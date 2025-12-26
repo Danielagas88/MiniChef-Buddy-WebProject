@@ -1,33 +1,50 @@
 import { Request, Response, NextFunction } from "express";
-import * as jwt from "jsonwebtoken";
-import { UserType } from "../features/auth/UserType";
+import jwt from "jsonwebtoken";
 import User from "../features/auth/UserModel";
 
-interface IAuth extends Request {
-  user?: UserType;
+export interface AuthRequest extends Request {
+  user?: any;
 }
 
-const auth = async (req: IAuth, res: Response, next: NextFunction) => {
+export async function auth(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    if (!req.headers.authorization) throw {};
-    const token = req.headers.authorization.split("Bearer ")[1];
+    const header = req.headers.authorization;
 
-    if (!token) throw {};
+    // Expect: "Bearer <token>"
+    if (!header || !header.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
-    const verified = jwt.verify(token, process.env["JWT_SECRET"] as string) as { id: string };
+    const token = header.slice("Bearer ".length).trim();
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
-    if (!verified) throw {};
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      return res
+        .status(500)
+        .json({ message: "Server misconfiguration: missing JWT_SECRET" });
+    }
 
-    const user: UserType | null = await User.findById(verified.id);
+    // token payload shape we expect
+    const decoded = jwt.verify(token, secret) as { id?: string };
+    if (!decoded?.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
-    if (!user) throw {};
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
     req.user = user;
-    next();
+    return next();
   } catch (err) {
-    console.log({ message: "Unauthorized" });
-    res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
-};
-
-export { auth };
+}

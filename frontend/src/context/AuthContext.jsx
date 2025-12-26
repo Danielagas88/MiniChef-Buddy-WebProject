@@ -10,12 +10,31 @@ export function AuthProvider({ children }) {
 
   const [isAuthLoading, setIsAuthLoading] = useState(false);
 
+  // function getErrorMessage(err, fallback) {
+  //   const errorMessage =
+  //     typeof err?.response?.data === "string" && err.response.data;
+  //   return (
+  //     errorMessage || err?.response?.data?.error || err?.message || fallback
+  //   );
+  // }
   function getErrorMessage(err, fallback) {
-    const errorMessage =
-      typeof err?.response?.data === "string" && err.response.data;
-    return (
-      errorMessage || err?.response?.data?.error || err?.message || fallback
-    );
+    // Axios error -> server response
+    const data = err?.response?.data;
+
+    // Case 1: backend sent a plain string: res.status(...).send("...")
+    if (typeof data === "string" && data.trim()) return data;
+
+    // Case 2: backend sent JSON: { message: "..." } or { error: "..." }
+    if (data && typeof data === "object") {
+      if (typeof data.message === "string") return data.message;
+      if (typeof data.error === "string") return data.error;
+    }
+
+    // Case 3: network / axios message
+    if (typeof err?.message === "string" && err.message.trim())
+      return err.message;
+
+    return fallback;
   }
 
   async function register({ username, password, name }) {
@@ -71,6 +90,7 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
+    localStorage.removeItem("token");
     setUser(null);
     setViewMode("child");
     setError(null);
@@ -93,33 +113,3 @@ export function AuthProvider({ children }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
-// async function login(email, password) {
-//     setError(null);
-
-//     if (email === fakeUser.email && password === fakeUser.password) {
-//       const childUser = {
-//         id: fakeUser.id,
-//         email: fakeUser.email,
-//         childName: fakeUser.childName,
-//         childAge: fakeUser.childAge,
-//         parentName: fakeUser.parentName,
-//         parentEmail: fakeUser.parentEmail,
-//         stats: fakeUser.stats,
-//         parentReport: {
-//           childName: fakeUser.childName,
-//           parentName: fakeUser.parentName,
-//           totalTimeThisWeek: parentReportTemplate.totalTimeThisWeek,
-//           recipesCookedThisWeek: ["Happy Pancakes", "Rainbow Salad"],
-//           safetyNotes: parentReportTemplate.safetyNotes,
-//         },
-//       };
-
-//       setUser(childUser);
-//       setViewMode("child");
-//       return true;
-//     }
-
-//     setError("Wrong email or password. Please try again.");
-//     return false;
-//   }
