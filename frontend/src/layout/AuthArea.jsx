@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 
+
 export default function AuthArea() {
   const navigate = useNavigate();
   const { user, viewMode, setViewMode, logout } = useAuth();
@@ -16,7 +17,8 @@ export default function AuthArea() {
     );
   }
 
-  return (
+ return (
+  <>
     <div className="flex items-center gap-3 bg-white/70 backdrop-blur rounded-full shadow-sm px-3 py-2">
       {/* Avatar */}
       <div className="w-9 h-9 rounded-full bg-pink-100 flex items-center justify-center text-pink-700 font-bold">
@@ -46,9 +48,10 @@ export default function AuthArea() {
         >
           Child
         </button>
+
         <button
           type="button"
-          onClick={() => setViewMode("parent")}
+          onClick={() => setViewMode("parent")}  
           className={`px-3 py-1 text-[11px] rounded-full transition ${
             viewMode === "parent"
               ? "bg-purple-500 text-white shadow-sm"
@@ -68,5 +71,8 @@ export default function AuthArea() {
         Logout
       </button>
     </div>
-  );
+
+  </>
+);
+
 }

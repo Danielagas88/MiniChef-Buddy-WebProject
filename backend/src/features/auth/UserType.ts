@@ -4,5 +4,10 @@ export interface UserType {
     username: string;
     password: string;
     createdAt: Date;
-    updatedAt: Date;
+    updatedAt: Date; 
+    //  Parent PIN (hashed) amit added this
+    parentPinHash?: string | null
+
+    //  Favorites (recipe ids from TheMealDB)
+    favoriteRecipeIds?: string[];
 }

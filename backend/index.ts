@@ -14,6 +14,13 @@ import express from "express";
 import cors from "cors";
 import { connect as mongoConnect } from "mongoose";
 import { userRouter } from "./src/features/auth/userRoute";
+import { parentPinRouter } from "./src/features/parentPin/parentPinRoute";//amit added this
+import weeklyReportRoutes from "./src/features/weeklyReport";//amit added this
+import favoritesRoutes from "./src/features/favorites/favorites.routes";
+
+
+
+
 
 // Create Express application instance
 const app = express();
@@ -32,11 +39,29 @@ const MONGO_URI = (process.env.MONGO_URI || "").replace(
 app.use(express.json());
 app.use(cors());
 
+//favorites routes amit added this
+app.use("/api/favorites", favoritesRoutes);
+
 /**
  * Routes
  * All authentication-related routes are prefixed with /api/auth
  */
 app.use("/api/auth", userRouter);
+
+/**
+ * Parent PIN routes amit added this
+ * -----------------
+ * Routes responsible for managing parent access PIN:
+ * - POST /api/parent-pin/set    → Create or update the parent's PIN
+ * - POST /api/parent-pin/verify → Verify the parent's PIN
+ *
+ * All routes are protected by JWT authentication middleware.
+ */
+app.use("/api/parent-pin", parentPinRouter);
+app.use("/api/weekly-report", weeklyReportRoutes);
+
+
+
 
 /**
  * Used to verify that the server is running

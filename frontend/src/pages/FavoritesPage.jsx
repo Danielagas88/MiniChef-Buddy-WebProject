@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { fetchRecipes } from "../services/recipeService";
 import { useNavigate } from "react-router-dom";
-import { recipes } from "../data/fakeData.js";
 import { useAuth } from "../hooks/useAuth.js";
 import { useFavorites } from "../hooks/useFavorites.js";
 import RecipeCard from "../components/recipes/RecipeCard.jsx";
@@ -10,10 +10,42 @@ export default function FavoritesPage() {
   const { user } = useAuth();
   const { favoriteIds, toggleFavorite } = useFavorites();
 
+  const [allRecipes, setAllRecipes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+useEffect(() => {
+  let alive = true;
+
+  async function load() {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // אותו מקור כמו בדף Recipes
+      const data = await fetchRecipes("");
+      if (alive) setAllRecipes(data);
+    } catch (e) {
+      console.error(e);
+      if (alive) setError("Failed to load recipes.");
+    } finally {
+      if (alive) setLoading(false);
+    }
+  }
+
+  load();
+  return () => {
+    alive = false;
+  };
+}, []);
+
+  
+
   const favoriteRecipes = useMemo(() => {
     const set = new Set(favoriteIds.map(String));
-    return recipes.filter((r) => set.has(String(r.id)));
-  }, [favoriteIds]);
+    return allRecipes.filter((r) => set.has(String(r.id)));
+  }, [favoriteIds, allRecipes]);
+
 
   if (!user) {
     return (
@@ -35,6 +67,9 @@ export default function FavoritesPage() {
   return (
     <section className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6 space-y-3">
       <h2 className="text-xl font-bold text-gray-800">My Favorites</h2>
+      {loading && <p className="text-sm text-gray-600">Loading favorites...</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
+
 
       {favoriteRecipes.length === 0 ? (
         <p className="text-sm text-gray-700">
