@@ -228,31 +228,6 @@ if (viewMode === "parent") {
         </div>
       </button>
 
-      <button
-        onClick={() => setActiveParentSection("approved")}
-        className={`text-left rounded-3xl shadow p-5 bg-white bg-opacity-80 hover:shadow-md transition border ${
-          activeParentSection === "approved" ? "border-purple-400" : "border-transparent"
-        }`}
-      >
-        <div className="text-2xl">✅</div>
-        <div className="mt-2">
-          <h3 className="text-lg font-bold text-gray-800">Approved Recipes</h3>
-          <p className="text-sm text-gray-600">Approve or reject pending recipes.</p>
-        </div>
-      </button>
-
-      <button
-        onClick={() => setActiveParentSection("shopping")}
-        className={`text-left rounded-3xl shadow p-5 bg-white bg-opacity-80 hover:shadow-md transition border ${
-          activeParentSection === "shopping" ? "border-purple-400" : "border-transparent"
-        }`}
-      >
-        <div className="text-2xl">🛒</div>
-        <div className="mt-2">
-          <h3 className="text-lg font-bold text-gray-800">Family Shopping List</h3>
-          <p className="text-sm text-gray-600">Create and track shopping items.</p>
-        </div>
-      </button>
     </div>
 
     {/* Selected Section */}
@@ -406,20 +381,6 @@ if (viewMode === "parent") {
       )}
     </div>
 
-        </div>
-      )}
-
-      {activeParentSection === "approved" && (
-        <div className="space-y-2">
-          <h3 className="text-xl font-bold text-gray-800">Approved Recipes</h3>
-          <p className="text-sm text-gray-600">(Next step) Pending list here.</p>
-        </div>
-      )}
-
-      {activeParentSection === "shopping" && (
-        <div className="space-y-2">
-          <h3 className="text-xl font-bold text-gray-800">Family Shopping List</h3>
-          <p className="text-sm text-gray-600">(Next step) Shopping items here.</p>
         </div>
       )}
     </div>
