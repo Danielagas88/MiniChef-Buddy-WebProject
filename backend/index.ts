@@ -14,13 +14,10 @@ import express from "express";
 import cors from "cors";
 import { connect as mongoConnect } from "mongoose";
 import { userRouter } from "./src/features/auth/userRoute";
-import { parentPinRouter } from "./src/features/parentPin/parentPinRoute";//amit added this
-import weeklyReportRoutes from "./src/features/weeklyReport";//amit added this
+import { parentPinRouter } from "./src/features/parentPin/parentPinRoute"; //amit added this
+import weeklyReportRoutes from "./src/features/weeklyReport/weeklyReport.routes";
 import favoritesRoutes from "./src/features/favorites/favorites.routes";
-
-
-
-
+import recipeHistoryRoutes from "./src/features/recipeHistory/recipeHistory.routes";
 
 // Create Express application instance
 const app = express();
@@ -59,9 +56,7 @@ app.use("/api/auth", userRouter);
  */
 app.use("/api/parent-pin", parentPinRouter);
 app.use("/api/weekly-report", weeklyReportRoutes);
-
-
-
+app.use("/api/recipe-history", recipeHistoryRoutes);
 
 /**
  * Used to verify that the server is running

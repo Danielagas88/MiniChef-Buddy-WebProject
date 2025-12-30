@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { fetchRecipeById } from "../../services/recipeService.js";
+import { useAuth } from "../../hooks/useAuth.js";
+import { saveRecipeCompletion } from "../../services/recipeHistoryService.js";
 import SessionHeader from "./SessionHeader.jsx";
 import StepProgress from "./StepProgress.jsx";
 import SessionChat from "./SessionChat.jsx";
@@ -56,6 +58,9 @@ function getFallbackReply(userText, recipe, currentStepIndex) {
 export default function SessionPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  // stable per page session
+  const sessionId = useMemo(() => crypto.randomUUID(), []);
 
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -253,7 +258,22 @@ export default function SessionPage() {
               That looks delicious!
             </p>
             <button
-              onClick={() => navigate("/recipes")}
+              onClick={async () => {
+                try {
+                  // save only if logged-in
+                  if (user?.token) {
+                    await saveRecipeCompletion({
+                      recipe,
+                      token: user.token,
+                      sessionId,
+                    });
+                  }
+                } catch (e) {
+                  console.error("Failed to save recipe completion:", e);
+                } finally {
+                  navigate("/recipes");
+                }
+              }}
               className="w-full py-3 rounded-full bg-pink-500 text-white font-bold text-xl hover:bg-pink-600 shadow-lg transition"
             >
               Back to Menu
