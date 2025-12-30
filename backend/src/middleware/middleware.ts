@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../features/auth/UserModel";
+import { UserDocument } from "../features/auth/UserType";
 
 export interface AuthRequest extends Request {
-  user?: any;
+  user?: UserDocument;
 }
 
 export async function auth(
@@ -14,8 +15,7 @@ export async function auth(
   try {
     const header = req.headers.authorization;
 
-    // Expect: "Bearer <token>"
-    if (!header || !header.startsWith("Bearer ")) {
+    if (!header?.startsWith("Bearer ")) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
@@ -31,7 +31,6 @@ export async function auth(
         .json({ message: "Server misconfiguration: missing JWT_SECRET" });
     }
 
-    // token payload shape we expect
     const decoded = jwt.verify(token, secret) as { id?: string };
     if (!decoded?.id) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -42,9 +41,9 @@ export async function auth(
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    req.user = user;
+    req.user = user as UserDocument;
     return next();
-  } catch (err) {
+  } catch {
     return res.status(401).json({ message: "Unauthorized" });
   }
 }

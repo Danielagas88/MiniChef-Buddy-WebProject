@@ -19,14 +19,14 @@ export default function App() {
   useEffect(() => {
     const loginWithToken = async () => {
       const token = localStorage.getItem("token");
+      if (!token) return;
 
-      if (token) {
-        const loggedInUser = await Axios.get("/auth", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+      const res = await Axios.get("/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-        setUser(loggedInUser.data);
-      }
+      const u = res.data?.user ?? res.data;
+      setUser({ ...u, token });
     };
 
     loginWithToken();

@@ -18,14 +18,16 @@ function getJwtSecret(res: Response): string | null {
 
 export const createUser = async (req: Request, res: Response) => {
   try {
-    let { username, name, password } = req.body as {
+    let { username, name, password, allergens, cookingLevel } = req.body as {
       username?: string;
       name?: string;
       password?: string;
+      allergens?: string[];
+      cookingLevel?: "Easy" | "Medium" | "Advanced";
     };
 
     // Normalize inputs
-    username = username?.trim();
+    username = username?.trim().toLowerCase();
     name = name?.trim();
 
     if (!username || !name || !password) {
@@ -37,6 +39,18 @@ export const createUser = async (req: Request, res: Response) => {
         .status(400)
         .json({ message: "Password must be at least 6 characters long" });
     }
+
+    const allowedLevels = new Set(["Easy", "Medium", "Advanced"]);
+    const level =
+      cookingLevel && allowedLevels.has(cookingLevel) ? cookingLevel : "Easy";
+
+    const cleanAllergens = Array.isArray(allergens)
+      ? Array.from(
+          new Set(
+            allergens.map((a) => String(a).trim().toLowerCase()).filter(Boolean)
+          )
+        )
+      : [];
 
     const existingUser = await User.findOne({ username });
     if (existingUser) {
@@ -51,17 +65,23 @@ export const createUser = async (req: Request, res: Response) => {
       username,
       name,
       password: passwordHash,
+      allergens: cleanAllergens,
+      cookingLevel: level,
     }).save();
 
     const secret = getJwtSecret(res);
     if (!secret) return;
 
-    const token = jwt.sign({ id: savedUser._id }, secret, { expiresIn: "7d" });
+    const token = jwt.sign({ id: savedUser._id.toString() }, secret, {
+      expiresIn: "7d",
+    });
 
     return res.status(201).json({
-      id: savedUser._id,
+      id: savedUser._id.toString(),
       username: savedUser.username,
       name: savedUser.name,
+      allergens: savedUser.allergens || [],
+      cookingLevel: savedUser.cookingLevel || "Easy",
       token,
       createdAt: savedUser.createdAt,
       updatedAt: savedUser.updatedAt,
@@ -78,7 +98,7 @@ export const login = async (req: Request, res: Response) => {
       username?: string;
       password?: string;
     };
-    username = username?.trim();
+    username = username?.trim().toLowerCase();
 
     if (!username || !password) {
       return res.status(400).json({ message: "All fields are required" });
@@ -97,12 +117,16 @@ export const login = async (req: Request, res: Response) => {
     const secret = getJwtSecret(res);
     if (!secret) return;
 
-    const token = jwt.sign({ id: user._id }, secret, { expiresIn: "7d" });
+    const token = jwt.sign({ id: user._id.toString() }, secret, {
+      expiresIn: "7d",
+    });
 
     return res.status(200).json({
-      id: user._id,
+      id: user._id.toString(),
       username: user.username,
       name: user.name,
+      allergens: user.allergens || [],
+      cookingLevel: user.cookingLevel || "Easy",
       token,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
@@ -117,9 +141,11 @@ export const getUser = async (req: AuthRequest, res: Response) => {
   if (!req.user) return res.status(401).json({ message: "Unauthorized" });
 
   return res.json({
-    id: req.user._id,
+    id: req.user._id.toString(),
     username: req.user.username,
     name: req.user.name,
+    allergens: req.user.allergens || [],
+    cookingLevel: req.user.cookingLevel || "Easy",
     createdAt: req.user.createdAt,
     updatedAt: req.user.updatedAt,
   });

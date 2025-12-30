@@ -67,6 +67,27 @@ const parseInstructions = (text) => {
   return steps.length > 0 ? steps : [text];
 };
 
+function extractIngredients(meal) {
+  const display = [];
+  const names = [];
+
+  for (let i = 1; i <= 20; i++) {
+    const nameRaw = meal[`strIngredient${i}`];
+    const measureRaw = meal[`strMeasure${i}`];
+
+    if (!nameRaw || !nameRaw.trim()) continue;
+
+    const name = nameRaw.trim();
+    const measure = (measureRaw || "").trim();
+
+    display.push(`${measure} ${name}`.trim());
+
+    names.push(name.toLowerCase());
+  }
+
+  return { display, names };
+}
+
 export const fetchRecipes = async (query = "") => {
   try {
     let allMeals = [];
@@ -107,7 +128,8 @@ export const fetchRecipes = async (query = "") => {
         youtube: meal.strYoutube,
         area: meal.strArea,
         level: level,
-        ingredients,
+        ingredients: ingredients.display,
+        ingredientNames: ingredients.names,
       };
     });
   } catch (error) {
@@ -115,19 +137,6 @@ export const fetchRecipes = async (query = "") => {
     return [];
   }
 };
-
-function extractIngredients(meal) {
-  const list = [];
-  for (let i = 1; i <= 20; i++) {
-    const name = meal[`strIngredient${i}`];
-    const measure = meal[`strMeasure${i}`];
-    if (name && name.trim() !== "") {
-      // נשמור גם measure (לא חובה לפנטרי), אבל זה נחמד
-      list.push(`${(measure || "").trim()} ${name}`.trim());
-    }
-  }
-  return list;
-}
 
 export const fetchRecipeById = async (id) => {
   try {
@@ -139,16 +148,7 @@ export const fetchRecipeById = async (id) => {
     if (!data.meals || data.meals.length === 0) return null;
 
     const meal = data.meals[0];
-    const ingredients = [];
-
-    // Create ingredients list for display
-    for (let i = 1; i <= 20; i++) {
-      const name = meal[`strIngredient${i}`];
-      const measure = meal[`strMeasure${i}`];
-      if (name && name.trim() !== "") {
-        ingredients.push(`${measure} ${name}`.trim());
-      }
-    }
+    const ingredients = extractIngredients(meal);
 
     const cleanSteps = parseInstructions(meal.strInstructions);
     const level = calculateLevel(meal.strInstructions || "");
@@ -162,7 +162,8 @@ export const fetchRecipeById = async (id) => {
       steps: cleanSteps,
       youtube: meal.strYoutube,
       area: meal.strArea,
-      ingredients: ingredients,
+      ingredients: ingredients.display,
+      ingredientNames: ingredients.names,
       level: level,
     };
   } catch (error) {

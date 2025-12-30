@@ -2,6 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 
+export const ALLERGEN_OPTIONS = [
+  { key: "milk", label: "Milk" },
+  { key: "eggs", label: "Eggs" },
+  { key: "nuts", label: "Nuts" },
+  { key: "soy", label: "Soy" },
+  { key: "wheat", label: "Wheat / Gluten" },
+  { key: "fish", label: "Fish" },
+  { key: "sesame", label: "Sesame" },
+];
+
 export default function RegisterPage() {
   const { register, error, isAuthLoading } = useAuth();
 
@@ -9,6 +19,9 @@ export default function RegisterPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [cookingLevel, setCookingLevel] = useState("Easy");
+  const [allergens, setAllergens] = useState([]);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(e) {
@@ -21,7 +34,10 @@ export default function RegisterPage() {
       username: username.trim(),
       password,
       name: name.trim(),
+      cookingLevel,
+      allergens,
     });
+
     setIsSubmitting(false);
 
     if (ok) {
@@ -29,8 +45,18 @@ export default function RegisterPage() {
     }
   }
 
+  function toggleAllergen(key) {
+    setAllergens((prev) =>
+      prev.includes(key) ? prev.filter((x) => x !== key) : [...prev, key]
+    );
+  }
+
   const isDisabled =
-    isSubmitting || isAuthLoading || !name.trim() || !username.trim() || !password;
+    isSubmitting ||
+    isAuthLoading ||
+    !name.trim() ||
+    !username.trim() ||
+    !password;
 
   return (
     <section className="max-w-md mx-auto bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6 space-y-4">
@@ -38,7 +64,8 @@ export default function RegisterPage() {
         Register to MiniChef Buddy
       </h2>
       <p className="text-sm text-gray-700">
-        Register to see the child&apos;s cooking profile and the parent report.
+        Register to create a personal profile, level up your cooking skills, and
+        earn fun badges!
       </p>
 
       <form className="space-y-3" onSubmit={handleSubmit}>
@@ -88,6 +115,42 @@ export default function RegisterPage() {
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="new-password"
           />
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-xs font-semibold text-gray-700">
+            Cooking Level
+          </label>
+          <select
+            value={cookingLevel}
+            onChange={(e) => setCookingLevel(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 bg-white"
+          >
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+        </div>
+        <div className="space-y-2">
+          <p className="text-xs font-semibold text-gray-700">
+            Allergens to avoid
+          </p>
+
+          <div className="grid grid-cols-2 gap-2">
+            {ALLERGEN_OPTIONS.map((a) => (
+              <label
+                key={a.key}
+                className="flex items-center gap-2 text-xs text-gray-700 bg-white/70 border border-gray-200 rounded-xl px-3 py-2 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  checked={allergens.includes(a.key)}
+                  onChange={() => toggleAllergen(a.key)}
+                />
+                {a.label}
+              </label>
+            ))}
+          </div>
         </div>
 
         {error && (

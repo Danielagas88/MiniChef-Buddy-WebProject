@@ -1,11 +1,85 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
-// Axios is gone! We use only fetch via our service.
 import { fetchRecipes } from "../../services/recipeService.js";
 import { useAuth } from "../../hooks/useAuth.js";
 import { useFavorites } from "../../hooks/useFavorites.js";
 import RecipesFilters from "./RecipesFilters.jsx";
 import RecipeCard from "./RecipeCard.jsx";
+
+/** Allergen aliases (exact ingredient-name matching; no substring matching) */
+const ALLERGEN_ALIASES = {
+  milk: [
+    "milk",
+    "cream",
+    "sour cream",
+    "butter",
+    "cheese",
+    "greek yogurt",
+    "yogurt",
+    "yoghurt",
+    "whey",
+    "cream cheese",
+    "condensed milk",
+    "evaporated milk",
+  ],
+  eggs: ["egg", "eggs", "egg yolk", "egg white"],
+  nuts: [
+    "nut",
+    "nuts",
+    "peanut",
+    "peanuts",
+    "almond",
+    "almonds",
+    "walnut",
+    "walnuts",
+    "cashew",
+    "cashews",
+    "hazelnut",
+    "hazelnuts",
+    "pistachio",
+    "pistachios",
+  ],
+  soy: ["soy", "soya", "soy sauce", "tofu", "edamame", "miso"],
+  wheat: [
+    "wheat",
+    "flour",
+    "bread",
+    "pasta",
+    "noodles",
+    "breadcrumbs",
+    "semolina",
+    "gluten",
+  ],
+  fish: [
+    "fish",
+    "salmon",
+    "tuna",
+    "cod",
+    "anchovy",
+    "anchovies",
+    "sardine",
+    "sardines",
+  ],
+  sesame: ["sesame", "sesame seeds", "tahini"],
+};
+
+function containsAllergen(ingredientNames = [], userAllergens = []) {
+  if (!userAllergens?.length) return false;
+
+  const ingredients = ingredientNames.map((i) =>
+    String(i).toLowerCase().trim()
+  );
+
+  const blocked = new Set();
+  for (const a of userAllergens) {
+    const key = String(a).toLowerCase().trim();
+    blocked.add(key);
+    (ALLERGEN_ALIASES[key] || []).forEach((alias) => blocked.add(alias));
+  }
+
+  // exact match only (prevents false positives like "cream of tartar")
+  return ingredients.some((ing) => blocked.has(ing));
+}
 
 export default function RecipesPage() {
   const [search, setSearch] = useState("");
@@ -18,6 +92,27 @@ export default function RecipesPage() {
   const { user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
 
+  const levelRank = { Easy: 1, Medium: 2, Advanced: 3 };
+
+  const userLevel = user?.cookingLevel || "Easy";
+  const userAllergens = user?.allergens || [];
+
+  function allowedByUserLevel(recipeLevel, uLevel) {
+    if (!uLevel) return true;
+    return levelRank[recipeLevel] <= levelRank[uLevel];
+  }
+
+  const levelOptions = ["Easy", "Medium", "Advanced"].filter(
+    (lvl) => levelRank[lvl] <= levelRank[userLevel]
+  );
+
+  // If user level decreases, reset manual filter if it became invalid
+  useEffect(() => {
+    if (levelFilter && !levelOptions.includes(levelFilter)) {
+      setLevelFilter("");
+    }
+  }, [levelFilter, levelOptions]);
+
   useEffect(() => {
     let isMounted = true;
 
@@ -26,42 +121,44 @@ export default function RecipesPage() {
         setIsLoading(true);
         setLoadError(null);
 
-        // Fetching real data (Defaults to 'Dessert' for kids, or change to '' for all)
         const data = await fetchRecipes("");
-
-        if (isMounted) {
-          setRecipes(data);
-        }
+        if (isMounted) setRecipes(data);
       } catch (err) {
         if (isMounted) {
           console.error(err);
           setLoadError("Failed to load recipes. Please try again.");
         }
       } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        if (isMounted) setIsLoading(false);
       }
     }
 
     loadData();
-
     return () => {
       isMounted = false;
     };
   }, []);
 
-  // Filter Logic
   const filteredRecipes = useMemo(() => {
     const q = search.trim().toLowerCase();
+
     return recipes.filter((r) => {
       const matchesName = r.title.toLowerCase().includes(q);
-      // Now using the SMART calculated level (Easy/Medium/Hard)
-      const matchesLevel = levelFilter ? r.level === levelFilter : true;
 
-      return matchesName && matchesLevel;
+      // Manual UI filter (optional)
+      const matchesLevelFilter = levelFilter ? r.level === levelFilter : true;
+
+      // Auto restriction by user's level (default)
+      const matchesUserLevel = allowedByUserLevel(r.level, userLevel);
+
+      // Allergen restriction (uses ingredientNames from recipeService)
+      const safeForUser = !containsAllergen(r.ingredientNames, userAllergens);
+
+      return (
+        matchesName && matchesLevelFilter && matchesUserLevel && safeForUser
+      );
     });
-  }, [search, levelFilter, recipes]);
+  }, [search, levelFilter, recipes, userLevel, userAllergens]);
 
   return (
     <section className="space-y-4">
@@ -76,6 +173,7 @@ export default function RecipesPage() {
             onSearch={setSearch}
             level={levelFilter}
             onLevel={setLevelFilter}
+            levelOptions={levelOptions}
           />
         </div>
 

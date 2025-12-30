@@ -29,7 +29,13 @@ export function AuthProvider({ children }) {
     return fallback;
   }
 
-  async function register({ username, password, name }) {
+  async function register({
+    username,
+    password,
+    name,
+    allergens,
+    cookingLevel,
+  }) {
     try {
       setError(null);
       setIsAuthLoading(true);
@@ -38,6 +44,8 @@ export function AuthProvider({ children }) {
         username,
         password,
         name,
+        allergens,
+        cookingLevel,
       });
 
       const token = response.data.token;

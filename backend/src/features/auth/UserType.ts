@@ -1,13 +1,17 @@
-export interface UserType {
-    _id: string;
-    name: string;
-    username: string;
-    password: string;
-    createdAt: Date;
-    updatedAt: Date; 
-    //  Parent PIN (hashed) amit added this
-    parentPinHash?: string | null
+import { HydratedDocument } from "mongoose";
 
-    //  Favorites (recipe ids from TheMealDB)
-    favoriteRecipeIds?: string[];
+export interface UserDoc {
+  name: string;
+  username: string;
+  password: string;
+
+  parentPinHash?: string | null;
+  favoriteRecipeIds?: string[];
+  allergens?: string[];
+  cookingLevel?: "Easy" | "Medium" | "Advanced";
+
+  createdAt: Date;
+  updatedAt: Date;
 }
+
+export type UserDocument = HydratedDocument<UserDoc>;

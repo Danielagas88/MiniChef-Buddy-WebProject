@@ -1,20 +1,34 @@
 import { model, Schema } from "mongoose";
-import { UserType } from "./UserType";
+import { UserDoc } from "./UserType";
 
-const userSchema = new Schema<UserType>(
+const userSchema = new Schema<UserDoc>(
   {
-    name: { type: String, required: true },
-    username: { type: String, required: true },
+    name: { type: String, required: true, trim: true },
+
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+
     password: { type: String, required: true },
 
-    // 🔐 Parent PIN (hashed) amit add this
     parentPinHash: { type: String, default: null },
-     //  Favorites
+
     favoriteRecipeIds: { type: [String], default: [] },
+    allergens: { type: [String], default: [] },
+    cookingLevel: {
+      type: String,
+      enum: ["Easy", "Medium", "Advanced"],
+      default: "Easy",
+    },
   },
   { timestamps: true }
 );
 
-const User = model<UserType>("User", userSchema);
+userSchema.index({ username: 1 }, { unique: true });
 
+const User = model<UserDoc>("User", userSchema);
 export default User;
