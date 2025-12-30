@@ -1,17 +1,38 @@
-import { useAuth } from "../../hooks/useAuth.js";
-import { useParentArea } from "../../hooks/useParentArea.js";
-import ParentGateModal from "./ParentGateModal.jsx";
-import ParentDashboard from "./ParentDashboard.jsx";
-import ChildProfile from "./ChildProfile.jsx";
+/**
+ * ProfilePage.jsx
+ * ----------------
+ * Main "Profile" page entry.
+ *
+ * Responsibilities:
+ * 1) Reads authentication state (user + viewMode) from Auth context.
+ * 2) If user is NOT logged in -> render login prompt.
+ * 3) If user is in "child" mode -> render ChildProfile.
+ * 4) If user is in "parent" mode -> render:
+ *    - ParentDashboard if parent is unlocked
+ *    - ParentGateModal if parent gate is required
+ *
+ * The "parent area" behavior (PIN gate, sections, usage limits, weekly report)
+ * is handled by a single hook: useParentArea() implemented with useReducer.
+ */
 
-export default function ProgressPage() {
+import { useAuth } from "../../hooks/useAuth.js"; // your existing hook that reads AuthContext
+import { useParentArea } from "./parent/useParentArea.js"; // reducer-based hook
+import ParentGateModal from "./parent/ParentGateModal.jsx";
+import ParentDashboard from "./parent/ParentDashboard.jsx";
+import ChildProfile from "./child/ChildProfile.jsx";
+
+export default function ProfilePage() {
+  // 1) read auth data
   const { user, viewMode } = useAuth();
 
+  // 2) initialize parent logic ONLY using token + viewMode
+  //    token may be undefined if user is not logged in
   const parent = useParentArea({
     token: user?.token,
     viewMode,
   });
 
+  // 3) user not logged in -> show prompt
   if (!user) {
     return (
       <section className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6 space-y-3">
@@ -23,21 +44,21 @@ export default function ProgressPage() {
     );
   }
 
+  // 4) child mode -> render child profile
   if (viewMode === "child") return <ChildProfile />;
 
+  // 5) parent mode -> render dashboard (if unlocked) + modal (if gate required)
   return (
     <>
-      {parent.isParentUnlocked && <ParentDashboard {...parent} />}
-      {parent.showParentGate && (
+      {parent.gate.isUnlocked && <ParentDashboard parent={parent} />}
+
+      {parent.gate.show && (
         <ParentGateModal
-          pinMode={parent.pinMode}
+          pin={parent.pin}
           setPinMode={parent.setPinMode}
-          pinInput={parent.pinInput}
           setPinInput={parent.setPinInput}
-          pinConfirm={parent.pinConfirm}
           setPinConfirm={parent.setPinConfirm}
-          pinError={parent.pinError}
-          onClose={() => parent.setShowParentGate(false)}
+          onClose={parent.hideGate}
           onSubmit={parent.submitPin}
         />
       )}

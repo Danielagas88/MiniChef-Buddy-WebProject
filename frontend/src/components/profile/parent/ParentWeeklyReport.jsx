@@ -1,3 +1,13 @@
+/**
+ * ParentWeeklyReport.jsx
+ * ----------------------
+ * UI for weekly report (from server).
+ *
+ * Props:
+ * - weeklyReport: object|null
+ * - onGenerateDemoWeek(): generates a demo report and saves it
+ */
+
 export default function ParentWeeklyReport({
   weeklyReport,
   onGenerateDemoWeek,

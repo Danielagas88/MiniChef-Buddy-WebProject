@@ -1,22 +1,21 @@
+/**
+ * ParentDashboard.jsx
+ * -------------------
+ * Parent Area UI shell:
+ * - header
+ * - section selector cards (Usage / Weekly Report)
+ * - renders selected section content
+ *
+ * Props:
+ * - parent: object returned by useParentArea()
+ */
+
 import ParentUsage from "./ParentUsage.jsx";
 import ParentWeeklyReport from "./ParentWeeklyReport.jsx";
 
-export default function ParentDashboard({
-  activeParentSection,
-  setActiveParentSection,
+export default function ParentDashboard({ parent }) {
+  const { section } = parent;
 
-  dailyLimit,
-  setDailyLimit,
-  allowedFrom,
-  setAllowedFrom,
-  allowedTo,
-  setAllowedTo,
-  saveMessage,
-  saveUsageLimits,
-
-  weeklyReport,
-  generateDemoWeek,
-}) {
   return (
     <section className="space-y-6">
       {/* Header */}
@@ -27,14 +26,12 @@ export default function ParentDashboard({
         </p>
       </div>
 
-      {/* Dashboard Cards */}
+      {/* Section Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <button
-          onClick={() => setActiveParentSection("usage")}
+          onClick={() => parent.setSection("usage")}
           className={`text-left rounded-3xl shadow p-5 bg-white bg-opacity-80 hover:shadow-md transition border ${
-            activeParentSection === "usage"
-              ? "border-purple-400"
-              : "border-transparent"
+            section === "usage" ? "border-purple-400" : "border-transparent"
           }`}
         >
           <div className="text-2xl">⏱️</div>
@@ -47,11 +44,9 @@ export default function ParentDashboard({
         </button>
 
         <button
-          onClick={() => setActiveParentSection("report")}
+          onClick={() => parent.setSection("report")}
           className={`text-left rounded-3xl shadow p-5 bg-white bg-opacity-80 hover:shadow-md transition border ${
-            activeParentSection === "report"
-              ? "border-purple-400"
-              : "border-transparent"
+            section === "report" ? "border-purple-400" : "border-transparent"
           }`}
         >
           <div className="text-2xl">📊</div>
@@ -64,25 +59,20 @@ export default function ParentDashboard({
         </button>
       </div>
 
-      {/* Selected Section */}
+      {/* Content */}
       <div className="rounded-3xl bg-white bg-opacity-80 shadow p-6">
-        {activeParentSection === "usage" && (
+        {section === "usage" && (
           <ParentUsage
-            dailyLimit={dailyLimit}
-            setDailyLimit={setDailyLimit}
-            allowedFrom={allowedFrom}
-            setAllowedFrom={setAllowedFrom}
-            allowedTo={allowedTo}
-            setAllowedTo={setAllowedTo}
-            saveMessage={saveMessage}
-            onSave={saveUsageLimits}
+            usage={parent.usage}
+            onChange={parent.setUsage}
+            onSave={parent.saveUsageLimits}
           />
         )}
 
-        {activeParentSection === "report" && (
+        {section === "report" && (
           <ParentWeeklyReport
-            weeklyReport={weeklyReport}
-            onGenerateDemoWeek={generateDemoWeek}
+            weeklyReport={parent.weeklyReport}
+            onGenerateDemoWeek={parent.generateDemoWeek}
           />
         )}
       </div>
