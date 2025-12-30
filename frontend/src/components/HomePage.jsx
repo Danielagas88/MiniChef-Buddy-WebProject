@@ -1,4 +1,4 @@
-import PantryHelper from "../components/pantry/PantryHelper.jsx";
+import PantryHelper from "./pantry/PantryHelper.jsx";
 
 export default function HomePage() {
   return (

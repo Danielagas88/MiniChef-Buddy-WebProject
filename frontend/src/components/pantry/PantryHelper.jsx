@@ -1,22 +1,55 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { recipes } from "../../data/fakeData.js";
+import { fetchRecipes } from "../../services/recipeService.js";
 import PantryInput from "./PantryInput.jsx";
 import PantryChips from "./PantryChips.jsx";
 import PantryResults from "./PantryResults.jsx";
 
 export default function PantryHelper() {
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [pantryInput, setPantryInput] = useState("");
   const [pantryItems, setPantryItems] = useState([]);
   const [matchMode, setMatchMode] = useState("any"); // "any" | "all"
   const navigate = useNavigate();
 
-  function normalizeItem(s) {
-    return s.trim().toLowerCase();
+  useEffect(() => {
+    let alive = true;
+
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const data = await fetchRecipes("");
+        if (alive) setRecipes(data);
+      } catch {
+        if (alive) setError("Failed to load recipes");
+      } finally {
+        if (alive) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  function normalizeIngredientLine(line) {
+    return line
+      .toLowerCase()
+      .replace(/[\d/.]+/g, " ")
+      .replace(
+        /\b(cup|cups|tbsp|tsp|teaspoon|tablespoon|grams|g|kg|ml|l|oz|lb)\b/g,
+        " "
+      )
+      .replace(/\s+/g, " ")
+      .trim();
   }
 
   function addItem(raw) {
-    const item = normalizeItem(raw);
+    const item = normalizeIngredientLine(raw);
     if (!item) return;
 
     setPantryItems((prev) => Array.from(new Set([...prev, item])));
@@ -28,7 +61,10 @@ export default function PantryHelper() {
   }
 
   function scanFromInputCommaSeparated() {
-    const parts = pantryInput.split(",").map(normalizeItem).filter(Boolean);
+    const parts = pantryInput
+      .split(",")
+      .map(normalizeIngredientLine)
+      .filter(Boolean);
 
     if (parts.length === 0) return;
     setPantryItems((prev) => Array.from(new Set([...prev, ...parts])));
@@ -44,7 +80,7 @@ export default function PantryHelper() {
 
     return recipes
       .map((r) => {
-        const ing = (r.ingredients || []).map(normalizeItem);
+        const ing = (r.ingredients || []).map(normalizeIngredientLine);
 
         const hits = pantryItems.filter((p) =>
           ing.some((i) => i.includes(p) || p.includes(i))
@@ -59,7 +95,7 @@ export default function PantryHelper() {
       })
       .filter(Boolean)
       .sort((a, b) => b.hitsCount - a.hitsCount);
-  }, [pantryItems, matchMode]);
+  }, [recipes, pantryItems, matchMode]);
 
   return (
     <div className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6 space-y-3">
@@ -90,6 +126,10 @@ export default function PantryHelper() {
         onAdd={addFromInput}
         onScan={scanFromInputCommaSeparated}
       />
+
+      {loading && <p className="text-xs text-gray-600">Loading recipes…</p>}
+
+      {error && <p className="text-xs text-red-600">{error}</p>}
 
       <PantryChips
         items={pantryItems}

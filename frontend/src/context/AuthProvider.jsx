@@ -1,7 +1,6 @@
-import { createContext, useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Axios } from "../Axios";
-
-export const AuthContext = createContext(null);
+import { AuthContext } from "./auth.context.js";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -10,13 +9,6 @@ export function AuthProvider({ children }) {
 
   const [isAuthLoading, setIsAuthLoading] = useState(false);
 
-  // function getErrorMessage(err, fallback) {
-  //   const errorMessage =
-  //     typeof err?.response?.data === "string" && err.response.data;
-  //   return (
-  //     errorMessage || err?.response?.data?.error || err?.message || fallback
-  //   );
-  // }
   function getErrorMessage(err, fallback) {
     // Axios error -> server response
     const data = err?.response?.data;
@@ -48,9 +40,11 @@ export function AuthProvider({ children }) {
         name,
       });
 
-      localStorage.setItem("token", response.data.token);
+      const token = response.data.token;
+      const userFromServer = response.data.user ?? response.data;
 
-      setUser(response.data?.user ?? response.data);
+      localStorage.setItem("token", token);
+      setUser({ ...userFromServer, token });
 
       setViewMode("child");
       return true;
@@ -74,8 +68,11 @@ export function AuthProvider({ children }) {
 
       const response = await Axios.post("/auth/login", { username, password });
 
-      localStorage.setItem("token", response.data.token);
-      setUser(response.data?.user ?? response.data);
+      const token = response.data.token;
+      const userFromServer = response.data.user ?? response.data;
+
+      localStorage.setItem("token", token);
+      setUser({ ...userFromServer, token });
 
       setViewMode("child");
       return true;
@@ -110,6 +107,36 @@ export function AuthProvider({ children }) {
     }),
     [user, viewMode, error, isAuthLoading]
   );
+
+  useEffect(() => {
+    let alive = true;
+
+    async function hydrate() {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        setIsAuthLoading(true);
+
+        const res = await Axios.get("/auth/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const u = res.data?.user ?? res.data;
+        if (alive && u) setUser({ ...u, token });
+      } catch {
+        localStorage.removeItem("token");
+        if (alive) setUser(null);
+      } finally {
+        if (alive) setIsAuthLoading(false);
+      }
+    }
+
+    hydrate();
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

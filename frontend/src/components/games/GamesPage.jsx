@@ -1,5 +1,3 @@
-import { games } from "../data/fakeData.js";
-
 export default function GamesPage() {
   return (
     <section className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6 space-y-3">

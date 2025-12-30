@@ -1,15 +1,15 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./layout/MainLayout.jsx";
 
-import HomePage from "./pages/HomePage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-import RecipesPage from "./pages/RecipesPage.jsx";
-import GamesPage from "./pages/GamesPage.jsx";
-import ProgressPage from "./pages/ProgressPage.jsx";
-import FavoritesPage from "./pages/FavoritesPage.jsx";
-import SessionPage from "./pages/SessionPage.jsx";
+import HomePage from "./components/HomePage.jsx";
+import LoginPage from "./components/LoginPage.jsx";
+import RecipesPage from "./components/recipes/RecipesPage.jsx";
+import GamesPage from "./components/games/GamesPage.jsx";
+import ProgressPage from "./components/profile/ProfilePage.jsx";
+import FavoritesPage from "./components/FavoritesPage.jsx";
+import SessionPage from "./components/session/SessionPage.jsx";
 import { useAuth } from "./hooks/useAuth.js";
-import RegisterPage from "./pages/RegisterPage.jsx";
+import RegisterPage from "./components/RegisterPage.jsx";
 import { useEffect } from "react";
 import { Axios } from "./Axios.js";
 

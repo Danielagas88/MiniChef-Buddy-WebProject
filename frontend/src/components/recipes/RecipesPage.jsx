@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 // Axios is gone! We use only fetch via our service.
-import { fetchRecipes } from "../services/recipeService";
-import { useAuth } from "../hooks/useAuth.js";
-import { useFavorites } from "../hooks/useFavorites.js";
-import RecipesFilters from "../components/recipes/RecipesFilters.jsx";
-import RecipeCard from "../components/recipes/RecipeCard.jsx";
+import { fetchRecipes } from "../../services/recipeService.js";
+import { useAuth } from "../../hooks/useAuth.js";
+import { useFavorites } from "../../hooks/useFavorites.js";
+import RecipesFilters from "./RecipesFilters.jsx";
+import RecipeCard from "./RecipeCard.jsx";
 
 export default function RecipesPage() {
   const [search, setSearch] = useState("");

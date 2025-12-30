@@ -96,6 +96,8 @@ export const fetchRecipes = async (query = "") => {
       // Calculate level based on instructions text only
       const level = calculateLevel(meal.strInstructions || "");
 
+      const ingredients = extractIngredients(meal);
+
       return {
         id: meal.idMeal,
         title: meal.strMeal,
@@ -105,6 +107,7 @@ export const fetchRecipes = async (query = "") => {
         youtube: meal.strYoutube,
         area: meal.strArea,
         level: level,
+        ingredients,
       };
     });
   } catch (error) {
@@ -112,6 +115,19 @@ export const fetchRecipes = async (query = "") => {
     return [];
   }
 };
+
+function extractIngredients(meal) {
+  const list = [];
+  for (let i = 1; i <= 20; i++) {
+    const name = meal[`strIngredient${i}`];
+    const measure = meal[`strMeasure${i}`];
+    if (name && name.trim() !== "") {
+      // נשמור גם measure (לא חובה לפנטרי), אבל זה נחמד
+      list.push(`${(measure || "").trim()} ${name}`.trim());
+    }
+  }
+  return list;
+}
 
 export const fetchRecipeById = async (id) => {
   try {

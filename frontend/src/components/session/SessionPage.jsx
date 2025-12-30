@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { fetchRecipeById } from "../services/recipeService";
-import SessionHeader from "../components/session/SessionHeader.jsx";
-import StepProgress from "../components/session/StepProgress.jsx";
-import SessionChat from "../components/session/SessionChat.jsx";
+import { fetchRecipeById } from "../../services/recipeService.js";
+import SessionHeader from "./SessionHeader.jsx";
+import StepProgress from "./StepProgress.jsx";
+import SessionChat from "./SessionChat.jsx";
 
 // --- CONFIGURATION ---
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
