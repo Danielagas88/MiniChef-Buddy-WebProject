@@ -28,7 +28,7 @@ function initialState() {
       show: false, // whether to show the PIN modal
     },
     pin: {
-      mode: "enter", // "enter" | "create" | "forgot"
+      mode: "enter", // "enter" | "forgot"
       input: "",
       confirm: "",
       error: "",
@@ -210,7 +210,6 @@ function writeUsageLimits({ dailyLimit, allowedFrom, allowedTo }) {
     JSON.stringify({ dailyLimit, allowedFrom, allowedTo })
   );
 }
-
 /**
  * useParentArea hook
  * @param {Object} params
@@ -221,14 +220,13 @@ export function useParentArea({ token, viewMode }) {
   // reducer state + dispatch
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
 
-  // we store timeout id to cleanup properly (prevents "setState on unmounted component" warnings)
+  // we store timeout id to cleanup properly
   const saveTimerRef = useRef(null);
 
   // -------------------------
   // Gate visibility management
   // -------------------------
   useEffect(() => {
-    // If no token -> user isn't properly authenticated for parent actions
     if (!token) {
       dispatch({ type: "GATE/RESET" });
       return;
@@ -244,17 +242,16 @@ export function useParentArea({ token, viewMode }) {
   }, [token, viewMode, state.gate.isUnlocked]);
 
   // -------------------------
-  // Load usage limits only when opening "usage" section
+  // Load usage limits
   // -------------------------
   useEffect(() => {
     if (state.section !== "usage") return;
-
     const saved = readUsageLimits();
     dispatch({ type: "USAGE/LOAD_FROM_STORAGE", payload: saved });
   }, [state.section]);
 
   // -------------------------
-  // Load weekly report only when opening "report" section
+  // Load weekly report
   // -------------------------
   const loadWeeklyReport = useCallback(async () => {
     if (!token) return;
@@ -263,7 +260,6 @@ export function useParentArea({ token, viewMode }) {
       dispatch({ type: "REPORT/SET", payload: data?.report ?? null });
     } catch (e) {
       console.error("loadWeeklyReport failed:", e);
-      // keep current report state as-is
     }
   }, [token]);
 
@@ -289,9 +285,7 @@ export function useParentArea({ token, viewMode }) {
   }, []);
 
   const setPinInput = useCallback((value) => {
-    // Ensure numeric only (remove non-digits)
     const onlyDigits = String(value).replace(/\D/g, "");
-    // Enforce max length 4
     dispatch({ type: "PIN/SET_INPUT", payload: onlyDigits.slice(0, 4) });
   }, []);
 
@@ -304,24 +298,25 @@ export function useParentArea({ token, viewMode }) {
     dispatch({ type: "USAGE/SET", payload: patch });
   }, []);
 
+  const handleForgotPin = useCallback(() => {
+    dispatch({ type: "PIN/SET_MODE", payload: { mode: "create" } });
+  }, []);
+
   // -------------------------
   // Save usage limits
   // -------------------------
   const saveUsageLimits = useCallback(() => {
-    // 1) persist to localStorage
     writeUsageLimits({
       dailyLimit: state.usage.dailyLimit,
       allowedFrom: state.usage.allowedFrom,
       allowedTo: state.usage.allowedTo,
     });
 
-    // 2) show a friendly message
     dispatch({
       type: "USAGE/SET",
       payload: { saveMessage: "Settings saved ✔️" },
     });
 
-    // 3) clear message after 2 seconds (and clean up old timer)
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
 
     saveTimerRef.current = setTimeout(() => {
@@ -329,7 +324,6 @@ export function useParentArea({ token, viewMode }) {
     }, 2000);
   }, [state.usage.dailyLimit, state.usage.allowedFrom, state.usage.allowedTo]);
 
-  // Cleanup timer on unmount
   useEffect(() => {
     return () => {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -342,7 +336,6 @@ export function useParentArea({ token, viewMode }) {
   const generateDemoWeek = useCallback(async () => {
     if (!token) return;
 
-    // example demo report
     const demo = {
       weekLabel: "This Week",
       totals: { recipes: 3, games: 5, minutes: 78 },
@@ -365,7 +358,6 @@ export function useParentArea({ token, viewMode }) {
       dispatch({ type: "REPORT/SET", payload: data?.report ?? demo });
     } catch (e) {
       console.error("saveWeeklyReport failed:", e);
-      // fallback to local demo (still show something)
       dispatch({ type: "REPORT/SET", payload: demo });
     }
   }, [token]);
@@ -374,7 +366,6 @@ export function useParentArea({ token, viewMode }) {
   // Submit PIN (enter or create)
   // -------------------------
   const submitPin = useCallback(async () => {
-    // Safety: token required for server verification
     if (!token) {
       dispatch({
         type: "PIN/SET_ERROR",
@@ -383,35 +374,23 @@ export function useParentArea({ token, viewMode }) {
       return;
     }
 
-    // Clear previous errors
     dispatch({ type: "PIN/SET_ERROR", payload: "" });
 
-    // "forgot" mode not implemented (placeholder)
-    if (state.pin.mode === "forgot") {
-      dispatch({
-        type: "PIN/SET_ERROR",
-        payload: "Forgot PIN flow not implemented yet",
-      });
-      return;
-    }
-
-    // Create/change PIN mode
     if (state.pin.mode === "create") {
-      // Validate length
       if (state.pin.input.length !== 4 || state.pin.confirm.length !== 4) {
         dispatch({ type: "PIN/SET_ERROR", payload: "PIN must be 4 digits" });
         return;
       }
-      // Validate match
       if (state.pin.input !== state.pin.confirm) {
         dispatch({ type: "PIN/SET_ERROR", payload: "PINs do not match" });
         return;
       }
 
-      // Save PIN in server
       try {
         await parentApi.setPin(state.pin.input, token);
         dispatch({ type: "GATE/UNLOCK" });
+
+        dispatch({ type: "PIN/SET_MODE", payload: { mode: "enter" } });
       } catch (e) {
         dispatch({
           type: "PIN/SET_ERROR",
@@ -421,7 +400,6 @@ export function useParentArea({ token, viewMode }) {
       return;
     }
 
-    // Enter PIN mode
     if (state.pin.input.length !== 4) {
       dispatch({ type: "PIN/SET_ERROR", payload: "PIN must be 4 digits" });
       return;
@@ -447,7 +425,6 @@ export function useParentArea({ token, viewMode }) {
   // -------------------------
   return useMemo(() => {
     return {
-      // grouped state objects
       gate: state.gate,
       pin: state.pin,
       section: state.section,
@@ -461,12 +438,15 @@ export function useParentArea({ token, viewMode }) {
       setPinMode,
       setPinInput,
       setPinConfirm,
+      handleForgotPin,
 
       setUsage,
       saveUsageLimits,
 
       generateDemoWeek,
       submitPin,
+
+      pinMode: state.pin.mode,
     };
   }, [
     state.gate,
@@ -479,6 +459,7 @@ export function useParentArea({ token, viewMode }) {
     setPinMode,
     setPinInput,
     setPinConfirm,
+    handleForgotPin,
     setUsage,
     saveUsageLimits,
     generateDemoWeek,

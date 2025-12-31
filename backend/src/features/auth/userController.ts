@@ -146,7 +146,49 @@ export const getUser = async (req: AuthRequest, res: Response) => {
     name: req.user.name,
     allergens: req.user.allergens || [],
     cookingLevel: req.user.cookingLevel || "Easy",
+    gallery: req.user.gallery || [],
     createdAt: req.user.createdAt,
     updatedAt: req.user.updatedAt,
   });
+};
+
+export const addToGallery = async (req: AuthRequest, res: Response) => {
+  try {
+    const { imageUrl, caption } = req.body;
+
+    if (!req.user) return res.status(401).json({ message: "Unauthorized" });
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { gallery: { imageUrl, caption } } },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      message: "Photo added to gallery",
+      gallery: user?.gallery,
+    });
+  } catch (err) {
+    console.error("addToGallery error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const deleteFromGallery = async (req: AuthRequest, res: Response) => {
+  try {
+    const { photoId } = req.params;
+    if (!req.user) return res.status(401).json({ message: "Unauthorized" });
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { $pull: { gallery: { _id: photoId } } },
+      { new: true }
+    );
+
+    return res
+      .status(200)
+      .json({ message: "Photo deleted", gallery: user?.gallery });
+  } catch (err) {
+    return res.status(500).json({ message: "Server error" });
+  }
 };

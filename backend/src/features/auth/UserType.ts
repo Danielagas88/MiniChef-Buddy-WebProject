@@ -12,6 +12,12 @@ export interface UserDoc {
 
   createdAt: Date;
   updatedAt: Date;
+
+  gallery?: {
+    imageUrl: string;
+    caption?: string;
+    createdAt?: Date;
+  }[];
 }
 
 export type UserDocument = HydratedDocument<UserDoc>;

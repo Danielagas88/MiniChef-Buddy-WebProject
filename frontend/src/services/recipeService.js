@@ -13,6 +13,42 @@ const KID_FRIENDLY_KEYWORDS = [
   "Chicken",
 ];
 
+export const CATEGORY_FILTERS = {
+  ALL: "All",
+  BREAKFAST: "Breakfast",
+  MEAT: "Meat", // Include all kinds
+  DESSERT: "Dessert",
+  SALAD: "Salad",
+  PASTA: "Pasta",
+  VEGETARIAN: "Vegetarian",
+};
+
+const NON_VEGETARIAN_INGREDIENTS = [
+  "beef",
+  "chicken",
+  "pork",
+  "bacon",
+  "ham",
+  "steak",
+  "lamb",
+  "sausage",
+  "duck",
+  "turkey",
+  "fish",
+  "salmon",
+  "tuna",
+  "cod",
+  "shrimp",
+  "prawn",
+  "crab",
+  "meat",
+  "mince",
+  "gelatin",
+  "chorizo",
+];
+
+const MEAT_API_CATEGORIES = ["Beef", "Chicken", "Lamb", "Pork", "Goat"];
+
 /**
  * Calculates difficulty level based on EQUIPMENT and SAFETY keywords.
  * - Advanced: Involves Oven, Grill, Baking, Roasting.
@@ -88,7 +124,7 @@ function extractIngredients(meal) {
   return { display, names };
 }
 
-export const fetchRecipes = async (query = "") => {
+export const fetchRecipes = async (query = "", activeCategory = "All") => {
   try {
     let allMeals = [];
 
@@ -112,11 +148,9 @@ export const fetchRecipes = async (query = "") => {
       );
     }
 
-    // --- CLEANED UP: No more 'count' variable here ---
-    return allMeals.map((meal) => {
+    let mappedMeals = allMeals.map((meal) => {
       // Calculate level based on instructions text only
       const level = calculateLevel(meal.strInstructions || "");
-
       const ingredients = extractIngredients(meal);
 
       return {
@@ -132,6 +166,69 @@ export const fetchRecipes = async (query = "") => {
         ingredientNames: ingredients.names,
       };
     });
+
+    // --- FILTERING LOGIC ---
+    // 3. Advanced Filtering Logic
+    if (activeCategory !== CATEGORY_FILTERS.ALL) {
+      mappedMeals = mappedMeals.filter((meal) => {
+        const apiCat = meal.category;
+        const title = meal.title.toLowerCase();
+
+        // Vegetarian Safety Check:
+        // Check if ANY ingredient is in the blacklist
+        const hasMeatIngredients = meal.ingredientNames.some((ing) =>
+          NON_VEGETARIAN_INGREDIENTS.some((meat) => ing.includes(meat))
+        );
+        // Check if TITLE contains meat words (extra safety)
+        const hasMeatTitle = NON_VEGETARIAN_INGREDIENTS.some((meat) =>
+          title.includes(meat)
+        );
+        // Result: True if absolutely no meat found
+        const isSafeVegetarian = !hasMeatIngredients && !hasMeatTitle;
+
+        const isExplicitMeatCategory = MEAT_API_CATEGORIES.includes(apiCat);
+        const isMeatDish = isExplicitMeatCategory || !isSafeVegetarian;
+
+        // Breakfast Logic Helpers:
+        const isBreakfastItem =
+          apiCat === "Breakfast" ||
+          title.includes("pancake") ||
+          title.includes("blini") ||
+          title.includes("egg") ||
+          title.includes("omelet");
+
+        // --- SWITCH LOGIC ---
+        switch (activeCategory) {
+          case CATEGORY_FILTERS.BREAKFAST:
+            return isBreakfastItem;
+
+          case CATEGORY_FILTERS.DESSERT:
+            return apiCat === "Dessert";
+
+          case CATEGORY_FILTERS.PASTA:
+            return (
+              apiCat === "Pasta" ||
+              title.includes("pasta") ||
+              title.includes("spaghetti") ||
+              title.includes("macaroni")
+            );
+
+          case CATEGORY_FILTERS.VEGETARIAN:
+            return isSafeVegetarian && apiCat !== "Dessert";
+
+          case CATEGORY_FILTERS.MEAT:
+            return isMeatDish;
+
+          case CATEGORY_FILTERS.SALAD:
+            return title.includes("salad");
+
+          default:
+            return true;
+        }
+      });
+    }
+
+    return mappedMeals;
   } catch (error) {
     console.error("Error fetching recipes:", error);
     return [];

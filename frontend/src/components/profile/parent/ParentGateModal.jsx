@@ -5,7 +5,6 @@
  *
  * Modes:
  * - enter: verify existing PIN
- * - create: create/change PIN (requires confirmation)
  * - forgot: placeholder (not implemented)
  *
  * Props:
@@ -16,102 +15,101 @@
  * - onClose()
  * - onSubmit()
  */
-
 export default function ParentGateModal({
   pin,
-  setPinMode,
+  pinMode,
   setPinInput,
   setPinConfirm,
   onClose,
   onSubmit,
+  onForgotPin,
 }) {
+  const isSetup = pinMode === "setup" || pinMode === "create";
+
   return (
     <div
       className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center"
-      onClick={onClose} // click outside closes
+      onClick={onClose}
     >
       <div
-        className="w-[420px] max-w-[92vw] rounded-2xl bg-white p-6 shadow-2xl"
-        onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+        className="w-[350px] max-w-[90vw] rounded-3xl bg-white p-8 shadow-2xl text-center space-y-6"
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* Title changes by mode */}
-        <h2 className="text-lg font-semibold text-gray-800">
-          {pin.mode === "enter" && "Parent Access"}
-          {pin.mode === "create" && "Create / Change Parent PIN"}
-          {pin.mode === "forgot" && "Forgot PIN"}
-        </h2>
+        <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto text-3xl">
+          {isSetup ? "🛠️" : "🔒"}
+        </div>
 
-        {/* Subtitle changes by mode */}
-        <p className="mt-1 text-sm text-gray-500">
-          {pin.mode === "enter" && "Enter your 4-digit PIN"}
-          {pin.mode === "create" && "Choose a new 4-digit PIN"}
-          {pin.mode === "forgot" && "Reset PIN flow (not implemented yet)"}
-        </p>
+        <div>
+          <h2 className="text-xl font-bold text-gray-800">
+            {isSetup ? "Reset PIN" : "Parent Access"}
+          </h2>
+          <p className="mt-2 text-sm text-gray-500">
+            {isSetup
+              ? "Create a new 4-digit PIN."
+              : "Enter your PIN to access dashboard."}
+          </p>
+        </div>
 
-        {/* Main PIN input */}
-        <input
-          type="password"
-          inputMode="numeric"
-          maxLength={4}
-          value={pin.input}
-          onChange={(e) => setPinInput(e.target.value)}
-          placeholder="••••"
-          className="mt-4 w-full rounded-xl border border-gray-200 px-3 py-2 text-lg
-                     focus:outline-none focus:ring-2 focus:ring-purple-300"
-        />
-
-        {/* Confirmation input only in create mode */}
-        {pin.mode === "create" && (
+        <div className="space-y-4">
           <input
             type="password"
             inputMode="numeric"
             maxLength={4}
-            value={pin.confirm}
-            onChange={(e) => setPinConfirm(e.target.value)}
-            placeholder="Confirm PIN"
-            className="mt-3 w-full rounded-xl border border-gray-200 px-3 py-2 text-lg
-                       focus:outline-none focus:ring-2 focus:ring-purple-300"
+            value={pin.input}
+            onChange={(e) => setPinInput(e.target.value)}
+            placeholder={isSetup ? "New PIN" : "••••"}
+            className="w-full text-center text-1xl tracking-[0.5em] font-bold text-purple-700 border-b-2 border-purple-200 focus:border-purple-500 focus:outline-none py-2 bg-transparent"
+            autoFocus
           />
-        )}
 
-        {/* Error message */}
-        {pin.error && <p className="mt-2 text-sm text-red-600">{pin.error}</p>}
-
-        {/* Mode switch links */}
-        <div className="mt-3 flex items-center justify-between text-sm">
-          <button
-            type="button"
-            onClick={() => setPinMode("create")}
-            className="text-purple-600 hover:underline"
-          >
-            Create / Change PIN
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setPinMode("forgot")}
-            className="text-gray-600 hover:underline"
-          >
-            Forgot PIN?
-          </button>
+          {isSetup && (
+            <input
+              type="password"
+              inputMode="numeric"
+              maxLength={4}
+              value={pin.confirm}
+              onChange={(e) => setPinConfirm(e.target.value)}
+              placeholder="Confirm"
+              className="w-full text-center text-1xl tracking-[0.5em] font-bold text-purple-700 border-b-2 border-purple-200 focus:border-purple-500 focus:outline-none py-2 bg-transparent"
+            />
+          )}
         </div>
 
-        {/* Footer buttons */}
-        <div className="mt-4 flex gap-2">
+        {pin.error && (
+          <p className="text-sm text-red-500 font-medium animate-pulse">
+            {pin.error}
+          </p>
+        )}
+
+        <div className="flex gap-3 pt-2">
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl bg-gray-100 px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+            className="flex-1 rounded-full bg-gray-100 px-4 py-3 text-sm font-bold text-gray-600 hover:bg-gray-200 transition"
           >
             Cancel
           </button>
 
           <button
             onClick={onSubmit}
-            className="flex-1 rounded-xl bg-purple-500 px-4 py-2 text-sm text-white hover:bg-purple-600"
+            disabled={
+              pin.input.length !== 4 || (isSetup && pin.confirm.length !== 4)
+            }
+            className="flex-1 rounded-full bg-purple-600 px-4 py-3 text-sm font-bold text-white hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Submit
+            {isSetup ? "Save PIN" : "Unlock"}
           </button>
         </div>
+
+        {!isSetup && (
+          <div className="pt-2">
+            <button
+              onClick={onForgotPin}
+              className="text-xs text-gray-400 underline hover:text-purple-600 transition cursor-pointer"
+            >
+              Forgot PIN?
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

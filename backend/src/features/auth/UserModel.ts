@@ -24,6 +24,14 @@ const userSchema = new Schema<UserDoc>(
       enum: ["Easy", "Medium", "Advanced"],
       default: "Easy",
     },
+
+    gallery: [
+      {
+        imageUrl: { type: String, required: true },
+        caption: { type: String },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );

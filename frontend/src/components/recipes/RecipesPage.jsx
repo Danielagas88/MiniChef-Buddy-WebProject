@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
-import { fetchRecipes } from "../../services/recipeService.js";
+import {
+  fetchRecipes,
+  CATEGORY_FILTERS,
+} from "../../services/recipeService.js";
 import { useAuth } from "../../hooks/useAuth.js";
 import { useFavorites } from "../../hooks/useFavorites.js";
 import RecipesFilters from "./RecipesFilters.jsx";
@@ -63,6 +66,11 @@ const ALLERGEN_ALIASES = {
   sesame: ["sesame", "sesame seeds", "tahini"],
 };
 
+/**
+ * Checks if a recipe contains any allergens defined for the user.
+ * @param {string[]} ingredientNames - List of ingredients in the recipe
+ * @param {string[]} userAllergens - List of allergens the user is allergic to
+ */
 function containsAllergen(ingredientNames = [], userAllergens = []) {
   if (!userAllergens?.length) return false;
 
@@ -84,6 +92,10 @@ function containsAllergen(ingredientNames = [], userAllergens = []) {
 export default function RecipesPage() {
   const [search, setSearch] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
+
+  // NEW: State for category filtering
+  const [activeCategory, setActiveCategory] = useState(CATEGORY_FILTERS.ALL);
+
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState(null);
@@ -113,6 +125,7 @@ export default function RecipesPage() {
     }
   }, [levelFilter, levelOptions]);
 
+  // Load recipes from API when the component mounts or category changes
   useEffect(() => {
     let isMounted = true;
 
@@ -121,7 +134,9 @@ export default function RecipesPage() {
         setIsLoading(true);
         setLoadError(null);
 
-        const data = await fetchRecipes("");
+        // Fetch recipes based on the selected category
+        const data = await fetchRecipes("", activeCategory);
+
         if (isMounted) setRecipes(data);
       } catch (err) {
         if (isMounted) {
@@ -137,7 +152,7 @@ export default function RecipesPage() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [activeCategory]); // Re-run when category changes
 
   const filteredRecipes = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -163,18 +178,23 @@ export default function RecipesPage() {
   return (
     <section className="space-y-4">
       <div className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6 space-y-3">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <h3 className="text-lg md:text-xl font-bold text-gray-800">
-            Choose a Yummy Recipe
-          </h3>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <h3 className="text-lg md:text-xl font-bold text-gray-800">
+              Choose a Yummy Recipe
+            </h3>
 
-          <RecipesFilters
-            search={search}
-            onSearch={setSearch}
-            level={levelFilter}
-            onLevel={setLevelFilter}
-            levelOptions={levelOptions}
-          />
+            {/* Filter Component containing Search, Level, and Category buttons */}
+            <RecipesFilters
+              search={search}
+              onSearch={setSearch}
+              level={levelFilter}
+              onLevel={setLevelFilter}
+              levelOptions={levelOptions}
+              activeCategory={activeCategory}
+              onCategoryChange={setActiveCategory}
+            />
+          </div>
         </div>
 
         <div className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6">
@@ -185,7 +205,7 @@ export default function RecipesPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
             {!isLoading && filteredRecipes.length === 0 && (
               <p className="text-xs md:text-sm text-gray-500 col-span-full">
-                No recipes found.
+                No recipes found for this selection.
               </p>
             )}
 

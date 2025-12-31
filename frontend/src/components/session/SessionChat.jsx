@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 
-export default function SessionChat({ messages = [], onSend }) {
+// Added isVoiceEnabled prop to control icon state
+export default function SessionChat({
+  messages = [],
+  onSend,
+  isVoiceEnabled,
+  onToggleVoice,
+}) {
   const [text, setText] = useState("");
   const messagesEndRef = useRef(null);
 
@@ -17,16 +23,32 @@ export default function SessionChat({ messages = [], onSend }) {
   }
 
   return (
-    // Updated container background and border for better visibility
     <div className="bg-white rounded-3xl shadow-lg p-4 md:p-6 flex flex-col h-full border-4 border-pink-200">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 border-b-2 border-pink-100 pb-3">
         <h3 className="text-lg md:text-xl font-bold text-pink-600 flex items-center gap-2">
           🤖 My Cooking Buddy
         </h3>
-        <span className="text-xs font-bold px-3 py-1 rounded-full bg-green-100 text-green-700 border border-green-300 animate-pulse">
-          Online
-        </span>
+
+        <div className="flex items-center gap-2">
+          {/* --- NEW: Voice Toggle Button --- */}
+          <button
+            onClick={onToggleVoice}
+            type="button"
+            className={`p-2 rounded-full transition ${
+              isVoiceEnabled
+                ? "bg-pink-100 text-pink-600"
+                : "bg-gray-100 text-gray-400"
+            }`}
+            title={isVoiceEnabled ? "Mute Voice" : "Enable Voice"}
+          >
+            {isVoiceEnabled ? "🔊" : "🔇"}
+          </button>
+
+          <span className="text-xs font-bold px-3 py-1 rounded-full bg-green-100 text-green-700 border border-green-300 animate-pulse">
+            Online
+          </span>
+        </div>
       </div>
 
       {/* Messages Area */}
@@ -34,9 +56,6 @@ export default function SessionChat({ messages = [], onSend }) {
         {messages.map((m) => (
           <div
             key={m.id}
-            // === HIGH CONTRAST COLORS ===
-            // Bot: Pink-200 background (Darker)
-            // User: Purple-300 background (Darker)
             className={`relative px-5 py-3 rounded-2xl max-w-[85%] text-base md:text-lg leading-relaxed shadow-sm font-bold ${
               m.from === "bot"
                 ? "bg-pink-200 text-pink-900 rounded-tl-none mr-auto border-2 border-pink-300"

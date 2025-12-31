@@ -1,75 +1,39 @@
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 
 export default function AuthArea() {
-  const navigate = useNavigate();
-  const { user, viewMode, setViewMode, logout } = useAuth();
+  const { user, logout, setUser } = useAuth();
 
-  if (!user) {
-    return (
-      <button
-        onClick={() => navigate("/login")}
-        className="text-xs md:text-sm bg-pink-500 text-white px-4 py-2 rounded-full shadow hover:bg-pink-600"
-      >
-        Login
-      </button>
-    );
+  if (!user) return null;
+
+  function handleLogout() {
+    logout();
+    setUser(null);
   }
 
   return (
-    <>
-      <div className="flex items-center gap-3 bg-white/70 backdrop-blur rounded-full shadow-sm px-3 py-2">
-        {/* Avatar */}
-        <div className="w-9 h-9 rounded-full bg-pink-100 flex items-center justify-center text-pink-700 font-bold">
-          {user.name?.[0] || "👧"}
+    <div className="flex items-center gap-3 bg-white/60 backdrop-blur rounded-full pl-2 pr-4 py-1.5 border border-white/60 shadow-sm">
+      <div className="flex items-center gap-2">
+        <div className="w-8 h-8 rounded-full bg-pink-500 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+          {user.name?.[0]?.toUpperCase() || "C"}
         </div>
-
-        {/* Name + mode */}
-        <div className="hidden md:flex flex-col leading-tight">
-          <span className="text-sm font-semibold text-gray-800">
-            {user.name}
-          </span>
-          <span className="text-[11px] text-gray-500">
-            Mode: <span className="font-medium">{viewMode}</span>
+        <div className="hidden md:flex flex-col leading-none">
+          <span className="text-sm font-bold text-gray-800">{user.name}</span>
+          <span className="text-[10px] text-gray-500 font-medium">
+            Level: {user.cookingLevel || "Beginner"}
           </span>
         </div>
-
-        {/* Segmented control */}
-        <div className="flex items-center bg-gray-100 rounded-full p-1">
-          <button
-            type="button"
-            onClick={() => setViewMode("child")}
-            className={`px-3 py-1 text-[11px] rounded-full transition ${
-              viewMode === "child"
-                ? "bg-pink-500 text-white shadow-sm"
-                : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            Child
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setViewMode("parent")}
-            className={`px-3 py-1 text-[11px] rounded-full transition ${
-              viewMode === "parent"
-                ? "bg-purple-500 text-white shadow-sm"
-                : "text-gray-700 hover:bg-gray-200"
-            }`}
-          >
-            Parent
-          </button>
-        </div>
-
-        {/* Logout */}
-        <button
-          onClick={logout}
-          className="text-xs bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full hover:bg-gray-300"
-          title="Logout"
-        >
-          Logout
-        </button>
       </div>
-    </>
+
+      <div className="h-5 w-px bg-gray-300 mx-1"></div>
+
+      <button
+        onClick={handleLogout}
+        className="text-xs font-bold text-gray-500 hover:text-red-500 transition flex items-center gap-1"
+        title="Logout"
+      >
+        <span>Logout</span>
+        <span className="text-lg"></span>
+      </button>
+    </div>
   );
 }

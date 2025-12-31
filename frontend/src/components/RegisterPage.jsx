@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 
-export const ALLERGEN_OPTIONS = [
+const ALLERGEN_OPTIONS = [
   { key: "milk", label: "Milk" },
   { key: "eggs", label: "Eggs" },
   { key: "nuts", label: "Nuts" },
@@ -20,6 +20,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [cookingLevel, setCookingLevel] = useState("Easy");
+  const [parentPin, setParentPin] = useState("");
   const [allergens, setAllergens] = useState([]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,6 +37,7 @@ export default function RegisterPage() {
       name: name.trim(),
       cookingLevel,
       allergens,
+      parentPin,
     });
 
     setIsSubmitting(false);
@@ -49,6 +51,11 @@ export default function RegisterPage() {
     setAllergens((prev) =>
       prev.includes(key) ? prev.filter((x) => x !== key) : [...prev, key]
     );
+  }
+
+  function handlePinChange(e) {
+    const val = e.target.value.replace(/\D/g, "").slice(0, 4);
+    setParentPin(val);
   }
 
   const isDisabled =
@@ -118,6 +125,25 @@ export default function RegisterPage() {
         </div>
 
         <div className="space-y-1">
+          <label
+            htmlFor="pin"
+            className="text-xs font-semibold text-purple-700"
+          >
+            Parent PIN (4 digits)
+          </label>
+          <input
+            id="pin"
+            type="text"
+            inputMode="numeric"
+            maxLength={4}
+            placeholder="e.g. 1234"
+            className="w-full px-3 py-2 border border-purple-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-300 tracking-widest font-mono"
+            value={parentPin}
+            onChange={handlePinChange}
+          />
+        </div>
+
+        <div className="space-y-1">
           <label className="text-xs font-semibold text-gray-700">
             Cooking Level
           </label>
@@ -166,6 +192,18 @@ export default function RegisterPage() {
         >
           {isSubmitting || isAuthLoading ? "Registering..." : "Register"}
         </button>
+
+        <div className="text-center pt-2">
+          <p className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className="text-pink-600 font-bold cursor-pointer hover:underline"
+            >
+              Login here
+            </span>
+          </p>
+        </div>
       </form>
     </section>
   );
