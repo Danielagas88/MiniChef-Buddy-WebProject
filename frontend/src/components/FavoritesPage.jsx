@@ -18,9 +18,7 @@ export default function FavoritesPage() {
     let alive = true;
 
     async function loadFavoritesRecipes() {
-      if (!user?.token) return;
-
-      if (!favoriteIds || favoriteIds.length === 0) {
+      if (!user?.token || !favoriteIds || favoriteIds.length === 0) {
         setFavoriteRecipes([]);
         return;
       }
@@ -28,13 +26,9 @@ export default function FavoritesPage() {
       try {
         setLoading(true);
         setError(null);
-
         const ids = favoriteIds.map(String);
-
         const results = await Promise.all(ids.map((id) => fetchRecipeById(id)));
-
         const clean = results.filter(Boolean);
-
         const byId = new Map(clean.map((r) => [String(r.id), r]));
         const ordered = ids.map((id) => byId.get(id)).filter(Boolean);
 
@@ -53,59 +47,65 @@ export default function FavoritesPage() {
     };
   }, [user?.token, favoriteIds]);
 
-  if (!user?.token) {
-    return (
-      <section className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6 space-y-3">
-        <h2 className="text-xl font-bold text-gray-800">My Favorites</h2>
-        <p className="text-sm text-gray-700">
-          Please login to save and view your favorite recipes.
-        </p>
-        <button
-          onClick={() => navigate("/login")}
-          className="text-sm bg-pink-500 text-white px-4 py-2 rounded-full shadow hover:bg-pink-600"
-        >
-          Go to Login
-        </button>
-      </section>
-    );
-  }
-
   return (
-    <section className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6 space-y-3">
-      <h2 className="text-xl font-bold text-gray-800">My Favorites</h2>
+    <section className="bg-white/80 backdrop-blur-md rounded-3xl shadow-sm border border-emerald-50 p-6 space-y-6">
+      {/* Header Area */}
+      <div className="flex items-center justify-between border-b border-emerald-50 pb-4">
+        <h2 className="text-2xl font-extrabold text-slate-800">
+          My <span className="text-emerald-600">Favorites</span>
+        </h2>
+        <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+          {favoriteRecipes.length} Recipes
+        </span>
+      </div>
 
-      {loading && <p className="text-sm text-gray-600">Loading favorites...</p>}
-      {error && <p className="text-sm text-red-600">{error}</p>}
-
-      {favoriteRecipes.length === 0 && !loading ? (
-        <p className="text-sm text-gray-700">
-          No favorites yet. Go to Recipes and tap ♡ on a recipe card.
+      {/* Status Messages */}
+      {loading && (
+        <p className="text-center py-10 text-slate-500 animate-pulse">
+          Gathering your favorites...
         </p>
+      )}
+      {error && (
+        <p className="text-center py-10 text-red-500 font-bold">{error}</p>
+      )}
+
+      {/* Empty State */}
+      {!loading && favoriteRecipes.length === 0 ? (
+        <div className="text-center py-16 space-y-4">
+          <div className="text-6xl grayscale opacity-30">🍳</div>
+          <p className="text-slate-500 font-medium text-lg">
+            Your favorites list is empty.
+          </p>
+          <button
+            onClick={() => navigate("/recipes")}
+            className="bg-emerald-500 text-white px-8 py-2.5 rounded-full font-bold shadow-lg hover:bg-emerald-600 transition-all hover:scale-105"
+          >
+            Find Yummy Recipes
+          </button>
+        </div>
       ) : (
-        <div className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-            {favoriteRecipes.map((recipe) => (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
-                onOpen={() => navigate(`/session/${recipe.id}`)}
-                action={
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFavorite(recipe.id);
-                    }}
-                    className="w-9 h-9 rounded-full bg-pink-100 shadow flex items-center justify-center"
-                    aria-label="Remove from favorites"
-                    title="Remove from favorites"
-                  >
-                    <span className="text-lg text-pink-600">♥</span>
-                  </button>
-                }
-              />
-            ))}
-          </div>
+        /* Recipes Grid */
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {favoriteRecipes.map((recipe) => (
+            <RecipeCard
+              key={recipe.id}
+              recipe={recipe}
+              onOpen={() => navigate(`/session/${recipe.id}`)}
+              action={
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite(recipe.id);
+                  }}
+                  className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center hover:scale-110 transition-transform border border-red-50"
+                  aria-label="Remove from favorites"
+                >
+                  <span className="text-xl text-red-500">❤️</span>
+                </button>
+              }
+            />
+          ))}
         </div>
       )}
     </section>

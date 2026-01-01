@@ -38,7 +38,7 @@ export default function App() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-pink-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#F0FDF4] flex items-center justify-center p-4">
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

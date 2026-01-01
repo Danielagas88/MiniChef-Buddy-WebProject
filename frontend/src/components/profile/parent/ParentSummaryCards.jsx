@@ -1,49 +1,85 @@
+import { Clock, ChefHat, TrendingUp } from "lucide-react";
+
 export default function ParentSummaryCards({ loading, stats }) {
   const totalMinutes = stats.totalMinutes || 0;
   const hours = Math.floor(totalMinutes / 60);
   const mins = totalMinutes % 60;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {/* Active time */}
-      <div className="rounded-3xl bg-white/80 shadow p-6 border border-gray-100">
-        <div className="text-sm text-gray-500">Active time</div>
-        <div className="text-3xl font-extrabold text-gray-800 mt-2">
-          {loading ? "…" : `${hours}h ${mins}m`}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 1. Active Time Card */}
+      <div className="rounded-[2.5rem] bg-white p-7 border border-emerald-50 shadow-sm transition-all hover:shadow-md">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 bg-amber-100 rounded-xl text-amber-600">
+            <Clock size={20} />
+          </div>
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+            Active Time
+          </span>
         </div>
-        <div className="text-xs text-gray-500 mt-2">Sum of cooking minutes</div>
+        <div className="text-3xl font-black text-slate-800">
+          {loading ? (
+            <div className="h-9 w-24 bg-slate-50 animate-pulse rounded-lg" />
+          ) : (
+            `${hours}h ${mins}m`
+          )}
+        </div>
+        <p className="text-xs text-slate-400 font-medium mt-2 italic">
+          Total kitchen experience
+        </p>
       </div>
 
-      {/* Recipes cooked */}
-      <div className="rounded-3xl bg-white/80 shadow p-6 border border-gray-100">
-        <div className="text-sm text-gray-500">Recipes cooked</div>
-        <div className="text-3xl font-extrabold text-gray-800 mt-2">
-          {loading ? "…" : stats.totalCooked}
+      {/* 2. Recipes Cooked Card */}
+      <div className="rounded-[2.5rem] bg-white p-7 border border-emerald-50 shadow-sm transition-all hover:shadow-md">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 bg-emerald-100 rounded-xl text-emerald-600">
+            <ChefHat size={20} />
+          </div>
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+            Recipes Cooked
+          </span>
         </div>
-        <div className="text-xs text-gray-500 mt-2">
-          Summary of last sessions
+        <div className="text-3xl font-black text-slate-800">
+          {loading ? (
+            <div className="h-9 w-16 bg-slate-50 animate-pulse rounded-lg" />
+          ) : (
+            stats.totalCooked
+          )}
         </div>
+        <p className="text-xs text-slate-400 font-medium mt-2 italic">
+          Successfully completed
+        </p>
       </div>
 
-      {/* Progress */}
-      <div className="rounded-3xl bg-white/80 shadow p-6 border border-gray-100">
-        <div className="text-sm text-gray-500">Progress</div>
+      {/* 3. Growth Card - Now matches the rest with White background */}
+      <div className="rounded-[2.5rem] bg-white p-7 border border-emerald-50 shadow-sm transition-all hover:shadow-md">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600">
+            <TrendingUp size={20} />
+          </div>
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+            Growth
+          </span>
+        </div>
 
-        <div className="mt-2 flex items-end justify-between gap-3">
-          <div className="text-3xl font-extrabold text-gray-800">
+        <div className="flex items-end justify-between gap-3 mb-4">
+          <div className="text-3xl font-black text-slate-800">
             {loading ? "…" : `${stats.progressPercent}%`}
           </div>
-          <div className="text-xs text-gray-500 text-right">
-            Next milestone:{" "}
-            <b className="text-gray-700">{stats.nextMilestone}</b>
+          <div className="text-[10px] text-slate-400 text-right font-bold leading-tight">
+            NEXT:{" "}
+            <span className="text-emerald-600 uppercase">
+              {stats.nextMilestone} recipes
+            </span>
             <br />
-            {stats.progressToNext}/15 to next badge
+            {stats.progressToNext}/15 TO BADGE
           </div>
         </div>
 
-        <div className="h-3 bg-gray-200 rounded-full overflow-hidden mt-4">
+        {/* Updated Progress Bar: Emerald color, no purple */}
+        <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden shadow-inner">
           <div
-            className="h-3 bg-purple-600 rounded-full transition-all"
+            className="h-full bg-emerald-500 rounded-full transition-all duration-1000 shadow-sm"
             style={{ width: `${stats.progressPercent}%` }}
           />
         </div>

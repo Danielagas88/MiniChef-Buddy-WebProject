@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "../../../hooks/useAuth.js";
 import { galleryService } from "../../../services/galleryService.js";
-import { Award, ChefHat, Star, Trophy } from "lucide-react";
+import { Award, ChefHat, Star, Trophy, Camera } from "lucide-react";
 import BadgeCard from "./BadgeCard";
 import { BADGES, computeProgress } from "../../../utils/progressUtils";
 import { getMyRecipeHistory } from "../../../services/recipeHistoryService.js";
@@ -14,12 +14,6 @@ const BADGE_ICONS = {
   "master-chef": Trophy,
 };
 
-/**
- * ChildProfile Component
- * ----------------------
- * Displays the child's chef profile and their personal cooking gallery.
- * Photos are fetched from the backend (stored as Cloudinary URLs).
- */
 export default function ChildProfile() {
   const { user, setUser } = useAuth();
   const [images, setImages] = useState([]);
@@ -42,7 +36,6 @@ export default function ChildProfile() {
         token: user.token,
         cookingLevel: level,
       });
-
       setUser((prev) => ({ ...prev, cookingLevel: updated.cookingLevel }));
     } catch (e) {
       alert(e.message || "Failed to update cooking level");
@@ -67,15 +60,12 @@ export default function ChildProfile() {
         setProgressLoading(false);
       }
     }
-
     if (user?.token) loadProgress();
   }, [user?.token]);
 
-  // Fetch gallery images when the component mounts or user changes
   useEffect(() => {
     async function loadGallery() {
       try {
-        // Fetch current user data which includes the gallery array
         const galleryData = await galleryService.getUserGallery();
         setImages(galleryData);
       } catch (error) {
@@ -84,22 +74,13 @@ export default function ChildProfile() {
         setLoading(false);
       }
     }
-
-    if (user) {
-      loadGallery();
-    }
+    if (user) loadGallery();
   }, [user]);
 
-  /**
-   * Handles photo deletion
-   * @param {string} photoId - The unique ID of the photo in the MongoDB array
-   */
   const handleDelete = async (photoId) => {
     if (!window.confirm("Are you sure you want to delete this photo?")) return;
-
     try {
       await galleryService.deletePhoto(photoId);
-      // Optimistically update the UI by filtering out the deleted image
       setImages((prev) => prev.filter((img) => img._id !== photoId));
     } catch (error) {
       console.error("Delete failed:", error);
@@ -110,98 +91,123 @@ export default function ChildProfile() {
   if (!user) return null;
 
   return (
-    <section className="space-y-6 animate-fade-in">
-      {/* 1. CHEF PROFILE CARD */}
-      <div className="bg-white bg-opacity-90 rounded-3xl shadow-lg p-6 flex items-center gap-4 border border-pink-100">
-        {/* Avatar Placeholder */}
-        <div className="w-20 h-20 bg-linear-to-br from-yellow-200 to-orange-300 rounded-full flex items-center justify-center text-4xl shadow-inner border-4 border-white">
+    <section className="space-y-4 animate-fade-in pb-12">
+      {" "}
+      {/* צמצמתי מ-space-y-8 ל-4 */}
+      {/* 1. CHEF PROFILE CARD - Compact Version */}
+      <div className="bg-white rounded-3xl shadow-sm p-5 flex flex-col md:flex-row items-center gap-6 border border-emerald-50 relative overflow-hidden">
+        {/* הקטנתי את העיגול ברקע מ-w-32 ל-w-24 */}
+        <div className="absolute top-0 left-0 w-24 h-24 bg-emerald-50 rounded-br-full -z-0 opacity-40"></div>
+
+        {/* הקטנתי את האייקון מ-w-28 ל-w-20 */}
+        <div className="relative z-10 w-20 h-20 bg-gradient-to-br from-amber-200 to-orange-400 rounded-full flex items-center justify-center text-4xl shadow-lg border-4 border-white">
           🧑‍🍳
         </div>
 
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">Chef {user.name}</h2>
-          <p className="text-gray-500 text-sm">@{user.username}</p>
-
-          <div className="mt-2 inline-flex items-center bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
-            Level: {user.cookingLevel || "Easy"}
+        <div className="relative z-10 flex-1 text-center md:text-left space-y-1">
+          {" "}
+          {/* צמצמתי space-y-3 ל-1 */}
+          <div>
+            <h2 className="text-xl md:text-2xl font-extrabold text-slate-800">
+              {" "}
+              {/* הקטנתי טקסט */}
+              Chef {user.name}
+            </h2>
+            <p className="text-slate-400 text-xs font-medium">
+              @{user.username}
+            </p>
           </div>
-
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <label className="text-sm font-semibold text-gray-700">
-              Update cooking level:
-            </label>
-
-            <select
-              value={level}
-              onChange={(e) => setLevel(e.target.value)}
-              className="rounded-xl border border-gray-200 px-3 py-2 bg-white text-sm"
-            >
-              <option value="Easy">Easy</option>
-              <option value="Medium">Medium</option>
-              <option value="Advanced">Advanced</option>
-            </select>
+          <div className="inline-flex items-center bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm border border-emerald-200">
+            Rank: {user.cookingLevel || "Easy"}
+          </div>
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-1">
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-bold text-slate-600">
+                Level up:
+              </label>
+              <select
+                value={level}
+                onChange={(e) => setLevel(e.target.value)}
+                className="rounded-full border-2 border-slate-100 px-3 py-1 bg-white text-xs font-medium focus:border-emerald-400 outline-none transition-all shadow-sm"
+              >
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
 
             <button
               onClick={saveLevel}
               disabled={savingLevel || level === (user.cookingLevel || "Easy")}
-              className="rounded-xl bg-purple-600 px-4 py-2 text-white text-sm font-semibold hover:bg-purple-700 disabled:opacity-50"
+              className="rounded-full bg-slate-800 px-4 py-1.5 text-white text-xs font-bold hover:bg-emerald-600 disabled:opacity-30 transition-all shadow-md active:scale-95"
             >
-              {savingLevel ? "Saving..." : "Save"}
+              {savingLevel ? "Saving..." : "Update Level"}
             </button>
           </div>
         </div>
       </div>
-
-      {/* 2. ACHIEVEMENTS (no history list shown) */}
-      <div className="bg-white bg-opacity-80 rounded-3xl shadow p-6 border border-yellow-100">
-        <div className="flex items-start justify-between gap-4">
+      {/* 2. ACHIEVEMENTS - Compact Version */}
+      <div className="bg-white rounded-3xl shadow-sm p-6 border border-amber-50">
+        {" "}
+        {/* צמצמתי p-8 ל-6 */}
+        <div className="flex items-center justify-between mb-4">
+          {" "}
+          {/* צמצמתי mb-8 ל-4 */}
           <div>
-            <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-              🏅 Achievements
+            <h3 className="text-lg font-extrabold text-slate-800 flex items-center gap-2">
+              <span className="text-amber-500">🏅</span> My Achievements
             </h3>
-            <p className="text-sm text-gray-500">
-              Earn badges as you cook more recipes!
+            <p className="text-xs text-slate-500 font-medium">
+              Earn badges as you cook more!
             </p>
           </div>
-
-          <div className="text-right">
-            <div className="text-xs text-gray-500">Recipes cooked</div>
-            <div className="text-2xl font-extrabold text-gray-800">
+          <div className="bg-slate-50 p-3 rounded-2xl text-center border border-slate-100 min-w-[100px]">
+            <div className="text-[9px] uppercase font-bold text-slate-400 tracking-widest mb-0.5">
+              Total Cooked
+            </div>
+            <div className="text-2xl font-black text-emerald-600">
               {progressLoading ? "…" : progress.totalCooked}
             </div>
           </div>
         </div>
-
-        {/* Progress bar */}
-        <div className="mt-4">
+        {/* Progress bar Section - Compact */}
+        <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 mb-6">
+          {" "}
+          {/* צמצמתי p-6 ל-4 */}
           {progressLoading ? (
-            <div className="text-sm text-gray-400">Loading progress…</div>
+            <div className="text-center py-2 text-slate-400 animate-pulse text-xs">
+              Calculating progress…
+            </div>
           ) : (
-            <>
-              <div className="flex justify-between text-xs text-gray-600 mb-2">
-                <span>Next milestone: {progress.nextMilestone} recipes</span>
-                <span>
+            <div className="space-y-3">
+              <div className="flex justify-between items-end">
+                <span className="text-xs font-bold text-slate-700">
+                  Next milestone: {progress.nextMilestone} recipes
+                </span>
+                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
                   {progress.progressToNext}/15 ({progress.progressPercent}%)
                 </span>
               </div>
 
-              <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-3 bg-slate-200 rounded-full overflow-hidden shadow-inner">
                 <div
-                  className="h-3 bg-pink-500 rounded-full transition-all"
+                  className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-1000 shadow-sm"
                   style={{ width: `${progress.progressPercent}%` }}
                 />
               </div>
 
-              <div className="mt-2 text-xs text-gray-500">
-                Total cooking time:{" "}
-                <b className="text-gray-700">{progress.totalMinutes}</b> minutes
-              </div>
-            </>
+              <p className="text-[10px] text-slate-500 font-medium italic">
+                You've spent{" "}
+                <b className="text-slate-700">{progress.totalMinutes}</b>{" "}
+                minutes in the kitchen.
+              </p>
+            </div>
           )}
         </div>
-
         {/* Badges grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {" "}
+          {/* צמצמתי gap-6 ל-4 */}
           {BADGES.map((b) => {
             const unlocked = progress.earnedBadges.some((x) => x.key === b.key);
             const Icon = BADGE_ICONS[b.key] || Award;
@@ -212,71 +218,53 @@ export default function ChildProfile() {
                 IconComponent={Icon}
                 title={b.name}
                 unlocked={unlocked}
-                subtitle={`Unlock at ${b.at} recipes`}
+                subtitle={`Unlock at ${b.at}`} // קיצרתי את הטקסט
               />
             );
           })}
         </div>
       </div>
-
-      {/* 3. COOKING GALLERY SECTION */}
-      <div className="bg-white bg-opacity-80 rounded-3xl shadow p-6 min-h-[250px]">
-        <div className="mb-4">
-          <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-            📸 My Cooking Gallery
-          </h3>
-          <p className="text-sm text-gray-500">
-            Check out all the amazing dishes you've cooked!
-          </p>
+      {/* 3. COOKING GALLERY SECTION - Compact */}
+      <div className="bg-white rounded-3xl shadow-sm p-6 border border-emerald-50">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-lg font-extrabold text-slate-800 flex items-center gap-2">
+              <Camera className="text-emerald-500" size={20} /> My Gallery
+            </h3>
+          </div>
+          <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-full">
+            {images.length} Photos
+          </span>
         </div>
 
         {loading ? (
-          <div className="text-center py-10 text-gray-400">
-            Loading your photos... ⏳
+          <div className="text-center py-10 text-slate-400 text-sm">
+            Loading... ⏳
           </div>
         ) : images.length > 0 ? (
-          /* Render Grid of Images */
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {images.map((img) => (
               <div
                 key={img._id}
-                className="group relative aspect-square overflow-hidden rounded-2xl shadow-sm border border-gray-100 bg-gray-50"
+                className="group relative aspect-square overflow-hidden rounded-2xl shadow-sm border-2 border-white bg-slate-50 hover:shadow-md transition-all"
               >
-                {/* Image from Cloudinary */}
                 <img
                   src={img.imageUrl}
                   alt={img.caption || "My Dish"}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-
-                {/* Delete Button - Visible on hover */}
                 <button
                   onClick={() => handleDelete(img._id)}
-                  className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center shadow-md hover:bg-red-600 z-20"
-                  title="Delete Photo"
+                  className="absolute top-2 right-2 bg-white/90 text-red-500 w-7 h-7 rounded-full opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center shadow hover:bg-red-500 hover:text-white z-20"
                 >
                   ✕
                 </button>
-
-                {/* Optional Caption Overlay */}
-                {img.caption && (
-                  <div className="absolute inset-x-0 bottom-0 bg-black/40 backdrop-blur-xs p-2">
-                    <p className="text-[10px] text-white font-medium truncate">
-                      {img.caption}
-                    </p>
-                  </div>
-                )}
               </div>
             ))}
           </div>
         ) : (
-          /* Empty State UI */
-          <div className="border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center p-12 text-gray-400 bg-gray-50/50">
-            <span className="text-4xl mb-2 opacity-50">🖼️</span>
-            <p className="text-sm font-medium">Gallery is empty</p>
-            <p className="text-xs mt-1 text-center">
-              Cook a recipe and upload a photo to see it here!
-            </p>
+          <div className="border-2 border-dashed border-slate-100 rounded-3xl flex flex-col items-center justify-center p-8 text-slate-300 bg-slate-50/30">
+            <p className="text-sm font-bold italic">Gallery is empty</p>
           </div>
         )}
       </div>

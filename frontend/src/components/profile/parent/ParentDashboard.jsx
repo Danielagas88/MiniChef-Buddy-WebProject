@@ -3,6 +3,7 @@ import { getMyRecipeHistory } from "../../../services/recipeHistoryService.js";
 import { computeProgress } from "../../../utils/progressUtils.js";
 import ParentSummaryCards from "./ParentSummaryCards.jsx";
 import ParentRecentCooked from "./ParentRecentCooked.jsx";
+import { LayoutDashboard, ShieldCheck } from "lucide-react"; // הוספת אייקונים
 
 export default function ParentDashboard({ token, limit = 10 }) {
   const [items, setItems] = useState([]);
@@ -30,28 +31,41 @@ export default function ParentDashboard({ token, limit = 10 }) {
   const stats = useMemo(() => computeProgress(items), [items]);
 
   return (
-    <section className="space-y-6">
-      {/* Header */}
-      <div className="rounded-3xl bg-white/80 shadow p-6">
-        <h2 className="text-2xl font-bold text-gray-800">Parent Area</h2>
-        <p className="text-sm text-gray-600 mt-1">
-          Activity overview, recipes cooked, and child progress.
-        </p>
+    <section className="space-y-6 animate-fade-in pb-10">
+      {/* Header - Glassmorphism style */}
+      <div className="rounded-[2rem] bg-white/70 backdrop-blur-md shadow-sm p-8 border border-emerald-50 flex items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="text-emerald-500" size={24} />
+            <h2 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">
+              Parent <span className="text-emerald-600">Dashboard</span>
+            </h2>
+          </div>
+          <p className="text-sm md:text-base text-slate-500 font-medium">
+            Activity overview, recipes cooked, and child progress
+          </p>
+        </div>
       </div>
 
       {err && (
-        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-          {err}
+        <div className="rounded-2xl border-2 border-red-100 bg-red-50 p-4 text-sm font-bold text-red-600 flex items-center gap-3">
+          <span>⚠️</span> {err}
         </div>
       )}
 
-      <ParentSummaryCards
-        loading={loading}
-        stats={stats}
-        loadedCount={items.length}
-      />
+      {/* Stats Summary Cards */}
+      <div className="relative">
+        <ParentSummaryCards
+          loading={loading}
+          stats={stats}
+          loadedCount={items.length}
+        />
+      </div>
 
-      <ParentRecentCooked loading={loading} items={items} />
+      {/* Recent Activity Table/List */}
+      <div className="bg-white/50 rounded-[2rem] p-2 border border-slate-50">
+        <ParentRecentCooked loading={loading} items={items} />
+      </div>
     </section>
   );
 }

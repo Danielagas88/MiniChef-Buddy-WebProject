@@ -5,12 +5,12 @@ function NavItem({ to, children, isParent }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `pb-0.5 text-sm font-bold transition-all duration-200 border-b-2 ${
+        `pb-1 text-sm font-bold transition-all duration-300 border-b-2 ${
           isActive
             ? isParent
-              ? "text-purple-700 border-purple-500"
-              : "text-pink-600 border-pink-500"
-            : "text-gray-500 border-transparent hover:text-pink-400"
+              ? "text-amber-600 border-amber-500" // Active Parent Link
+              : "text-emerald-600 border-emerald-500" // Active Child Link
+            : "text-slate-500 border-transparent hover:text-emerald-500 hover:border-emerald-200" // Inactive state
         }`
       }
     >
@@ -27,7 +27,10 @@ export default function TopNav() {
       <NavItem to="/favorites">My Favorites</NavItem>
       <NavItem to="/games">Games</NavItem>
       <NavItem to="/progress">My Profile</NavItem>
-      <div className="w-px h-4 bg-gray-300 mx-2"></div>
+
+      {/* Separator line */}
+      <div className="w-px h-5 bg-slate-200 mx-2"></div>
+
       <NavItem to="/parent-dashboard" isParent>
         Parent Dashboard
       </NavItem>

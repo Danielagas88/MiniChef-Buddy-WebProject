@@ -6,8 +6,8 @@ import { fetchRecipeById } from "../../services/recipeService.js";
 import { useAuth } from "../../hooks/useAuth.js";
 import { saveRecipeCompletion } from "../../services/recipeHistoryService.js";
 import SessionHeader from "./SessionHeader.jsx";
-import StepProgress from "./StepProgress.jsx";
 import SessionChat from "./SessionChat.jsx";
+import StepCard from "./StepCard.jsx";
 
 // --- CONFIGURATION ---
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -250,6 +250,7 @@ export default function SessionPage() {
     window.speechSynthesis.cancel();
     setCurrentStepIndex((i) => Math.max(0, i - 1));
   };
+
   // --- CHAT HANDLER ---
   async function sendMessage(text) {
     // Add user message to state
@@ -261,7 +262,7 @@ export default function SessionPage() {
     try {
       const prompt = `You are ChefBot. Recipe: ${recipe.title}. Step: ${recipe.steps[currentStepIndex]}. User query: "${text}". Reply: Short, safe, and encouraging.`;
 
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
       const result = await model.generateContent(prompt);
       const aiResponseText = result.response.text();
 
@@ -283,115 +284,84 @@ export default function SessionPage() {
       setIsBotTyping(false);
     }
   }
+
   if (loading)
     return (
-      <div className="p-10 text-center text-xl font-bold">
+      <div className="p-10 text-center text-xl font-bold text-slate-500">
         Loading recipe...
       </div>
     );
   if (!recipe) return <div className="p-10 text-center">Recipe not found.</div>;
 
   return (
-    <section className="max-w-6xl mx-auto space-y-6 pb-10 px-4 relative">
+    <section className="max-w-7xl mx-auto space-y-6 pb-10 px-4 relative flex flex-col min-h-screen">
       <SessionHeader title={recipe.title} onBack={() => navigate("/recipes")} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <StepProgress
-            current={currentStepIndex + 1}
-            total={recipe.steps.length}
-          />
+      {/* --- NEW LAYOUT GRID --- */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+        <div className="lg:col-span-1 bg-amber-50 rounded-3xl border-2 border-amber-200 p-6 shadow-sm h-full max-h-[650px] overflow-y-auto">
+          <h3 className="font-bold text-amber-700 text-xl mb-4 flex items-center gap-2 sticky top-0 bg-amber-50 pb-2 border-b border-amber-200">
+            🛒 Ingredients
+          </h3>
+          <ul className="space-y-3 text-slate-700 font-medium">
+            {recipe.ingredients.map((ing, idx) => (
+              <li
+                key={idx}
+                className="flex items-start gap-3 bg-white p-3 rounded-xl border border-amber-100 shadow-sm"
+              >
+                <span className="w-2 h-2 mt-2 bg-amber-400 rounded-full flex-shrink-0"></span>
+                <span className="text-sm leading-snug">{ing}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-          {/* INGREDIENTS BOX */}
-          <div className="bg-orange-50 rounded-3xl border-2 border-orange-200 p-6 shadow-sm">
-            <h3 className="font-bold text-orange-700 text-xl mb-4 flex items-center gap-2">
-              🛒 Ingredients
-            </h3>
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-800 font-medium">
-              {recipe.ingredients.map((ing, idx) => (
-                <li
-                  key={idx}
-                  className="flex items-center gap-3 bg-white p-2 rounded-lg border border-orange-100"
-                >
-                  <span className="w-3 h-3 bg-orange-400 rounded-full flex-shrink-0"></span>{" "}
-                  {ing}
-                </li>
-              ))}
-            </ul>
-          </div>
-
+        {/* RIGHT COLUMN (75%): Step Card & Progress */}
+        <div className="lg:col-span-3 space-y-6 flex flex-col">
           {/* STEP CARD */}
-          <div className="bg-white rounded-3xl shadow-xl p-8 min-h-[300px] flex flex-col justify-between relative overflow-hidden border border-gray-100">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-pink-50 rounded-bl-full -z-0 opacity-60"></div>
-            <div className="z-10 relative">
-              <div className="flex justify-between items-start mb-6">
-                <span
-                  className={`inline-block px-3 py-1 rounded-full text-sm font-bold tracking-wide ${
-                    recipe.level === "Advanced"
-                      ? "bg-red-100 text-red-600"
-                      : "bg-green-100 text-green-600"
-                  }`}
-                >
-                  STEP {currentStepIndex + 1} • {recipe.level}
-                </span>
-                <SpeakingRobot isSpeaking={isSpeaking} />
-              </div>
-              <p className="text-2xl md:text-3xl text-gray-800 font-medium leading-relaxed">
-                {recipe.steps[currentStepIndex]}
-              </p>
-            </div>
-            <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-100">
-              <button
-                onClick={handlePrev}
-                disabled={currentStepIndex === 0}
-                className="px-6 py-3 rounded-full text-gray-500 font-bold hover:bg-gray-100 disabled:opacity-30 text-lg transition"
-              >
-                ← Back
-              </button>
-              <button
-                onClick={handleNext}
-                className={`px-8 py-3 rounded-full text-white text-lg font-bold shadow-lg transition transform hover:scale-105 ${
-                  currentStepIndex === recipe.steps.length - 1
-                    ? "bg-green-500 hover:bg-green-600"
-                    : "bg-pink-500 hover:bg-pink-600"
-                }`}
-              >
-                {currentStepIndex === recipe.steps.length - 1
-                  ? "Finish! 🎉"
-                  : "Next Step →"}
-              </button>
+          <StepCard
+            stepText={recipe.steps[currentStepIndex]}
+            currentStep={currentStepIndex + 1}
+            totalSteps={recipe.steps.length}
+            level={recipe.level}
+            isSpeaking={isSpeaking}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            isFirst={currentStepIndex === 0}
+            isLast={currentStepIndex === recipe.steps.length - 1}
+          />
+          <div className="w-full bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden h-[300px] flex flex-col">
+            {isBotTyping && (
+              <span className="text-xs text-slate-400 animate-pulse">
+                Thinking...
+              </span>
+            )}
+            <div className="flex-1 overflow-hidden h-full">
+              <SessionChat
+                messages={messages}
+                onSend={sendMessage}
+                isVoiceEnabled={isVoiceEnabled}
+                onToggleVoice={() => setIsVoiceEnabled(!isVoiceEnabled)}
+              />
             </div>
           </div>
         </div>
-
-        <aside className="h-full flex flex-col">
-          <SessionChat
-            messages={messages}
-            onSend={sendMessage}
-            isVoiceEnabled={isVoiceEnabled}
-            onToggleVoice={() => setIsVoiceEnabled(!isVoiceEnabled)}
-          />
-          {isBotTyping && (
-            <div className="mt-2 text-xs text-gray-500 animate-pulse">
-              ChefBot is thinking... 🤔
-            </div>
-          )}
-        </aside>
       </div>
 
-      {/* FINISH POPUP */}
+      {/* FINISH MODAL */}
       {showFinishModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl space-y-6">
-            <div className="text-6xl">👨‍🍳🎉👩‍🍳</div>
-            <h2 className="text-3xl font-bold text-pink-600">Great Job!</h2>
-            <p className="text-gray-600 mb-8 text-lg">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl space-y-6 border border-emerald-100">
+            <div className="text-6xl animate-bounce">👨‍🍳🎉👩‍🍳</div>
+            <h2 className="text-3xl font-extrabold text-slate-800">
+              Great Job!
+            </h2>
+            <p className="text-slate-600 mb-8 text-lg">
               You finished cooking <b>{recipe.title}</b>!<br />
               That looks delicious!
             </p>
 
             <div className="space-y-3">
-              {/* Dynamic Button: Changes from Upload to View Profile */}
               {!isUploadSuccess ? (
                 <div className="relative">
                   <input
@@ -402,10 +372,10 @@ export default function SessionPage() {
                     disabled={isUploading}
                   />
                   <button
-                    className={`w-full py-3 rounded-full font-bold shadow-lg flex items-center justify-center gap-2 transition ${
+                    className={`w-full py-3 rounded-xl font-bold shadow-md flex items-center justify-center gap-2 transition ${
                       isUploading
-                        ? "bg-gray-100 text-gray-400"
-                        : "bg-purple-600 text-white hover:bg-purple-700"
+                        ? "bg-slate-100 text-slate-400"
+                        : "bg-emerald-500 text-white hover:bg-emerald-600"
                     }`}
                   >
                     {isUploading ? "Uploading..." : "📸 Upload Photo"}
@@ -414,7 +384,7 @@ export default function SessionPage() {
               ) : (
                 <button
                   onClick={() => navigate("/progress")}
-                  className="w-full py-3 rounded-full font-bold shadow-lg bg-green-500 text-white hover:bg-green-600 flex items-center justify-center gap-2 animate-bounce-in"
+                  className="w-full py-3 rounded-xl font-bold shadow-md bg-emerald-100 text-emerald-700 hover:bg-emerald-200 flex items-center justify-center gap-2 animate-bounce-in"
                 >
                   🖼️ View in My Profile
                 </button>
@@ -423,8 +393,6 @@ export default function SessionPage() {
               <button
                 onClick={async () => {
                   try {
-                    // Save history before leaving
-
                     if (user?.token) {
                       const minutes = Math.max(
                         0,
@@ -443,7 +411,7 @@ export default function SessionPage() {
                     navigate("/recipes");
                   }
                 }}
-                className="w-full py-3 rounded-full bg-pink-500 text-white font-bold text-xl hover:bg-pink-600 shadow-lg transition"
+                className="w-full py-3 rounded-xl bg-amber-400 text-slate-800 font-bold text-lg hover:bg-amber-500 shadow-md transition"
               >
                 Back to Menu
               </button>

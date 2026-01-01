@@ -73,29 +73,22 @@ const ALLERGEN_ALIASES = {
  */
 function containsAllergen(ingredientNames = [], userAllergens = []) {
   if (!userAllergens?.length) return false;
-
   const ingredients = ingredientNames.map((i) =>
     String(i).toLowerCase().trim()
   );
-
   const blocked = new Set();
   for (const a of userAllergens) {
     const key = String(a).toLowerCase().trim();
     blocked.add(key);
     (ALLERGEN_ALIASES[key] || []).forEach((alias) => blocked.add(alias));
   }
-
-  // exact match only (prevents false positives like "cream of tartar")
   return ingredients.some((ing) => blocked.has(ing));
 }
 
 export default function RecipesPage() {
   const [search, setSearch] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
-
-  // NEW: State for category filtering
   const [activeCategory, setActiveCategory] = useState(CATEGORY_FILTERS.ALL);
-
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState(null);
@@ -105,7 +98,6 @@ export default function RecipesPage() {
   const { isFavorite, toggleFavorite } = useFavorites();
 
   const levelRank = { Easy: 1, Medium: 2, Advanced: 3 };
-
   const userLevel = user?.cookingLevel || "Easy";
   const userAllergens = user?.allergens || [];
 
@@ -118,25 +110,19 @@ export default function RecipesPage() {
     (lvl) => levelRank[lvl] <= levelRank[userLevel]
   );
 
-  // If user level decreases, reset manual filter if it became invalid
   useEffect(() => {
     if (levelFilter && !levelOptions.includes(levelFilter)) {
       setLevelFilter("");
     }
   }, [levelFilter, levelOptions]);
 
-  // Load recipes from API when the component mounts or category changes
   useEffect(() => {
     let isMounted = true;
-
     async function loadData() {
       try {
         setIsLoading(true);
         setLoadError(null);
-
-        // Fetch recipes based on the selected category
         const data = await fetchRecipes("", activeCategory);
-
         if (isMounted) setRecipes(data);
       } catch (err) {
         if (isMounted) {
@@ -147,28 +133,19 @@ export default function RecipesPage() {
         if (isMounted) setIsLoading(false);
       }
     }
-
     loadData();
     return () => {
       isMounted = false;
     };
-  }, [activeCategory]); // Re-run when category changes
+  }, [activeCategory]);
 
   const filteredRecipes = useMemo(() => {
     const q = search.trim().toLowerCase();
-
     return recipes.filter((r) => {
       const matchesName = r.title.toLowerCase().includes(q);
-
-      // Manual UI filter (optional)
       const matchesLevelFilter = levelFilter ? r.level === levelFilter : true;
-
-      // Auto restriction by user's level (default)
       const matchesUserLevel = allowedByUserLevel(r.level, userLevel);
-
-      // Allergen restriction (uses ingredientNames from recipeService)
       const safeForUser = !containsAllergen(r.ingredientNames, userAllergens);
-
       return (
         matchesName && matchesLevelFilter && matchesUserLevel && safeForUser
       );
@@ -177,14 +154,14 @@ export default function RecipesPage() {
 
   return (
     <section className="space-y-4">
-      <div className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6 space-y-3">
+      {/* Container with the new Emerald theme but keeping your original padding/shadow structure */}
+      <div className="bg-white/90 rounded-3xl shadow-sm p-4 md:p-6 space-y-3 border border-emerald-50">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
-            <h3 className="text-lg md:text-xl font-bold text-gray-800">
+            <h3 className="text-lg md:text-xl font-bold text-slate-800">
               Choose a Yummy Recipe
             </h3>
 
-            {/* Filter Component containing Search, Level, and Category buttons */}
             <RecipesFilters
               search={search}
               onSearch={setSearch}
@@ -197,14 +174,16 @@ export default function RecipesPage() {
           </div>
         </div>
 
-        <div className="bg-white bg-opacity-80 rounded-3xl shadow p-4 md:p-6">
-          {isLoading && <p className="text-center text-gray-500">Loading...</p>}
-
+        {/* The Actual Grid */}
+        <div className="mt-6">
+          {isLoading && (
+            <p className="text-center text-slate-500">Loading recipes...</p>
+          )}
           {loadError && <p className="text-center text-red-500">{loadError}</p>}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {!isLoading && filteredRecipes.length === 0 && (
-              <p className="text-xs md:text-sm text-gray-500 col-span-full">
+              <p className="text-sm text-slate-500 col-span-full text-center py-10">
                 No recipes found for this selection.
               </p>
             )}
@@ -222,18 +201,20 @@ export default function RecipesPage() {
                       if (!user) return navigate("/login");
                       toggleFavorite(recipe.id);
                     }}
-                    className={`w-9 h-9 rounded-full shadow flex items-center justify-center
-                      ${isFavorite(recipe.id) ? "bg-pink-100" : "bg-white/90"}
-                    `}
+                    className={`w-9 h-9 rounded-full shadow flex items-center justify-center transition-all ${
+                      isFavorite(recipe.id)
+                        ? "bg-white border border-red-100"
+                        : "bg-white/90"
+                    }`}
                   >
                     <span
                       className={`text-lg ${
                         isFavorite(recipe.id)
-                          ? "text-pink-600"
-                          : "text-gray-500"
+                          ? "text-red-500"
+                          : "text-slate-400"
                       }`}
                     >
-                      {isFavorite(recipe.id) ? "♥" : "♡"}
+                      {isFavorite(recipe.id) ? "❤️" : "♡"}
                     </span>
                   </button>
                 }

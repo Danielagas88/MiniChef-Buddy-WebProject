@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 
-// Added isVoiceEnabled prop to control icon state
 export default function SessionChat({
   messages = [],
   onSend,
@@ -23,43 +22,46 @@ export default function SessionChat({
   }
 
   return (
-    <div className="bg-white rounded-3xl shadow-lg p-4 md:p-6 flex flex-col h-full border-4 border-pink-200">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4 border-b-2 border-pink-100 pb-3">
-        <h3 className="text-lg md:text-xl font-bold text-pink-600 flex items-center gap-2">
+    /* 1. Container Frame (Restored) - Emerald Border & Shadow */
+    <div className="bg-white rounded-3xl shadow-sm border border-emerald-100 flex flex-col h-full overflow-hidden">
+      {/* 2. Header (Restored) - Title + Controls */}
+      <div className="bg-slate-50 px-5 py-3 border-b border-emerald-50 flex items-center justify-between">
+        <h3 className="text-base md:text-lg font-bold text-slate-700 flex items-center gap-2">
           🤖 My Cooking Buddy
         </h3>
 
         <div className="flex items-center gap-2">
-          {/* --- NEW: Voice Toggle Button --- */}
+          {/* Voice Toggle */}
           <button
             onClick={onToggleVoice}
             type="button"
-            className={`p-2 rounded-full transition ${
+            className={`p-2 rounded-full transition-all duration-200 ${
               isVoiceEnabled
-                ? "bg-pink-100 text-pink-600"
-                : "bg-gray-100 text-gray-400"
+                ? "bg-emerald-100 text-emerald-600 hover:bg-emerald-200"
+                : "bg-slate-200 text-slate-400 hover:bg-slate-300"
             }`}
             title={isVoiceEnabled ? "Mute Voice" : "Enable Voice"}
           >
             {isVoiceEnabled ? "🔊" : "🔇"}
           </button>
 
-          <span className="text-xs font-bold px-3 py-1 rounded-full bg-green-100 text-green-700 border border-green-300 animate-pulse">
+          {/* Online Badge */}
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-100 text-green-700 border border-green-200 animate-pulse flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
             Online
           </span>
         </div>
       </div>
 
-      {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+      {/* 3. Messages Area - Emerald (Bot) & Amber (User) Bubbles */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
         {messages.map((m) => (
           <div
             key={m.id}
-            className={`relative px-5 py-3 rounded-2xl max-w-[85%] text-base md:text-lg leading-relaxed shadow-sm font-bold ${
+            className={`relative px-4 py-2.5 rounded-2xl max-w-[85%] text-sm md:text-base leading-snug shadow-sm font-medium border ${
               m.from === "bot"
-                ? "bg-pink-200 text-pink-900 rounded-tl-none mr-auto border-2 border-pink-300"
-                : "bg-purple-300 text-purple-900 rounded-tr-none ml-auto border-2 border-purple-400"
+                ? "bg-emerald-50 text-emerald-900 rounded-tl-none mr-auto border-emerald-100" // Bot style
+                : "bg-amber-50 text-amber-900 rounded-tr-none ml-auto border-amber-100" // User style
             }`}
           >
             {m.text}
@@ -68,21 +70,21 @@ export default function SessionChat({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
+      {/* 4. Input Area */}
       <form
-        className="mt-4 flex gap-2 pt-3 border-t-2 border-pink-100"
+        className="p-3 border-t border-emerald-50 bg-slate-50 flex gap-2"
         onSubmit={submit}
       >
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
           type="text"
-          placeholder="Ask me anything..."
-          className="flex-1 px-4 py-3 text-base border-2 border-gray-300 rounded-full focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition bg-gray-50 text-gray-800 font-medium"
+          placeholder="Ask ChefBot..."
+          className="flex-1 px-4 py-2.5 text-sm border border-slate-300 rounded-full focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 transition bg-white text-slate-800"
         />
         <button
           type="submit"
-          className="px-5 py-2 text-sm font-bold bg-pink-500 text-white rounded-full hover:bg-pink-600 shadow-lg transform active:scale-95 transition border-2 border-pink-600"
+          className="px-5 py-2.5 text-sm font-bold bg-emerald-500 text-white rounded-full hover:bg-emerald-600 shadow-md transform active:scale-95 transition flex items-center gap-1"
         >
           Send
         </button>
