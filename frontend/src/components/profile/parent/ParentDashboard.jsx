@@ -1,81 +1,57 @@
-/**
- * ParentDashboard.jsx
- * -------------------
- * Parent Area UI shell:
- * - header
- * - section selector cards (Usage / Weekly Report)
- * - renders selected section content
- *
- * Props:
- * - parent: object returned by useParentArea()
- */
+import { useEffect, useMemo, useState } from "react";
+import { getMyRecipeHistory } from "../../../services/recipeHistoryService.js";
+import { computeProgress } from "../../../utils/progressUtils.js";
+import ParentSummaryCards from "./ParentSummaryCards.jsx";
+import ParentRecentCooked from "./ParentRecentCooked.jsx";
 
-import ParentUsage from "./ParentUsage.jsx";
-import ParentWeeklyReport from "./ParentWeeklyReport.jsx";
+export default function ParentDashboard({ token, limit = 10 }) {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState(null);
 
-export default function ParentDashboard({ parent }) {
-  const { section } = parent;
+  useEffect(() => {
+    async function load() {
+      try {
+        setLoading(true);
+        setErr(null);
+        const history = await getMyRecipeHistory({ token, limit });
+        setItems(history);
+      } catch (e) {
+        console.error(e);
+        setErr(e?.message || "Failed to load parent report");
+        setItems([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (token) load();
+  }, [token, limit]);
+
+  const stats = useMemo(() => computeProgress(items), [items]);
 
   return (
     <section className="space-y-6">
       {/* Header */}
-      <div className="rounded-3xl bg-white bg-opacity-80 shadow p-6">
+      <div className="rounded-3xl bg-white/80 shadow p-6">
         <h2 className="text-2xl font-bold text-gray-800">Parent Area</h2>
         <p className="text-sm text-gray-600 mt-1">
-          Manage limits, approvals, and see weekly activity.
+          Activity overview, recipes cooked, and child progress.
         </p>
       </div>
 
-      {/* Section Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <button
-          onClick={() => parent.setSection("usage")}
-          className={`text-left rounded-3xl shadow p-5 bg-white bg-opacity-80 hover:shadow-md transition border ${
-            section === "usage" ? "border-purple-400" : "border-transparent"
-          }`}
-        >
-          <div className="text-2xl">⏱️</div>
-          <div className="mt-2">
-            <h3 className="text-lg font-bold text-gray-800">Usage Limits</h3>
-            <p className="text-sm text-gray-600">
-              Set daily time and allowed hours.
-            </p>
-          </div>
-        </button>
+      {err && (
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          {err}
+        </div>
+      )}
 
-        <button
-          onClick={() => parent.setSection("report")}
-          className={`text-left rounded-3xl shadow p-5 bg-white bg-opacity-80 hover:shadow-md transition border ${
-            section === "report" ? "border-purple-400" : "border-transparent"
-          }`}
-        >
-          <div className="text-2xl">📊</div>
-          <div className="mt-2">
-            <h3 className="text-lg font-bold text-gray-800">Weekly Report</h3>
-            <p className="text-sm text-gray-600">
-              Summary of recipes, games, and time.
-            </p>
-          </div>
-        </button>
-      </div>
+      <ParentSummaryCards
+        loading={loading}
+        stats={stats}
+        loadedCount={items.length}
+      />
 
-      {/* Content */}
-      <div className="rounded-3xl bg-white bg-opacity-80 shadow p-6">
-        {section === "usage" && (
-          <ParentUsage
-            usage={parent.usage}
-            onChange={parent.setUsage}
-            onSave={parent.saveUsageLimits}
-          />
-        )}
-
-        {section === "report" && (
-          <ParentWeeklyReport
-            weeklyReport={parent.weeklyReport}
-            onGenerateDemoWeek={parent.generateDemoWeek}
-          />
-        )}
-      </div>
+      <ParentRecentCooked loading={loading} items={items} />
     </section>
   );
 }

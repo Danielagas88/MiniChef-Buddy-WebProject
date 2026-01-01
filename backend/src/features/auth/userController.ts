@@ -192,3 +192,41 @@ export const deleteFromGallery = async (req: AuthRequest, res: Response) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+export const updateCookingLevel = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user?._id)
+      return res.status(401).json({ message: "Unauthorized" });
+
+    const { cookingLevel } = req.body as {
+      cookingLevel?: "Easy" | "Medium" | "Advanced";
+    };
+
+    const allowed = new Set(["Easy", "Medium", "Advanced"]);
+    if (!cookingLevel || !allowed.has(cookingLevel)) {
+      return res.status(400).json({ message: "Invalid cookingLevel" });
+    }
+
+    const updated = await User.findByIdAndUpdate(
+      req.user._id,
+      { $set: { cookingLevel } },
+      { new: true }
+    );
+
+    if (!updated) return res.status(404).json({ message: "User not found" });
+
+    return res.json({
+      id: updated._id.toString(),
+      username: updated.username,
+      name: updated.name,
+      allergens: updated.allergens || [],
+      cookingLevel: updated.cookingLevel || "Easy",
+      gallery: updated.gallery || [],
+      createdAt: updated.createdAt,
+      updatedAt: updated.updatedAt,
+    });
+  } catch (err) {
+    console.error("updateCookingLevel error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};

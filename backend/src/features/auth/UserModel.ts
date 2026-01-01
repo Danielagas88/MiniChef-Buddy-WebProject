@@ -36,7 +36,5 @@ const userSchema = new Schema<UserDoc>(
   { timestamps: true }
 );
 
-userSchema.index({ username: 1 }, { unique: true });
-
 const User = model<UserDoc>("User", userSchema);
 export default User;

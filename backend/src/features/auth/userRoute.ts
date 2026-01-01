@@ -5,6 +5,7 @@ import {
   login,
   addToGallery,
   deleteFromGallery,
+  updateCookingLevel,
 } from "./userController";
 import { auth } from "../../middleware/middleware";
 
@@ -15,4 +16,5 @@ userRouter.post("/register", createUser);
 userRouter.post("/login", login);
 userRouter.post("/gallery", auth, addToGallery);
 userRouter.delete("/gallery/:photoId", auth, deleteFromGallery);
+userRouter.patch("/me/cooking-level", auth, updateCookingLevel);
 export { userRouter };

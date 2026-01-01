@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { galleryService } from "../../services/galleryService.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -109,6 +109,7 @@ export default function SessionPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const sessionId = useMemo(() => crypto.randomUUID(), []);
+  const startedAtRef = useRef(Date.now());
 
   // --- STATE ---
   const [recipe, setRecipe] = useState(null);
@@ -207,6 +208,7 @@ export default function SessionPage() {
       const data = await fetchRecipeById(id);
       if (data) {
         setRecipe(data);
+        startedAtRef.current = Date.now();
         setMessages([
           {
             id: "bot-init",
@@ -423,14 +425,18 @@ export default function SessionPage() {
                   try {
                     // Save history before leaving
 
-                    if (user?.token)
+                    if (user?.token) {
+                      const minutes = Math.max(
+                        0,
+                        Math.round((Date.now() - startedAtRef.current) / 60000)
+                      );
                       await saveRecipeCompletion({
                         recipe,
-
                         token: user.token,
-
                         sessionId,
+                        minutes,
                       });
+                    }
                   } catch (e) {
                     console.error(e);
                   } finally {

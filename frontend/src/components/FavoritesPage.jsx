@@ -31,12 +31,10 @@ export default function FavoritesPage() {
 
         const ids = favoriteIds.map(String);
 
-        // מביאים מתכונים לפי ID (יציב)
         const results = await Promise.all(ids.map((id) => fetchRecipeById(id)));
 
         const clean = results.filter(Boolean);
 
-        // לשמור סדר לפי favoriteIds
         const byId = new Map(clean.map((r) => [String(r.id), r]));
         const ordered = ids.map((id) => byId.get(id)).filter(Boolean);
 
