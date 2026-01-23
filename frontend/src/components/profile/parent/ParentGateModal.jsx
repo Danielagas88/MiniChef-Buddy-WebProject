@@ -14,15 +14,12 @@ export default function ParentGateModal({
       className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4"
       onClick={onClose}
     >
-      {/* רוחב מאוזן: 350px. Padding בינוני: 8 */}
       <div
         className="w-full max-w-[350px] rounded-[2.5rem] bg-white p-8 shadow-2xl text-center space-y-6 border border-emerald-50 relative overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* קישוט רקע עדין */}
         <div className="absolute -top-10 -right-10 w-28 h-28 bg-amber-50 rounded-full blur-3xl opacity-60"></div>
 
-        {/* אייקון בגודל בינוני - 16 */}
         <div
           className={`w-16 h-16 rounded-[1.25rem] flex items-center justify-center mx-auto text-3xl shadow-sm ${
             isSetup
@@ -75,7 +72,6 @@ export default function ParentGateModal({
           </div>
         )}
 
-        {/* כפתורים בגובה נוח - py-3.5 */}
         <div className="flex gap-4 pt-2">
           <button
             onClick={onClose}

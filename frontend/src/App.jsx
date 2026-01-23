@@ -27,10 +27,14 @@ export default function App() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const u = res.data?.user ?? res.data;
+        if (u.username) {
+          localStorage.setItem("username", u.username);
+        }
         setUser({ ...u, token });
       } catch (err) {
         console.error("Token invalid", err);
         localStorage.removeItem("token");
+        localStorage.removeItem("username");
       }
     };
     loginWithToken();

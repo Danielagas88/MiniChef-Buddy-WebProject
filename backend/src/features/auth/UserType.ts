@@ -6,6 +6,7 @@ export interface UserDoc {
   password: string;
 
   parentPinHash?: string | null;
+  totalScore: number;
   favoriteRecipeIds?: string[];
   allergens?: string[];
   cookingLevel?: "Easy" | "Medium" | "Advanced";

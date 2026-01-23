@@ -19,9 +19,7 @@ export default function LoginPage() {
   }
 
   return (
-    /* הוספת bg-slate-50 כדי "לדרוס" את הוורוד ולוודא שהרקע נקי */
     <div className="min-h-screen w-full flex items-center justify-center bg-slate-50/50 p-6">
-      {/* max-w-md הוא הרוחב הקלאסי (448px) - הוא לא יהיה מכווץ יותר */}
       <section className="w-full max-w-md bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-emerald-50 p-8 md:p-12 space-y-8 animate-fade-in">
         {/* Header Section */}
         <div className="text-center space-y-3">

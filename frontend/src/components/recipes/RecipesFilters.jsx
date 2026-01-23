@@ -11,7 +11,6 @@ export default function RecipesFilters({
 }) {
   return (
     <div className="flex flex-col gap-6 w-full bg-white/50 backdrop-blur-sm p-6 rounded-3xl border border-emerald-50 shadow-sm">
-      {/* שורת חיפוש וסינון רמה */}
       <div className="flex flex-wrap gap-3 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
@@ -45,7 +44,6 @@ export default function RecipesFilters({
         </div>
       </div>
 
-      {/* שורת קטגוריות מעוצבת */}
       <div className="flex flex-wrap gap-2">
         {Object.values(CATEGORY_FILTERS).map((cat) => (
           <button

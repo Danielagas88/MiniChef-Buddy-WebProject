@@ -47,8 +47,10 @@ export const createUser = async (req: Request, res: Response) => {
     const cleanAllergens = Array.isArray(allergens)
       ? Array.from(
           new Set(
-            allergens.map((a) => String(a).trim().toLowerCase()).filter(Boolean)
-          )
+            allergens
+              .map((a) => String(a).trim().toLowerCase())
+              .filter(Boolean),
+          ),
         )
       : [];
 
@@ -82,6 +84,7 @@ export const createUser = async (req: Request, res: Response) => {
       name: savedUser.name,
       allergens: savedUser.allergens || [],
       cookingLevel: savedUser.cookingLevel || "Easy",
+      totalScore: savedUser.totalScore || 0,
       token,
       createdAt: savedUser.createdAt,
       updatedAt: savedUser.updatedAt,
@@ -127,6 +130,7 @@ export const login = async (req: Request, res: Response) => {
       name: user.name,
       allergens: user.allergens || [],
       cookingLevel: user.cookingLevel || "Easy",
+      totalScore: user.totalScore || 0, // <--- הוספנו כאן
       token,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
@@ -146,6 +150,7 @@ export const getUser = async (req: AuthRequest, res: Response) => {
     name: req.user.name,
     allergens: req.user.allergens || [],
     cookingLevel: req.user.cookingLevel || "Easy",
+    totalScore: req.user.totalScore || 0,
     gallery: req.user.gallery || [],
     createdAt: req.user.createdAt,
     updatedAt: req.user.updatedAt,
@@ -161,7 +166,7 @@ export const addToGallery = async (req: AuthRequest, res: Response) => {
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { $push: { gallery: { imageUrl, caption } } },
-      { new: true }
+      { new: true },
     );
 
     return res.status(200).json({
@@ -182,7 +187,7 @@ export const deleteFromGallery = async (req: AuthRequest, res: Response) => {
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { $pull: { gallery: { _id: photoId } } },
-      { new: true }
+      { new: true },
     );
 
     return res
@@ -210,7 +215,7 @@ export const updateCookingLevel = async (req: AuthRequest, res: Response) => {
     const updated = await User.findByIdAndUpdate(
       req.user._id,
       { $set: { cookingLevel } },
-      { new: true }
+      { new: true },
     );
 
     if (!updated) return res.status(404).json({ message: "User not found" });
@@ -221,6 +226,7 @@ export const updateCookingLevel = async (req: AuthRequest, res: Response) => {
       name: updated.name,
       allergens: updated.allergens || [],
       cookingLevel: updated.cookingLevel || "Easy",
+      totalScore: updated.totalScore || 0,
       gallery: updated.gallery || [],
       createdAt: updated.createdAt,
       updatedAt: updated.updatedAt,
@@ -228,5 +234,45 @@ export const updateCookingLevel = async (req: AuthRequest, res: Response) => {
   } catch (err) {
     console.error("updateCookingLevel error:", err);
     return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const addScore = async (req: AuthRequest, res: Response) => {
+  try {
+    const { points } = req.body;
+
+    if (!req.user) return res.status(401).json({ message: "Unauthorized" });
+    if (!points || typeof points !== "number") {
+      return res.status(400).json({ message: "Points must be a number" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { $inc: { totalScore: points } },
+      { new: true },
+    );
+
+    return res.status(200).json({
+      message: "Score updated",
+      totalScore: updatedUser?.totalScore,
+    });
+  } catch (err) {
+    console.error("addScore error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getLeaderboard = async (req: Request, res: Response) => {
+  try {
+    // We find users, sort by totalScore descending (-1), and limit to top 5
+    // We only select username and totalScore to keep it efficient
+    const topUsers = await User.find()
+      .sort({ totalScore: -1 })
+      .limit(5)
+      .select("username totalScore");
+
+    res.status(200).json(topUsers);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching leaderboard", error });
   }
 };

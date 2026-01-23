@@ -17,6 +17,8 @@ const userSchema = new Schema<UserDoc>(
 
     parentPinHash: { type: String, default: null },
 
+    totalScore: { type: Number, default: 0 },
+
     favoriteRecipeIds: { type: [String], default: [] },
     allergens: { type: [String], default: [] },
     cookingLevel: {
@@ -33,7 +35,7 @@ const userSchema = new Schema<UserDoc>(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const User = model<UserDoc>("User", userSchema);

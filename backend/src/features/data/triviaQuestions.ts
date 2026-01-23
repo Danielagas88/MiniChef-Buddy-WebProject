@@ -1,0 +1,158 @@
+// src/data/triviaQuestions.js
+
+export const triviaQuestions = [
+  {
+    id: 1,
+    question: "Which of these is a great source of protein?",
+    options: ["Apple", "Chicken", "Bread", "Cucumber"],
+    correctAnswer: "Chicken",
+    fact: "Protein helps your muscles grow strong!",
+  },
+  {
+    id: 2,
+    question: "Which food gives you energy from carbohydrates?",
+    options: ["Pasta", "Water", "Steak", "Lettuce"],
+    correctAnswer: "Pasta",
+    fact: "Carbohydrates are like fuel for your body's engine!",
+  },
+  {
+    id: 3,
+    question: "Which of these is considered a 'healthy fat'?",
+    options: ["Candy", "Avocado", "Soda", "White Bread"],
+    correctAnswer: "Avocado",
+    fact: "Healthy fats are great for your brain power!",
+  },
+  {
+    id: 4,
+    question: "Which of these is a dairy product full of calcium?",
+    options: ["Yogurt", "Orange Juice", "Olive Oil", "Rice"],
+    correctAnswer: "Yogurt",
+    fact: "Calcium makes your bones and teeth super strong.",
+  },
+
+  {
+    id: 5,
+    question: "What is flour usually made from?",
+    options: ["Rice", "Wheat", "Potatoes", "Sugar"],
+    correctAnswer: "Wheat",
+    fact: "Wheat is ground into fine powder to make flour for bread.",
+  },
+  {
+    id: 6,
+    question: "Which part of the plant is a carrot?",
+    options: ["Leaf", "Flower", "Root", "Fruit"],
+    correctAnswer: "Root",
+    fact: "Carrots grow underground as the root of the plant!",
+  },
+  {
+    id: 7,
+    question: "Where do eggs come from?",
+    options: ["Plants", "Cows", "Chickens", "The Supermarket"],
+    correctAnswer: "Chickens",
+    fact: "Chickens lay eggs, which are a perfect breakfast protein!",
+  },
+  {
+    id: 8,
+    question: "Chocolate is made from which bean?",
+    options: ["Coffee bean", "Cocoa bean", "Jelly bean", "Green bean"],
+    correctAnswer: "Cocoa bean",
+    fact: "Cocoa beans grow in pods on trees in tropical places.",
+  },
+  {
+    id: 9,
+    question: "What is the standard oven temperature for most baking?",
+    options: ["100°C", "180°C", "250°C", "50°C"],
+    correctAnswer: "180°C",
+    fact: "180°C (350°F) is the perfect temperature for cookies and cakes.",
+  },
+  {
+    id: 10,
+    question: "What should you always do before you start cooking?",
+    options: [
+      "Sing a song",
+      "Wash your hands",
+      "Jump 3 times",
+      "Open the window",
+    ],
+    correctAnswer: "Wash your hands",
+    fact: "Washing hands keeps germs away from your yummy food!",
+  },
+  {
+    id: 11,
+    question: "What makes bread dough rise and become fluffy?",
+    options: ["Salt", "Yeast", "Pepper", "Water"],
+    correctAnswer: "Yeast",
+    fact: "Yeast is a tiny living thing that blows bubbles into the dough.",
+  },
+  {
+    id: 12,
+    question: "Which tool is used to protect your hands from a hot tray?",
+    options: ["Oven mitts", "Rubber gloves", "Paper towels", "A hat"],
+    correctAnswer: "Oven mitts",
+    fact: "Oven mitts are thick and protect you from high heat.",
+  },
+
+  {
+    id: 13,
+    question: "Which fruit is famous for having a lot of Vitamin C?",
+    options: ["Banana", "Orange", "Grape", "Pear"],
+    correctAnswer: "Orange",
+    fact: "Vitamin C helps your body fight off colds and stay healthy.",
+  },
+  {
+    id: 14,
+    question: "Which of these is a fruit (it has seeds inside)?",
+    options: ["Tomato", "Potato", "Onion", "Broccoli"],
+    correctAnswer: "Tomato",
+    fact: "Even though we use it in salads, tomatoes are technically fruits.",
+  },
+  {
+    id: 15,
+    question:
+      "Which vegetable is known for being 'Popeye's' favorite for strength?",
+    options: ["Corn", "Spinach", "Peas", "Cabbage"],
+    correctAnswer: "Spinach",
+    fact: "Spinach is packed with iron and vitamins.",
+  },
+
+  {
+    id: 16,
+    question: "What does it mean to 'Simmer' something?",
+    options: [
+      "Freeze it",
+      "Cook it at a low boil",
+      "Cut it into cubes",
+      "Eat it quickly",
+    ],
+    correctAnswer: "Cook it at a low boil",
+    fact: "Simmering is like a gentle boil with small bubbles.",
+  },
+  {
+    id: 17,
+    question: "What do we call a list of instructions to make a dish?",
+    options: ["A Story", "A Map", "A Recipe", "A Letter"],
+    correctAnswer: "A Recipe",
+    fact: "Recipes tell you exactly what you need and how to cook it.",
+  },
+  {
+    id: 18,
+    question: "Which ingredient makes food taste sweet?",
+    options: ["Salt", "Lemon", "Sugar", "Vinegar"],
+    correctAnswer: "Sugar",
+    fact: "Sugar adds sweetness, but too much isn't good for your teeth!",
+  },
+  {
+    id: 19,
+    question: "What do you use to measure a small amount of salt?",
+    options: ["A Cup", "A Teaspoon", "A Plate", "A Bowl"],
+    correctAnswer: "A Teaspoon",
+    fact: "Measuring accurately makes sure your food tastes perfect.",
+  },
+  {
+    id: 20,
+    question: "Which of these is a whole grain?",
+    options: ["White Sugar", "Brown Rice", "Potato Chips", "Ice Cream"],
+    correctAnswer: "Brown Rice",
+    fact: "Whole grains have more fiber and keep you full longer.",
+  },
+];

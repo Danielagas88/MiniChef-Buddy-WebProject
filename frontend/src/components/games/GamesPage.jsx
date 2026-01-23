@@ -1,60 +1,184 @@
-import { Rocket, Gamepad2, Timer, Lock } from "lucide-react";
+import { Brain, Trophy, Layers, Sparkles, ChefHat, Star } from "lucide-react";
+import { useState, useEffect } from "react";
+
+import TriviaGame from "./trivia/TriviaGame";
+import MemoryGame from "./memory/MemoryGame";
+import FoodSorter from "./foodsorter/FoodSorter";
+import Leaderboard from "./common/LeaderBoard";
+import GameButton from "./common/GameButton";
 
 export default function GamesPage() {
-  return (
-    <section className="space-y-6 animate-fade-in pb-12">
-      {/* Header Section */}
-      <div className="bg-white/80 backdrop-blur-md rounded-[2.5rem] shadow-sm p-8 border border-emerald-50 text-center md:text-left">
-        <div className="flex flex-col md:flex-row items-center gap-6">
-          <div className="w-20 h-20 bg-amber-100 rounded-3xl flex items-center justify-center text-amber-600 shadow-inner">
-            <Gamepad2 size={40} strokeWidth={2.5} />
-          </div>
-          <div className="space-y-2">
-            <h2 className="text-3xl font-black text-slate-800 tracking-tight">
-              Learning <span className="text-emerald-600">Games</span>
-            </h2>
-            <p className="text-slate-500 font-medium max-w-2xl">
-              Master your kitchen skills through playful challenges! From
-              ingredient matching to safety puzzles, learning to cook has never
-              been this fun.
-            </p>
-          </div>
+  const [activeGame, setActiveGame] = useState(null);
+  const [players, setPlayers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchLeaderboard = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        "http://localhost:3000/api/auth/leaderboard",
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setPlayers(data);
+      }
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeaderboard();
+  }, []);
+
+  const handleBackToArcade = () => {
+    setActiveGame(null);
+    fetchLeaderboard();
+  };
+
+  // --- Render Active Game View ---
+  if (activeGame) {
+    return (
+      <div className="min-h-screen pb-10 bg-slate-50">
+        <div className="max-w-4xl mx-auto px-4 py-4 md:px-6 md:py-6">
+          <GameButton
+            label="Back to Arcade"
+            onClick={handleBackToArcade}
+            variant="primary"
+            className="w-auto px-6 h-12 text-sm md:text-base font-bold shadow-sm"
+          />
+        </div>
+
+        <div className="animate-fade-in px-4 md:px-0">
+          {activeGame === "trivia" && (
+            <TriviaGame onBack={handleBackToArcade} />
+          )}
+          {activeGame === "memory" && (
+            <MemoryGame onBack={handleBackToArcade} />
+          )}
+          {activeGame === "sorter" && (
+            <FoodSorter onBack={handleBackToArcade} />
+          )}
         </div>
       </div>
+    );
+  }
 
-      {/* "Coming Soon" Hero Area */}
-      <div className="relative overflow-hidden rounded-[3rem] bg-slate-900 p-12 text-center border-4 border-emerald-500/20 shadow-2xl">
-        {/* Background decorative elements */}
-        <div className="absolute top-0 left-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
-
-        <div className="relative z-10 space-y-6">
-          <div className="inline-flex items-center gap-2 bg-emerald-500 text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 animate-bounce">
-            <Rocket size={14} /> Launching Soon
+  // --- Render Menu View (The Arcade) ---
+  return (
+    <div className="min-h-screen px-4 py-6 md:px-6 md:py-8 max-w-6xl mx-auto space-y-8">
+      {/* 1. Hero Section (Compact Version) */}
+      <header className="relative text-center space-y-3">
+        <div className="inline-block animate-float">
+          <div className="bg-gradient-to-tr from-emerald-400 to-teal-500 text-white p-3 md:p-4 rounded-[1.5rem] shadow-lg shadow-emerald-200 rotate-3">
+            <ChefHat size={32} className="md:w-10 md:h-10" strokeWidth={2.5} />
           </div>
+        </div>
 
-          <h3 className="text-4xl md:text-5xl font-black text-white leading-tight">
-            The Culinary Arcade <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-amber-300">
-              Is Under Construction
-            </span>
-          </h3>
+        <h1 className="text-3xl md:text-5xl font-black text-slate-800 tracking-tight leading-tight">
+          Culinary{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-600">
+            Arcade
+          </span>
+        </h1>
+        <p className="text-sm md:text-lg text-slate-600 font-medium max-w-xl mx-auto leading-relaxed px-2">
+          Train your brain & become a Master Chef! 🍳
+        </p>
+      </header>
 
-          <p className="text-slate-400 font-medium max-w-lg mx-auto text-lg">
-            Our chefs are busy coding new adventures. Get ready for kitchen
-            safety quests and ingredient puzzles!
-          </p>
+      {/* 2. Games Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        {/* === Card 1: Trivia === */}
+        <div
+          onClick={() => setActiveGame("trivia")}
+          className="group relative bg-emerald-100 rounded-[2rem] p-6 cursor-pointer transition-all duration-300
+            border-4 border-emerald-200 border-b-[6px] border-b-emerald-300
+            hover:-translate-y-1 hover:border-b-emerald-400 active:translate-y-0 active:border-b-[4px]"
+        >
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-4">
+              <div className="bg-white text-emerald-600 p-3 rounded-2xl shadow-sm group-hover:rotate-6 transition-transform">
+                <Trophy size={24} strokeWidth={2.5} />
+              </div>
+              <span className="bg-emerald-200 text-emerald-800 text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider">
+                Popular
+              </span>
+            </div>
+            <h3 className="text-2xl font-black text-emerald-900 mb-1">
+              Chef Battle
+            </h3>
+            <p className="text-emerald-800/70 text-sm font-medium leading-snug mb-4">
+              Ultimate food trivia quiz!
+            </p>
+            <div className="w-full bg-white text-emerald-700 font-bold py-2.5 rounded-xl text-center text-sm shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-all">
+              Play Now
+            </div>
+          </div>
+        </div>
 
-          <div className="flex flex-wrap justify-center gap-4 pt-6">
-            <div className="bg-white/5 border border-white/10 px-6 py-4 rounded-3xl backdrop-blur-sm group hover:bg-white/10 transition-colors">
-              <Lock
-                className="mx-auto mb-2 text-slate-500 group-hover:text-amber-400 transition-colors"
-                size={24}
-              />
+        {/* === Card 2: Food Sorter === */}
+        <div
+          onClick={() => setActiveGame("sorter")}
+          className="group relative bg-orange-100 rounded-[2rem] p-6 cursor-pointer transition-all duration-300
+            border-4 border-orange-200 border-b-[6px] border-b-orange-300
+            hover:-translate-y-1 hover:border-b-orange-400 active:translate-y-0 active:border-b-[4px]"
+        >
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-4">
+              <div className="bg-white text-orange-500 p-3 rounded-2xl shadow-sm group-hover:-rotate-6 transition-transform">
+                <Layers size={24} strokeWidth={2.5} />
+              </div>
+              <span className="bg-orange-200 text-orange-800 text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider">
+                Speed
+              </span>
+            </div>
+            <h3 className="text-2xl font-black text-orange-900 mb-1">
+              Food Sorter
+            </h3>
+            <p className="text-orange-800/70 text-sm font-medium leading-snug mb-4">
+              Sort ingredients fast!
+            </p>
+            <div className="w-full bg-white text-orange-600 font-bold py-2.5 rounded-xl text-center text-sm shadow-sm group-hover:bg-orange-500 group-hover:text-white transition-all">
+              Start Sorting
+            </div>
+          </div>
+        </div>
+
+        {/* === Card 3: Memory Match === */}
+        <div
+          onClick={() => setActiveGame("memory")}
+          className="group relative bg-violet-100 rounded-[2rem] p-6 cursor-pointer transition-all duration-300
+            border-4 border-violet-200 border-b-[6px] border-b-violet-300
+            hover:-translate-y-1 hover:border-b-violet-400 active:translate-y-0 active:border-b-[4px]"
+        >
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-4">
+              <div className="bg-white text-violet-600 p-3 rounded-2xl shadow-sm group-hover:scale-110 transition-transform">
+                <Brain size={24} strokeWidth={2.5} />
+              </div>
+              <span className="bg-violet-200 text-violet-800 text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider">
+                Focus
+              </span>
+            </div>
+            <h3 className="text-2xl font-black text-violet-900 mb-1">
+              Memory Match
+            </h3>
+            <p className="text-violet-800/70 text-sm font-medium leading-snug mb-4">
+              Find matching tools!
+            </p>
+            <div className="w-full bg-white text-violet-600 font-bold py-2.5 rounded-xl text-center text-sm shadow-sm group-hover:bg-violet-500 group-hover:text-white transition-all">
+              Train Memory
             </div>
           </div>
         </div>
       </div>
-    </section>
+
+      {/* 3. Leaderboard Section */}
+      <section className="animate-slide-up pb-10">
+        <Leaderboard players={players} isLoading={loading} />
+      </section>
+    </div>
   );
 }

@@ -92,25 +92,18 @@ export default function ChildProfile() {
 
   return (
     <section className="space-y-4 animate-fade-in pb-12">
-      {" "}
-      {/* צמצמתי מ-space-y-8 ל-4 */}
-      {/* 1. CHEF PROFILE CARD - Compact Version */}
       <div className="bg-white rounded-3xl shadow-sm p-5 flex flex-col md:flex-row items-center gap-6 border border-emerald-50 relative overflow-hidden">
-        {/* הקטנתי את העיגול ברקע מ-w-32 ל-w-24 */}
         <div className="absolute top-0 left-0 w-24 h-24 bg-emerald-50 rounded-br-full -z-0 opacity-40"></div>
 
-        {/* הקטנתי את האייקון מ-w-28 ל-w-20 */}
         <div className="relative z-10 w-20 h-20 bg-gradient-to-br from-amber-200 to-orange-400 rounded-full flex items-center justify-center text-4xl shadow-lg border-4 border-white">
           🧑‍🍳
         </div>
 
         <div className="relative z-10 flex-1 text-center md:text-left space-y-1">
           {" "}
-          {/* צמצמתי space-y-3 ל-1 */}
           <div>
             <h2 className="text-xl md:text-2xl font-extrabold text-slate-800">
               {" "}
-              {/* הקטנתי טקסט */}
               Chef {user.name}
             </h2>
             <p className="text-slate-400 text-xs font-medium">
@@ -148,11 +141,7 @@ export default function ChildProfile() {
       </div>
       {/* 2. ACHIEVEMENTS - Compact Version */}
       <div className="bg-white rounded-3xl shadow-sm p-6 border border-amber-50">
-        {" "}
-        {/* צמצמתי p-8 ל-6 */}
         <div className="flex items-center justify-between mb-4">
-          {" "}
-          {/* צמצמתי mb-8 ל-4 */}
           <div>
             <h3 className="text-lg font-extrabold text-slate-800 flex items-center gap-2">
               <span className="text-amber-500">🏅</span> My Achievements
@@ -172,8 +161,6 @@ export default function ChildProfile() {
         </div>
         {/* Progress bar Section - Compact */}
         <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 mb-6">
-          {" "}
-          {/* צמצמתי p-6 ל-4 */}
           {progressLoading ? (
             <div className="text-center py-2 text-slate-400 animate-pulse text-xs">
               Calculating progress…
@@ -204,10 +191,7 @@ export default function ChildProfile() {
             </div>
           )}
         </div>
-        {/* Badges grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {" "}
-          {/* צמצמתי gap-6 ל-4 */}
           {BADGES.map((b) => {
             const unlocked = progress.earnedBadges.some((x) => x.key === b.key);
             const Icon = BADGE_ICONS[b.key] || Award;
