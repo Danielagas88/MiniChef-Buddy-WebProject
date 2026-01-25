@@ -27,8 +27,10 @@ export default function FavoritesPage() {
         setLoading(true);
         setError(null);
         const ids = favoriteIds.map(String);
-        const results = await Promise.all(ids.map((id) => fetchRecipeById(id)));
-        const clean = results.filter(Boolean);
+        const results = await Promise.allSettled(ids.map((id) => fetchRecipeById(id)));
+        const clean = results
+          .filter((result) => result.status === 'fulfilled' && result.value)
+          .map((result) => result.value);
         const byId = new Map(clean.map((r) => [String(r.id), r]));
         const ordered = ids.map((id) => byId.get(id)).filter(Boolean);
 

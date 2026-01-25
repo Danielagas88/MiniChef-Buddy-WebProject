@@ -134,12 +134,19 @@ export const fetchRecipes = async (query = "", activeCategory = "All") => {
       if (data.meals) allMeals = data.meals;
     } else {
       const promises = KID_FRIENDLY_KEYWORDS.map((keyword) =>
-        fetch(`${BASE_URL}${keyword}`).then((res) => res.json())
+        fetch(`${BASE_URL}${keyword}`)
+          .then((res) => res.json())
+          .catch((error) => {
+            console.error(`Error fetching recipes for keyword "${keyword}":`, error);
+            return { meals: null };
+          })
       );
 
-      const results = await Promise.all(promises);
-      results.forEach((data) => {
-        if (data.meals) allMeals = [...allMeals, ...data.meals];
+      const results = await Promise.allSettled(promises);
+      results.forEach((result) => {
+        if (result.status === 'fulfilled' && result.value?.meals) {
+          allMeals = [...allMeals, ...result.value.meals];
+        }
       });
 
       // Remove duplicates

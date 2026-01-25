@@ -39,9 +39,11 @@ export default function TriviaGame({ onBack }) {
   const startActualGame = (multiplayerData = null) => {
     setCurrentIndex(0);
     setScore(0);
+    scoreRef.current = 0;
     setTimeLeft(20);
     setSelectedAnswer(null);
     setShowFeedback(false);
+    isFinishedRef.current = false; // Reset the finished flag for new game
 
     setOpponentScore(0);
     setIsWaitingForNext(false);
@@ -83,7 +85,74 @@ export default function TriviaGame({ onBack }) {
     }
   };
 
+  /**
+   * Ends the game and saves the final score to the server.
+   * Uses scoreRef to ensure we have the most up-to-date score in socket callbacks.
+   */
+  const finishGame = useCallback(
+    async (isTechWin = false) => {
+      if (isFinishedRef.current) {
+        console.warn("finishGame called multiple times, ignoring duplicate call");
+        return;
+      }
+      isFinishedRef.current = true;
+
+      const isActualTechWin = isTechWin || technicalWin;
+      // Ensure we have the most up-to-date score - use ref as source of truth since it's always current
+      let finalTotal = scoreRef.current;
+
+      if (isBattle) {
+        if (isActualTechWin || finalTotal > opponentScore) {
+          finalTotal += SCORING.TRIVIA.ONLINE_WIN_BONUS;
+        }
+      }
+
+      // Update both state and ref to keep them in sync before saving
+      setScore(finalTotal);
+      scoreRef.current = finalTotal;
+
+      // Save the score before changing state to ensure we save the correct value
+      if (finalTotal > 0) {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            console.error("No token found, cannot save score");
+            setGameState("END");
+            return;
+          }
+
+          const response = await fetch("http://localhost:3000/api/auth/score", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ points: finalTotal }),
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log(`✅ Score saved! Game score: ${finalTotal}, Server total: ${data.totalScore}`);
+          } else {
+            const errorText = await response.text();
+            console.error("❌ Failed to save score:", response.status, errorText);
+          }
+        } catch (e) {
+          console.error("❌ Error saving score:", e);
+        }
+      } else {
+        console.log("Score is 0, not saving to server");
+      }
+
+      setGameState("END");
+    },
+    [isBattle, technicalWin, opponentScore],
+  );
+
   const nextQuestion = useCallback(() => {
+    // Prevent calling if game is already finished
+    if (isFinishedRef.current || gameState === "END") return;
+    
     setCurrentIndex((prev) => {
       const nextIdx = prev + 1;
       if (nextIdx < gameQuestions.length) {
@@ -92,10 +161,13 @@ export default function TriviaGame({ onBack }) {
         setTimeLeft(20);
         return nextIdx;
       }
-      setGameState("END");
+      // Last question - finish the game and save score
+      if (!isFinishedRef.current) {
+        finishGame();
+      }
       return prev;
     });
-  }, [gameQuestions.length]);
+  }, [gameQuestions.length, finishGame, gameState]);
 
   const handleAnswerClick = useCallback(
     (option) => {
@@ -131,48 +203,6 @@ export default function TriviaGame({ onBack }) {
       roomId,
       showFeedback,
     ],
-  );
-
-  /**
-   * Ends the game and saves the final score to the server.
-   * Uses scoreRef to ensure we have the most up-to-date score in socket callbacks.
-   */
-  const finishGame = useCallback(
-    async (isTechWin = false) => {
-      if (isFinishedRef.current) return;
-      isFinishedRef.current = true;
-
-      const isActualTechWin = isTechWin || technicalWin;
-      let finalTotal = scoreRef.current;
-
-      if (isBattle) {
-        if (isActualTechWin || scoreRef.current > opponentScore) {
-          finalTotal += SCORING.TRIVIA.ONLINE_WIN_BONUS;
-          setScore(finalTotal);
-          scoreRef.current = finalTotal;
-        }
-      }
-
-      setGameState("END");
-
-      if (finalTotal > 0) {
-        try {
-          const token = localStorage.getItem("token");
-          await fetch("http://localhost:3000/api/auth/score", {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ points: finalTotal }),
-          });
-          console.log("Score saved!");
-        } catch (e) {
-          console.error("Save failed", e);
-        }
-      }
-    },
-    [isBattle, technicalWin, opponentScore],
   );
 
   const handleExit = () => {
@@ -222,6 +252,9 @@ export default function TriviaGame({ onBack }) {
     });
 
     socket.on("opponent_left", (data) => {
+      // Prevent calling if game is already finished
+      if (isFinishedRef.current) return;
+      
       console.log("Opponent left the kitchen!");
       setTechnicalWin(true);
       setBattleMessage(data.message || "The other chef left the kitchen...");
@@ -229,6 +262,9 @@ export default function TriviaGame({ onBack }) {
     });
 
     socket.on("move_to_next_question", () => {
+      // Prevent calling if game is already finished
+      if (isFinishedRef.current) return;
+      
       setCurrentIndex((prev) => {
         const nextIdx = prev + 1;
         if (nextIdx < questionsRef.current.length) {
@@ -239,7 +275,10 @@ export default function TriviaGame({ onBack }) {
           setTimeLeft(20);
           return nextIdx;
         }
-        finishGame();
+        // Last question - finish the game
+        if (!isFinishedRef.current) {
+          finishGame();
+        }
         return prev;
       });
     });
@@ -408,6 +447,7 @@ export default function TriviaGame({ onBack }) {
         winBonus={SCORING.TRIVIA.ONLINE_WIN_BONUS}
         onPlayAgain={() => {
           isFinishedRef.current = false;
+          scoreRef.current = 0;
           setGameState("START");
         }}
         onExit={handleExit}

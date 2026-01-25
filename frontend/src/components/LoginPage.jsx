@@ -12,9 +12,45 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
+
+  function validateField(name, value) {
+    const errors = { ...validationErrors };
+    
+    if (name === "username") {
+      if (!value.trim()) {
+        errors.username = "Username is required";
+      } else if (value.trim().length < 3) {
+        errors.username = "Username must be at least 3 characters";
+      } else {
+        delete errors.username;
+      }
+    }
+    
+    if (name === "password") {
+      if (!value) {
+        errors.password = "Password is required";
+      } else if (value.length < 6) {
+        errors.password = "Password must be at least 6 characters";
+      } else {
+        delete errors.password;
+      }
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    
+    const isUsernameValid = validateField("username", username);
+    const isPasswordValid = validateField("password", password);
+    
+    if (!isUsernameValid || !isPasswordValid) {
+      return;
+    }
+    
     setIsSubmitting(true);
     const ok = await login(username, password);
     setIsSubmitting(false);
@@ -61,12 +97,23 @@ export default function LoginPage() {
                 <User size={18} />
               </span>
               <input
-                className="w-full pl-12 pr-4 py-4 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:text-(--text-secondary) placeholder:opacity-30 bg-(--input-bg) border-2 border-(--border-color)"
+                className={`w-full pl-12 pr-4 py-4 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:text-(--text-secondary) placeholder:opacity-30 bg-(--input-bg) border-2 ${
+                  validationErrors.username ? "border-red-500" : "border-(--border-color)"
+                }`}
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  if (validationErrors.username) {
+                    validateField("username", e.target.value);
+                  }
+                }}
+                onBlur={(e) => validateField("username", e.target.value)}
                 placeholder="Your chef name"
                 required
               />
+              {validationErrors.username && (
+                <p className="text-xs text-red-500 mt-1 ml-2">{validationErrors.username}</p>
+              )}
             </div>
           </div>
 
@@ -80,12 +127,23 @@ export default function LoginPage() {
               </span>
               <input
                 type="password"
-                className="w-full pl-12 pr-4 py-4 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:text-(--text-secondary) placeholder:opacity-30 bg-(--input-bg) border-2 border-(--border-color)"
+                className={`w-full pl-12 pr-4 py-4 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:text-(--text-secondary) placeholder:opacity-30 bg-(--input-bg) border-2 ${
+                  validationErrors.password ? "border-red-500" : "border-(--border-color)"
+                }`}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (validationErrors.password) {
+                    validateField("password", e.target.value);
+                  }
+                }}
+                onBlur={(e) => validateField("password", e.target.value)}
                 placeholder="••••••••"
                 required
               />
+              {validationErrors.password && (
+                <p className="text-xs text-red-500 mt-1 ml-2">{validationErrors.password}</p>
+              )}
             </div>
           </div>
 

@@ -1,70 +1,80 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useEffect } from "react";
-import { Axios } from "./Axios.js";
+import { lazy, Suspense } from "react";
 import { useAuth } from "./hooks/useAuth.js";
 
 // Layouts & Pages
 import MainLayout from "./layout/MainLayout.jsx";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import HomePage from "./components/HomePage.jsx";
 import LoginPage from "./components/LoginPage.jsx";
 import RegisterPage from "./components/RegisterPage.jsx";
 import RecipesPage from "./components/recipes/RecipesPage.jsx";
-import GamesPage from "./components/games/GamesPage.jsx";
 import FavoritesPage from "./components/FavoritesPage.jsx";
 import SessionPage from "./components/session/SessionPage.jsx";
 import ChildProfile from "./components/profile/child/ChildProfile.jsx";
-import ParentPage from "./components/profile/parent/ParentMainPage.jsx";
+
+// Lazy loaded routes for code splitting
+const GamesPage = lazy(() => import("./components/games/GamesPage.jsx"));
+const ParentPage = lazy(() => import("./components/profile/parent/ParentMainPage.jsx"));
 
 export default function App() {
-  const { user, setUser } = useAuth();
+  const { user } = useAuth();
+  // Note: Auth hydration is handled in AuthProvider.jsx to avoid duplicate /auth/me calls
 
-  useEffect(() => {
-    const loginWithToken = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      try {
-        const res = await Axios.get("/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const u = res.data?.user ?? res.data;
-        if (u.username) {
-          localStorage.setItem("username", u.username);
-        }
-        setUser({ ...u, token });
-      } catch (err) {
-        console.error("Token invalid", err);
-        localStorage.removeItem("token");
-        localStorage.removeItem("username");
-      }
-    };
-    loginWithToken();
-  }, [setUser]);
+  const LoadingFallback = () => (
+    <div className="min-h-screen bg-(--bg-current) flex items-center justify-center">
+      <div className="text-center space-y-4">
+        <div className="text-4xl animate-pulse">🍳</div>
+        <p className="text-(--text-secondary) font-medium">Loading...</p>
+      </div>
+    </div>
+  );
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-(--bg-current) flex items-center justify-center p-4 transition-colors duration-300">
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      </div>
+      <ErrorBoundary>
+        <div className="min-h-screen bg-(--bg-current) flex items-center justify-center p-4 transition-colors duration-300">
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        </div>
+      </ErrorBoundary>
     );
   }
 
   return (
-    <MainLayout>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/recipes" element={<RecipesPage />} />
-        <Route path="/session/:id" element={<SessionPage />} />
-        <Route path="/games" element={<GamesPage />} />
-        <Route path="/favorites" element={<FavoritesPage />} />
-        <Route path="/progress" element={<ChildProfile />} />
-        <Route path="/parent-dashboard" element={<ParentPage />} />
-        <Route path="/login" element={<Navigate to="/" replace />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </MainLayout>
+    <ErrorBoundary>
+      <MainLayout>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/recipes" element={<RecipesPage />} />
+            <Route path="/session/:id" element={<SessionPage />} />
+            <Route
+              path="/games"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <GamesPage />
+                </Suspense>
+              }
+            />
+            <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/progress" element={<ChildProfile />} />
+            <Route
+              path="/parent-dashboard"
+              element={
+                <Suspense fallback={<LoadingFallback />}>
+                  <ParentPage />
+                </Suspense>
+              }
+            />
+            <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+      </MainLayout>
+    </ErrorBoundary>
   );
 }

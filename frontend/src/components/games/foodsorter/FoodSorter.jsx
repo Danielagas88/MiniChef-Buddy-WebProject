@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 // Data and Types
 import { foodItems, CATEGORIES } from "../../../data/foodSorterData";
@@ -33,14 +33,20 @@ export default function FoodSorter({ onBack }) {
   const [isShaking, setIsShaking] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+
+  // Use ref to track score to avoid stale closures
+  const scoreRef = React.useRef(0);
 
   // --- 1. Server Integration ---
   // Syncs the final score with the database upon game completion
   const syncScoreWithServer = useCallback(async (finalScore) => {
-    if (finalScore <= 0) return;
+    if (finalScore <= 0 || isFinished) return;
+    setIsFinished(true);
+    
     try {
       const token = localStorage.getItem("token") || "";
-      await fetch("http://localhost:3000/api/auth/score", {
+      const response = await fetch("http://localhost:3000/api/auth/score", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -48,18 +54,26 @@ export default function FoodSorter({ onBack }) {
         },
         body: JSON.stringify({ points: finalScore }),
       });
-      console.log("Score successfully synced to server");
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log(`✅ Food Sorter score saved! Game score: ${finalScore}, Server total: ${data.totalScore}`);
+      } else {
+        console.error("❌ Failed to save Food Sorter score:", await response.text());
+      }
     } catch (error) {
-      console.error("Critical: Server sync failed", error);
+      console.error("❌ Critical: Server sync failed", error);
     }
-  }, []);
+  }, [isFinished]);
 
   // --- 2. Game Flow Control ---
   // Handles logic for proceeding to the next item or finishing the game
   const nextItem = useCallback(() => {
     if (currentIndex + 1 >= queue.length) {
+      // Last item - use the ref value which is always up-to-date
+      const finalScore = scoreRef.current;
       setGameState("END");
-      syncScoreWithServer(score);
+      syncScoreWithServer(finalScore);
     } else {
       setCurrentIndex((prev) => prev + 1);
       setTimeLeft(ROUND_TIME);
@@ -67,7 +81,7 @@ export default function FoodSorter({ onBack }) {
       setIsShaking(false);
       setIsAnimatingOut(false);
     }
-  }, [currentIndex, queue.length, score, syncScoreWithServer]);
+  }, [currentIndex, queue.length, syncScoreWithServer]);
 
   // Initializes the game, shuffles items, and resets all stats
   const startGame = () => {
@@ -94,7 +108,12 @@ export default function FoodSorter({ onBack }) {
 
     if (isCorrect) {
       setIsProcessing(true);
-      setScore((prev) => prev + POINTS_PER_CORRECT);
+      // Update both state and ref to keep them in sync
+      setScore((prev) => {
+        const newScore = prev + POINTS_PER_CORRECT;
+        scoreRef.current = newScore;
+        return newScore;
+      });
       setIsAnimatingOut(true);
       setTimeout(nextItem, 600);
     } else {
@@ -103,6 +122,11 @@ export default function FoodSorter({ onBack }) {
       // Incorrect choices don't advance the turn; allows the user to try again
     }
   };
+
+  // Keep scoreRef in sync with score state
+  useEffect(() => {
+    scoreRef.current = score;
+  }, [score]);
 
   // --- 3. Timer Logic (Async Safe Implementation) ---
   useEffect(() => {

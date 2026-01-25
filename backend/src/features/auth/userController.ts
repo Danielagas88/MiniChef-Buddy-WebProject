@@ -18,12 +18,13 @@ function getJwtSecret(res: Response): string | null {
 
 export const createUser = async (req: Request, res: Response) => {
   try {
-    let { username, name, password, allergens, cookingLevel } = req.body as {
+    let { username, name, password, allergens, cookingLevel, parentPin } = req.body as {
       username?: string;
       name?: string;
       password?: string;
       allergens?: string[];
       cookingLevel?: "Easy" | "Medium" | "Advanced";
+      parentPin?: string;
     };
 
     // Normalize inputs
@@ -63,12 +64,19 @@ export const createUser = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
+    // Hash parent PIN if provided
+    let parentPinHash: string | null = null;
+    if (parentPin && /^\d{4}$/.test(parentPin)) {
+      parentPinHash = await bcrypt.hash(parentPin, 10);
+    }
+
     const savedUser = await new User({
       username,
       name,
       password: passwordHash,
       allergens: cleanAllergens,
       cookingLevel: level,
+      parentPinHash,
     }).save();
 
     const secret = getJwtSecret(res);

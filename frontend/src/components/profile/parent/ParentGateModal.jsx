@@ -45,7 +45,9 @@ export default function ParentGateModal({
             value={pin.input}
             onChange={(e) => setPinInput(e.target.value)}
             placeholder="••••"
-            className="w-full text-center text-4xl tracking-[0.4em] font-black text-(--text-primary) border-b-2 border-(--border-color) focus:border-emerald-500 focus:outline-none py-2 bg-transparent transition-all placeholder:text-(--muted)"
+            className={`w-full text-center text-4xl tracking-[0.4em] font-black text-(--text-primary) border-b-2 focus:outline-none py-2 bg-transparent transition-all placeholder:text-(--muted) ${
+              pin.error ? "border-red-500" : "border-(--border-color) focus:border-emerald-500"
+            }`}
             autoFocus
           />
           {isSetup && (
@@ -56,8 +58,15 @@ export default function ParentGateModal({
               value={pin.confirm}
               onChange={(e) => setPinConfirm(e.target.value)}
               placeholder="••••"
-              className="w-full text-center text-4xl tracking-[0.4em] font-black text-(--text-primary) border-b-2 border-(--border-color) focus:border-amber-500 focus:outline-none py-2 bg-transparent transition-all placeholder:text-(--muted)"
+              className={`w-full text-center text-4xl tracking-[0.4em] font-black text-(--text-primary) border-b-2 focus:outline-none py-2 bg-transparent transition-all placeholder:text-(--muted) ${
+                pin.error ? "border-red-500" : "border-(--border-color) focus:border-amber-500"
+              }`}
             />
+          )}
+          {pin.error && (
+            <p className="text-xs font-bold text-red-500 text-center animate-bounce-in">
+              {pin.error}
+            </p>
           )}
         </div>
 

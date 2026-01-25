@@ -11,13 +11,14 @@ const userSchema = new Schema<UserDoc>(
       unique: true,
       trim: true,
       lowercase: true,
+      index: true, // Index for login queries
     },
 
     password: { type: String, required: true },
 
     parentPinHash: { type: String, default: null },
 
-    totalScore: { type: Number, default: 0 },
+    totalScore: { type: Number, default: 0, index: true }, // Index for leaderboard queries
 
     favoriteRecipeIds: { type: [String], default: [] },
     allergens: { type: [String], default: [] },

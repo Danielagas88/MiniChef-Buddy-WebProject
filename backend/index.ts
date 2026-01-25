@@ -19,6 +19,7 @@ import { userRouter } from "./src/features/auth/userRoute";
 import { parentPinRouter } from "./src/features/parentPin/parentPin.routes"; //amit added this
 import favoritesRoutes from "./src/features/favorites/favorites.routes";
 import recipeHistoryRoutes from "./src/features/recipeHistory/recipeHistory.routes";
+import geminiRoutes from "./src/features/gemini/gemini.routes";
 import { triviaQuestions } from "./src/features/data/triviaQuestions";
 
 // Create Express application instance
@@ -274,6 +275,7 @@ app.use("/api/auth", userRouter);
  */
 app.use("/api/parent-pin", parentPinRouter);
 app.use("/api/recipe-history", recipeHistoryRoutes);
+app.use("/api/gemini", geminiRoutes);
 
 /**
  * Used to verify that the server is running
@@ -291,14 +293,34 @@ app.get("/", (req, res) => {
 async function startServer() {
   try {
     // Connect to MongoDB
+    if (!MONGO_URI || MONGO_URI === "") {
+      console.error("ERROR: MONGO_URI is not set in environment variables!");
+      console.error("Please check your .env file and ensure MONGO_URI is configured.");
+      process.exit(1);
+    }
+
     await mongoConnect(MONGO_URI);
-    console.log("Server is connected to the MongoDB cluster");
+    console.log("✅ Server is connected to the MongoDB cluster");
 
     server.listen(port, () => {
-      console.log(`Server (HTTP & WebSockets) is listening on port ${port}`);
+      console.log(`✅ Server (HTTP & WebSockets) is listening on port ${port}`);
+      console.log(`✅ API available at http://localhost:${port}`);
+    });
+
+    server.on("error", (error: any) => {
+      if (error.code === "EADDRINUSE") {
+        console.error(`❌ ERROR: Port ${port} is already in use!`);
+        console.error(`   Please stop the other process using port ${port} or change PORT in .env`);
+      } else {
+        console.error("❌ Server error:", error);
+      }
+      process.exit(1);
     });
   } catch (error) {
-    console.error("Failed to start server:", error);
+    console.error("❌ Failed to start server:", error);
+    if (error instanceof Error) {
+      console.error("Error message:", error.message);
+    }
     process.exit(1);
   }
 }

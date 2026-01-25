@@ -35,10 +35,64 @@ export default function RegisterPage() {
   const [parentPin, setParentPin] = useState("");
   const [allergens, setAllergens] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
+
+  function validateField(name, value) {
+    const errors = { ...validationErrors };
+    
+    if (name === "name") {
+      if (!value.trim()) {
+        errors.name = "Name is required";
+      } else {
+        delete errors.name;
+      }
+    }
+    
+    if (name === "username") {
+      if (!value.trim()) {
+        errors.username = "Username is required";
+      } else if (value.trim().length < 3) {
+        errors.username = "Username must be at least 3 characters";
+      } else if (!/^[a-z0-9_]+$/i.test(value.trim())) {
+        errors.username = "Username can only contain letters, numbers, and underscores";
+      } else {
+        delete errors.username;
+      }
+    }
+    
+    if (name === "password") {
+      if (!value) {
+        errors.password = "Password is required";
+      } else if (value.length < 6) {
+        errors.password = "Password must be at least 6 characters";
+      } else {
+        delete errors.password;
+      }
+    }
+    
+    if (name === "parentPin") {
+      if (value && value.length !== 4) {
+        errors.parentPin = "PIN must be exactly 4 digits";
+      } else {
+        delete errors.parentPin;
+      }
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!name.trim() || !username.trim() || !password) return;
+    
+    const isNameValid = validateField("name", name);
+    const isUsernameValid = validateField("username", username);
+    const isPasswordValid = validateField("password", password);
+    const isPinValid = parentPin ? validateField("parentPin", parentPin) : true;
+    
+    if (!isNameValid || !isUsernameValid || !isPasswordValid || !isPinValid) {
+      return;
+    }
 
     setIsSubmitting(true);
     const ok = await register({
@@ -127,11 +181,22 @@ export default function RegisterPage() {
               </label>
               <input
                 placeholder="CoolChef123"
-                className="w-full px-4 py-3.5 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:opacity-30 bg-(--input-bg) border-2 border-(--border-color)"
+                className={`w-full px-4 py-3.5 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:opacity-30 bg-(--input-bg) border-2 ${
+                  validationErrors.username ? "border-red-500" : "border-(--border-color)"
+                }`}
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  if (validationErrors.username) {
+                    validateField("username", e.target.value);
+                  }
+                }}
+                onBlur={(e) => validateField("username", e.target.value)}
                 required
               />
+              {validationErrors.username && (
+                <p className="text-xs text-red-500 mt-1 ml-2">{validationErrors.username}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -164,10 +229,23 @@ export default function RegisterPage() {
                 inputMode="numeric"
                 maxLength={4}
                 placeholder="••••"
-                className="w-full px-4 py-3.5 rounded-2xl text-sm font-black focus:border-amber-400 focus:outline-none transition-all text-(--text-primary) tracking-[0.3em] placeholder:tracking-normal bg-amber-500/5 border-2 border-amber-500/20"
+                className={`w-full px-4 py-3.5 rounded-2xl text-sm font-black focus:border-amber-400 focus:outline-none transition-all text-(--text-primary) tracking-[0.3em] placeholder:tracking-normal bg-amber-500/5 border-2 ${
+                  validationErrors.parentPin ? "border-red-500" : "border-amber-500/20"
+                }`}
                 value={parentPin}
-                onChange={handlePinChange}
+                onChange={(e) => {
+                  handlePinChange(e);
+                  if (validationErrors.parentPin && e.target.value.length === 4) {
+                    validateField("parentPin", e.target.value);
+                  }
+                }}
+                onBlur={(e) => {
+                  if (parentPin) validateField("parentPin", parentPin);
+                }}
               />
+              {validationErrors.parentPin && (
+                <p className="text-xs text-red-500 mt-1 ml-2">{validationErrors.parentPin}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">

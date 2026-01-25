@@ -35,6 +35,7 @@ export function AuthProvider({ children }) {
     name,
     allergens,
     cookingLevel,
+    parentPin,
   }) {
     try {
       setError(null);
@@ -46,6 +47,7 @@ export function AuthProvider({ children }) {
         name,
         allergens,
         cookingLevel,
+        ...(parentPin && parentPin.trim().length === 4 ? { parentPin: parentPin.trim() } : {}),
       });
 
       const token = response.data.token;

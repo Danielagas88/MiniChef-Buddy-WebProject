@@ -109,8 +109,11 @@ export function useParentArea({ token, viewMode }) {
 
     try {
       const result = await parentApi.verifyPin(input, token);
-      if (result?.ok) dispatch({ type: "UNLOCK" });
-      else dispatch({ type: "PIN_ERROR", payload: "Incorrect PIN" });
+      if (result?.ok === true) {
+        dispatch({ type: "UNLOCK" });
+      } else {
+        dispatch({ type: "PIN_ERROR", payload: "Incorrect PIN" });
+      }
     } catch (e) {
       dispatch({ type: "PIN_ERROR", payload: e?.message || "Server error" });
     }

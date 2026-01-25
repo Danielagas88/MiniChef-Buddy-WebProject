@@ -3,6 +3,7 @@ export default function FinishModal({
   recipeTitle,
   isUploading,
   isUploadSuccess,
+  uploadError,
   onUpload,
   onViewProfile,
   onDone,
@@ -32,6 +33,11 @@ export default function FinishModal({
         </div>
 
         <div className="space-y-4 relative z-10">
+          {uploadError && (
+            <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-3 text-sm text-red-600 dark:text-red-400">
+              {uploadError}
+            </div>
+          )}
           {!isUploadSuccess ? (
             <div className="relative group">
               <input
@@ -40,15 +46,24 @@ export default function FinishModal({
                 onChange={onUpload}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                 disabled={isUploading}
+                aria-label="Upload photo of your cooked dish"
               />
               <button
+                disabled={isUploading}
                 className={`w-full py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-2 border-2 backdrop-blur-md shadow-md relative z-10 ${
                   isUploading
-                    ? "bg-(--input-bg) text-(--muted) border-(--border-color)"
+                    ? "bg-(--input-bg) text-(--muted) border-(--border-color) cursor-not-allowed"
                     : "bg-(--input-bg) text-(--accent-emerald) border-emerald-500/50 hover:border-emerald-500 hover:opacity-90 group-active:scale-95"
                 }`}
               >
-                {isUploading ? "Uploading..." : "📸 Upload Photo"}
+                {isUploading ? (
+                  <>
+                    <span className="animate-spin">⏳</span>
+                    Uploading...
+                  </>
+                ) : (
+                  "📸 Upload Photo"
+                )}
               </button>
             </div>
           ) : (

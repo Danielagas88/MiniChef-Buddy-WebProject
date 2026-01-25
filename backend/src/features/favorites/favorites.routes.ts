@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { auth } from "../../middleware/middleware";
+import { validate, validationSchemas } from "../../middleware/validation";
 import {
   getFavoritesController,
   toggleFavoriteController,
@@ -8,6 +9,6 @@ import {
 const router = Router();
 
 router.get("/", auth, getFavoritesController);
-router.post("/toggle", auth, toggleFavoriteController);
+router.post("/toggle", auth, validate(validationSchemas.toggleFavorite), toggleFavoriteController);
 
 export default router;
