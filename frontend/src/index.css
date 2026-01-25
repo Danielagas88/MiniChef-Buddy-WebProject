@@ -2,23 +2,43 @@
 
 @theme {
   --dark-mode: selector(.dark);
-  --color-main-bg: #e0faec;
-  --color-dark-bg: #0f172a;
 }
 
 @layer base {
   :root {
-    --bg-current: var(--color-main-bg);
-    --header-bg: #f0fdf4;
-    --text-primary: #1e293b;
-    --text-secondary: #475569;
+    --bg-current: var(--color-emerald-50);
+    --header-bg: var(--color-emerald-50);
+    --text-primary: var(--color-slate-800);
+    --text-secondary: var(--color-slate-500);
+    --card-bg: var(--color-white);
+    --card-surface: color-mix(in oklch, var(--color-white) 80%, transparent);
+    --card-surface-border: var(--color-slate-200);
+    --input-bg: var(--color-white);
+    --border-color: var(--color-slate-200);
+    --muted: var(--color-slate-400);
+    --accent-emerald: var(--color-emerald-600);
+    --accent-amber: var(--color-amber-600);
+    --toggle-bg: var(--color-slate-200);
+    --toggle-icon: var(--color-slate-700);
+    --toggle-border: var(--color-slate-300);
   }
 
   .dark {
-    --bg-current: var(--color-dark-bg);
-    --header-bg: #1e293b;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
+    --bg-current: var(--color-slate-950);
+    --header-bg: var(--color-slate-900);
+    --text-primary: var(--color-slate-100);
+    --text-secondary: var(--color-slate-400);
+    --card-bg: var(--color-slate-900);
+    --card-surface: color-mix(in oklch, var(--color-white) 6%, transparent);
+    --card-surface-border: color-mix(in oklch, var(--color-white) 12%, transparent);
+    --input-bg: var(--color-slate-800);
+    --border-color: var(--color-slate-700);
+    --muted: var(--color-slate-500);
+    --accent-emerald: var(--color-emerald-400);
+    --accent-amber: var(--color-amber-400);
+    --toggle-bg: var(--color-slate-700);
+    --toggle-icon: var(--color-amber-400);
+    --toggle-border: var(--color-slate-600);
     color-scheme: dark;
   }
 
@@ -35,13 +55,13 @@
     background: transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--color-slate-300);
     border-radius: 10px;
   }
   .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-slate-600);
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(16, 185, 129, 0.5); /* צבע אמרלד בשקיפות בהובר */
+    background: var(--color-emerald-500);
   }
 }

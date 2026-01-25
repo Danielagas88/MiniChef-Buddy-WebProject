@@ -330,13 +330,13 @@ export default function TriviaGame({ onBack }) {
                   <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase italic tracking-widest leading-none mb-1">
                     You
                   </p>
-                  <p className="text-4xl font-black text-[var(--text-primary)] leading-none tabular-nums">
+                  <p className="text-4xl font-black text-(--text-primary) leading-none tabular-nums">
                     {score}
                   </p>
                 </div>
               </div>
 
-              <div className="absolute left-1/2 -translate-x-1/2 bg-white/60 dark:bg-white/10 px-6 py-2 rounded-full font-black text-[var(--text-secondary)] italic text-sm border border-white/40 dark:border-white/10 shadow-sm backdrop-blur-md">
+              <div className="absolute left-1/2 -translate-x-1/2 bg-white/60 dark:bg-white/10 px-6 py-2 rounded-full font-black text-(--text-secondary) italic text-sm border border-white/40 dark:border-white/10 shadow-sm backdrop-blur-md">
                 VS
               </div>
 
@@ -345,7 +345,7 @@ export default function TriviaGame({ onBack }) {
                   <p className="text-[11px] font-black text-orange-600 dark:text-orange-400 uppercase italic tracking-widest leading-none mb-1 truncate max-w-[100px] md:max-w-[140px]">
                     {opponentName}
                   </p>
-                  <p className="text-4xl font-black text-[var(--text-primary)] leading-none tabular-nums">
+                  <p className="text-4xl font-black text-(--text-primary) leading-none tabular-nums">
                     {opponentScore}
                   </p>
                 </div>

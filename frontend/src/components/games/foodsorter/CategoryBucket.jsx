@@ -17,7 +17,7 @@ export default function CategoryBucket({ category, onClick, disabled }) {
 
   const currentStyle =
     glassStyles[category.id] ||
-    "bg-white/10 border-white/20 text-[var(--text-primary)]";
+    "bg-white/10 border-white/20 text-(--text-primary)";
 
   return (
     <button

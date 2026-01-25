@@ -23,7 +23,7 @@ export default function ParentMainPage() {
         <ParentDashboard token={user?.token} limit={10} />
       ) : (
         /* Overlay מעודכן - תואם ל-FinishModal */
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/20 dark:bg-black/40 backdrop-blur-sm animate-fade-in transition-all duration-500">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm animate-fade-in transition-all duration-500">
           <ParentGateModal
             pin={parent.pin}
             setPinInput={parent.setPinInput}

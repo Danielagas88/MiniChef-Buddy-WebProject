@@ -8,15 +8,12 @@ export default function Brand({ onClick }) {
         🍳
       </div>
 
-      {/* Text container */}
       <div className="flex flex-col min-w-[120px]">
         <h1 className="text-xl md:text-2xl font-extrabold tracking-tight leading-none transition-colors">
-          <span className="text-emerald-600 dark:text-emerald-400">
-            MiniChef
-          </span>{" "}
-          <span className="text-[var(--text-primary)]">Buddy</span>
+          <span className="text-(--accent-emerald)">MiniChef</span>{" "}
+          <span className="text-(--text-primary)">Buddy</span>
         </h1>
-        <p className="text-[11px] text-[var(--text-secondary)] font-bold tracking-wide transition-colors">
+        <p className="text-[11px] text-(--text-secondary) font-bold tracking-wide transition-colors">
           Cooking adventures for kids!
         </p>
       </div>

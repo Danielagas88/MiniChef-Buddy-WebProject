@@ -24,7 +24,7 @@ function StepCard({
   isLast,
 }) {
   return (
-    <div className="bg-white/90 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-xl p-8 min-h-[300px] flex flex-col justify-between relative overflow-hidden border border-white/40 dark:border-white/20 transition-all">
+    <div className="bg-(--card-surface) backdrop-blur-md rounded-3xl shadow-xl p-8 min-h-[300px] flex flex-col justify-between relative overflow-hidden border border-(--card-surface-border) transition-all">
       {/* Background Decoration */}
       <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-50 rounded-bl-full z-0 opacity-60"></div>
 
@@ -47,17 +47,17 @@ function StepCard({
         </p>
       </div>
 
-      <div className="flex justify-between items-center mt-8 pt-6 border-t border-slate-100">
+      <div className="flex justify-between items-center mt-8 pt-6 border-t border-(--border-color)">
         <button
           onClick={onPrev}
           disabled={isFirst}
-          className="px-6 py-3 rounded-full text-(--text-secondary) font-bold hover:bg-slate-100 disabled:opacity-30 text-lg transition"
+          className="px-6 py-3 rounded-full text-(--text-secondary) font-bold hover:bg-(--input-bg) disabled:opacity-30 text-lg transition"
         >
           ← Back
         </button>
         <button
           onClick={onNext}
-          className={`px-8 py-3 rounded-full text-slate-800 text-lg font-bold shadow-lg transition transform hover:scale-105 ${
+          className={`px-8 py-3 rounded-full text-(--text-primary) text-lg font-bold shadow-lg transition transform hover:scale-105 ${
             isLast
               ? "bg-emerald-500 text-white hover:bg-emerald-600"
               : "bg-amber-400 hover:bg-amber-500"

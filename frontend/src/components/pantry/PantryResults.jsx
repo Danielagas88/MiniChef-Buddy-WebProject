@@ -6,12 +6,10 @@ export default function PantryResults({ pantryItems, results, onStart }) {
 
   if (!pantryItems || pantryItems.length === 0) return null;
 
-  // --- 1. CONFIG ---
   const difficultyMap = { easy: 1, medium: 2, advanced: 3 };
   const userLevel = (user?.cookingLevel || "Easy").toLowerCase().trim();
   const userScore = difficultyMap[userLevel] || 1;
 
-  // --- 2. FILTER LOGIC ---
   const filteredResults = results.filter(({ recipe }) => {
     const recipeLevel = (recipe.level || "Easy").toLowerCase().trim();
     const recipeScore = difficultyMap[recipeLevel] || 1;
@@ -19,15 +17,14 @@ export default function PantryResults({ pantryItems, results, onStart }) {
   });
 
   return (
-    <div className="pt-6 border-t border-slate-200/50 dark:border-white/10">
-      <h5 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2 transition-colors">
-        <span className="text-emerald-500 dark:text-emerald-400">✨</span>{" "}
-        Suggested Recipes
+    <div className="pt-6 border-t border-(--border-color)">
+      <h5 className="text-xl font-bold text-(--text-primary) mb-4 flex items-center gap-2">
+        <span className="text-emerald-500">✨</span> Suggested Recipes
       </h5>
 
       {filteredResults.length === 0 ? (
-        <div className="bg-emerald-50/50 dark:bg-emerald-900/20 p-6 rounded-2xl text-center border-2 border-dashed border-emerald-100/50 dark:border-emerald-500/20 transition-all">
-          <p className="text-[var(--text-secondary)] font-medium italic">
+        <div className="bg-emerald-500/10 p-6 rounded-2xl text-center border-2 border-dashed border-emerald-500/20">
+          <p className="text-(--text-secondary) font-medium italic">
             {results.length > 0
               ? "We found recipes, but they are a bit too advanced for your current level. Try other ingredients!"
               : "No recipes found. Try adding more ingredients to your pantry!"}

@@ -9,7 +9,6 @@ import { useFavorites } from "../../hooks/useFavorites.js";
 import RecipesFilters from "./RecipesFilters.jsx";
 import RecipeCard from "./RecipeCard.jsx";
 
-/** Allergen aliases (exact ingredient-name matching; no substring matching) */
 const ALLERGEN_ALIASES = {
   milk: [
     "milk",
@@ -66,11 +65,6 @@ const ALLERGEN_ALIASES = {
   sesame: ["sesame", "sesame seeds", "tahini"],
 };
 
-/**
- * Checks if a recipe contains any allergens defined for the user.
- * @param {string[]} ingredientNames - List of ingredients in the recipe
- * @param {string[]} userAllergens - List of allergens the user is allergic to
- */
 function containsAllergen(ingredientNames = [], userAllergens = []) {
   if (!userAllergens?.length) return false;
   const ingredients = ingredientNames.map((i) =>
@@ -154,11 +148,10 @@ export default function RecipesPage() {
 
   return (
     <section className="space-y-4">
-      {/* Container with the new Emerald theme but keeping your original padding/shadow structure */}
-      <div className="bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-sm p-4 md:p-6 space-y-3 border border-white/40 dark:border-white/20 transition-all">
+      <div className="bg-(--card-surface) backdrop-blur-md rounded-3xl shadow-sm p-4 md:p-6 space-y-3 border border-(--card-surface-border) transition-all">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
-            <h3 className="text-lg md:text-xl font-bold text-[var(--text-primary)]">
+            <h3 className="text-lg md:text-xl font-bold text-(--text-primary)">
               Choose a Yummy Recipe
             </h3>
 
@@ -174,16 +167,15 @@ export default function RecipesPage() {
           </div>
         </div>
 
-        {/* The Actual Grid */}
         <div className="mt-6">
           {isLoading && (
-            <p className="text-center text-slate-500">Loading recipes...</p>
+            <p className="text-center text-(--text-secondary)">Loading recipes...</p>
           )}
           {loadError && <p className="text-center text-red-500">{loadError}</p>}
 
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
             {!isLoading && filteredRecipes.length === 0 && (
-              <p className="text-sm text-slate-500 col-span-full text-center py-10">
+              <p className="text-sm text-(--text-secondary) col-span-full text-center py-10">
                 No recipes found for this selection.
               </p>
             )}
@@ -201,17 +193,13 @@ export default function RecipesPage() {
                       if (!user) return navigate("/login");
                       toggleFavorite(recipe.id);
                     }}
-                    className={`w-9 h-9 rounded-full shadow flex items-center justify-center transition-all ${
-                      isFavorite(recipe.id)
-                        ? "bg-white border border-red-100"
-                        : "bg-white/90"
-                    }`}
+                    className={`w-9 h-9 rounded-full shadow flex items-center justify-center transition-all bg-(--card-bg) border border-(--border-color)`}
                   >
                     <span
                       className={`text-lg ${
                         isFavorite(recipe.id)
                           ? "text-red-500"
-                          : "text-slate-400"
+                          : "text-(--muted)"
                       }`}
                     >
                       {isFavorite(recipe.id) ? "❤️" : "♡"}

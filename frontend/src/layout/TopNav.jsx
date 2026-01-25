@@ -11,16 +11,16 @@ function NavItem({ to, children, isParent }) {
         if (isActive) {
           return `${baseClasses} ${
             isParent
-              ? "text-amber-600 border-amber-500"
-              : "text-emerald-600 border-emerald-500"
+              ? "text-(--accent-amber) border-(--accent-amber)"
+              : "text-(--accent-emerald) border-(--accent-emerald)"
           }`;
         }
 
-        const hoverColor = isParent
-          ? "hover:text-amber-500 dark:hover:text-amber-400 hover:border-amber-200"
-          : "hover:text-emerald-500 dark:hover:text-emerald-400 hover:border-emerald-200";
+        const hoverStyles = isParent
+          ? "hover:text-(--accent-amber) hover:border-(--accent-amber)"
+          : "hover:text-(--accent-emerald) hover:border-(--accent-emerald)";
 
-        return `${baseClasses} text-[var(--text-primary)] border-transparent ${hoverColor}`;
+        return `${baseClasses} text-(--text-primary) border-transparent ${hoverStyles}`;
       }}
     >
       {children}
@@ -37,7 +37,7 @@ export default function TopNav() {
       <NavItem to="/games">Games</NavItem>
       <NavItem to="/progress">My Profile</NavItem>
 
-      <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+      <div className="w-px h-5 bg-(--border-color) mx-1" />
 
       <NavItem to="/parent-dashboard" isParent>
         Parent Dashboard

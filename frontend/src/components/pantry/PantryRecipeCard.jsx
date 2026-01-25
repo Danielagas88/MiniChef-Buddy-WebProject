@@ -1,14 +1,12 @@
 export default function PantryRecipeCard({ recipe, hitsCount, hits, onStart }) {
-  const levelColors = {
-    Easy: "text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-500/10 border-emerald-100 dark:border-emerald-500/20",
-    Medium:
-      "text-amber-600 dark:text-amber-400 bg-amber-50/50 dark:bg-amber-500/10 border-amber-100 dark:border-amber-500/20",
-    Advanced:
-      "text-orange-600 dark:text-orange-400 bg-orange-50/50 dark:bg-orange-500/10 border-orange-100 dark:border-orange-500/20",
+  const levelStyles = {
+    Easy: "text-(--accent-emerald) bg-emerald-500/10 border-emerald-500/20",
+    Medium: "text-(--accent-amber) bg-amber-500/10 border-amber-500/20",
+    Advanced: "text-orange-500 bg-orange-500/10 border-orange-500/20",
   };
 
   return (
-    <article className="bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-2xl shadow-sm border border-white/40 dark:border-white/20 hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col group h-full">
+    <article className="bg-(--card-surface) backdrop-blur-md rounded-2xl shadow-sm border border-(--card-surface-border) hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col group h-full">
       <div className="relative overflow-hidden h-28 md:h-32">
         <img
           src={recipe.image}
@@ -21,24 +19,24 @@ export default function PantryRecipeCard({ recipe, hitsCount, hits, onStart }) {
       </div>
 
       <div className="p-3 md:p-4 flex-1 flex flex-col gap-1.5">
-        <h4 className="text-sm md:text-base font-bold text-[var(--text-primary)] group-hover:text-emerald-600 transition-colors line-clamp-1">
+        <h4 className="text-sm md:text-base font-bold text-(--text-primary) group-hover:text-(--accent-emerald) transition-colors line-clamp-1">
           {recipe.title}
         </h4>
 
         <div className="flex flex-wrap items-center gap-2 mb-1">
           <span
-            className={`text-[9px] px-1.5 py-0.5 rounded-md border font-bold uppercase tracking-wider ${levelColors[recipe.level] || levelColors.Easy}`}
+            className={`text-[9px] px-1.5 py-0.5 rounded-md border font-bold uppercase tracking-wider ${levelStyles[recipe.level] || levelStyles.Easy}`}
           >
             {recipe.level}
           </span>
-          <span className="text-[9px] text-[var(--text-secondary)] font-semibold italic">
+          <span className="text-[9px] text-(--text-secondary) font-semibold italic">
             • {recipe.category}
           </span>
         </div>
 
-        <p className="text-[10px] md:text-[11px] text-[var(--text-secondary)] leading-snug mb-2 flex-1">
+        <p className="text-[10px] md:text-[11px] text-(--text-secondary) leading-snug mb-2 flex-1">
           Matched:{" "}
-          <span className="text-emerald-600 dark:text-emerald-400 font-bold">
+          <span className="text-(--accent-emerald) font-bold">
             {hits.join(", ")}
           </span>
         </p>

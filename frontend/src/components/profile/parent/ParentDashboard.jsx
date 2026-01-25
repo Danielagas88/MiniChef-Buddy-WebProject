@@ -33,18 +33,18 @@ export default function ParentDashboard({ token, limit = 10 }) {
   return (
     <section className="space-y-6 animate-fade-in pb-10">
       {/* Header - Glassmorphism style */}
-      <div className="rounded-[2rem] bg-white/80 dark:bg-white/10 backdrop-blur-md shadow-sm p-8 border border-white/40 dark:border-white/20 flex items-center justify-between gap-4 transition-all">
+      <div className="rounded-[2rem] bg-(--card-surface) backdrop-blur-md shadow-sm p-8 border border-(--card-surface-border) flex items-center justify-between gap-4 transition-all">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <ShieldCheck className="text-emerald-500" size={24} />
-            <h2 className="text-2xl md:text-3xl font-black text-[var(--text-primary)] tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-black text-(--text-primary) tracking-tight">
               Parent{" "}
-              <span className="text-emerald-600 dark:text-emerald-400">
+              <span className="text-(--accent-emerald)">
                 Dashboard
               </span>
             </h2>
           </div>
-          <p className="text-sm md:text-base text-[var(--text-secondary)] font-medium">
+          <p className="text-sm md:text-base text-(--text-secondary) font-medium">
             Activity overview, recipes cooked, and child progress
           </p>
         </div>

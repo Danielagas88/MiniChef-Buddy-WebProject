@@ -58,13 +58,13 @@ export default function WaitingRoom({ onCancel, onStartGame }) {
           </div>
         </div>
 
-        <h2 className="text-3xl font-black text-[var(--text-primary)] mb-3 italic tracking-tight leading-tight">
+        <h2 className="text-3xl font-black text-(--text-primary) mb-3 italic tracking-tight leading-tight">
           Finding{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">
             Opponent...
           </span>
         </h2>
-        <p className="text-[var(--text-secondary)] text-sm font-medium px-4 leading-relaxed mb-8">
+        <p className="text-(--text-secondary) text-sm font-medium px-4 leading-relaxed mb-8">
           Preparing the kitchen for a Chef Battle! Hang tight.
         </p>
 

@@ -211,10 +211,10 @@ export default function MemoryGame({ onBack }) {
         </div>
 
         <div className="space-y-3">
-          <h2 className="text-4xl font-black text-[var(--text-primary)] tracking-tight">
+          <h2 className="text-4xl font-black text-(--text-primary) tracking-tight">
             Memory Match
           </h2>
-          <p className="text-[var(--text-secondary)] font-medium text-lg max-w-xs mx-auto leading-relaxed">
+          <p className="text-(--text-secondary) font-medium text-lg max-w-xs mx-auto leading-relaxed">
             Train your brain! Find all matching kitchen pairs before time runs
             out.
           </p>

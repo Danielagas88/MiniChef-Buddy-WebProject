@@ -47,7 +47,7 @@ export default function GamesPage() {
             label="Back to Arcade"
             onClick={handleBackToArcade}
             variant="outline"
-            className=" !bg-white/40 dark:!bg-white/10 !text-emerald-600 dark:!text-emerald-400 !border-emerald-500/20 h-14 text-base font-black shadow-lg  "
+            className="h-14 text-base font-black shadow-lg"
           />
         </div>
 
@@ -77,7 +77,7 @@ export default function GamesPage() {
           </div>
         </div>
 
-        <h1 className="text-3xl md:text-5xl font-black text-(--text-primary) tracking-tight leading-tigh">
+        <h1 className="text-3xl md:text-5xl font-black text-(--text-primary) tracking-tight leading-tight">
           Culinary{" "}
           <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-500 to-teal-600">
             Arcade
@@ -93,24 +93,24 @@ export default function GamesPage() {
         {/* === Card 1: Trivia === */}
         <div
           onClick={() => setActiveGame("trivia")}
-          className="group relative bg-emerald-500/10 dark:bg-emerald-500/5 backdrop-blur-md rounded-4xl p-6 cursor-pointer transition-all duration-300 border-2 border-emerald-500/20 border-b-[6px] border-b-emerald-500/40 hover:-translate-y-1 active:translate-y-0 shadow-sm"
+          className="group relative bg-emerald-500/10 backdrop-blur-md rounded-4xl p-6 cursor-pointer transition-all duration-300 border-2 border-emerald-500/20 border-b-[6px] border-b-emerald-500/40 hover:-translate-y-1 active:translate-y-0 shadow-sm"
         >
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
-              <div className="bg-white dark:bg-white/10 text-emerald-600 dark:text-emerald-400 p-3 rounded-2xl shadow-sm backdrop-blur-sm border border-transparent dark:border-white/10 group-hover:rotate-6 transition-transform">
+              <div className="bg-(--card-bg) text-(--accent-emerald) p-3 rounded-2xl shadow-sm backdrop-blur-sm border border-(--border-color) group-hover:rotate-6 transition-transform">
                 <Trophy size={24} strokeWidth={2.5} />
               </div>
-              <span className="bg-emerald-200 text-emerald-800 text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider">
+              <span className="bg-emerald-500/20 text-(--accent-emerald) text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider border border-emerald-500/20">
                 Popular
               </span>
             </div>
-            <h3 className="text-2xl font-black text-emerald-900 mb-1">
+            <h3 className="text-2xl font-black text-(--text-primary) mb-1">
               Chef Battle
             </h3>
-            <p className="text-emerald-800/70 text-sm font-medium leading-snug mb-4">
+            <p className="text-(--text-secondary) text-sm font-medium leading-snug mb-4">
               Ultimate food trivia quiz!
             </p>
-            <div className="w-full bg-white dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold py-2.5 rounded-xl text-center text-sm shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-all border border-transparent dark:border-emerald-500/20">
+            <div className="w-full bg-(--input-bg) text-(--accent-emerald) font-bold py-2.5 rounded-xl text-center text-sm shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-all border border-(--border-color)">
               Play Now
             </div>
           </div>
@@ -119,24 +119,24 @@ export default function GamesPage() {
         {/* === Card 2: Food Sorter === */}
         <div
           onClick={() => setActiveGame("sorter")}
-          className="group relative bg-orange-500/10 dark:bg-orange-500/5 backdrop-blur-md rounded-4xl p-6 cursor-pointer transition-all duration-300 border-2 border-orange-500/20 border-b-[6px] border-b-orange-500/40 hover:-translate-y-1 active:translate-y-0 shadow-sm"
+          className="group relative bg-orange-500/10 backdrop-blur-md rounded-4xl p-6 cursor-pointer transition-all duration-300 border-2 border-orange-500/20 border-b-[6px] border-b-orange-500/40 hover:-translate-y-1 active:translate-y-0 shadow-sm"
         >
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
-              <div className="bg-white dark:bg-white/10 text-orange-500 dark:text-orange-400 p-3 rounded-2xl shadow-sm backdrop-blur-sm border border-transparent dark:border-white/10 group-hover:-rotate-6 transition-transform">
+              <div className="bg-(--card-bg) text-orange-500 p-3 rounded-2xl shadow-sm backdrop-blur-sm border border-(--border-color) group-hover:-rotate-6 transition-transform">
                 <Layers size={24} strokeWidth={2.5} />
               </div>
-              <span className="bg-orange-200 text-orange-800 text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider">
+              <span className="bg-orange-500/20 text-orange-600 text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider border border-orange-500/20">
                 Speed
               </span>
             </div>
-            <h3 className="text-2xl font-black text-orange-900 mb-1">
+            <h3 className="text-2xl font-black text-(--text-primary) mb-1">
               Food Sorter
             </h3>
-            <p className="text-orange-800/70 text-sm font-medium leading-snug mb-4">
+            <p className="text-(--text-secondary) text-sm font-medium leading-snug mb-4">
               Sort ingredients fast!
             </p>
-            <div className="w-full bg-white dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 font-bold py-2.5 rounded-xl text-center text-sm shadow-sm group-hover:bg-orange-500 group-hover:text-white transition-all border border-transparent dark:border-orange-500/20">
+            <div className="w-full bg-(--input-bg) text-orange-600 font-bold py-2.5 rounded-xl text-center text-sm shadow-sm group-hover:bg-orange-500 group-hover:text-white transition-all border border-(--border-color)">
               Start Sorting
             </div>
           </div>
@@ -145,24 +145,24 @@ export default function GamesPage() {
         {/* === Card 3: Memory Match === */}
         <div
           onClick={() => setActiveGame("memory")}
-          className="group relative bg-violet-500/10 dark:bg-violet-500/5 backdrop-blur-md rounded-4xl p-6 cursor-pointer transition-all duration-300 border-2 border-violet-500/20 border-b-[6px] border-b-violet-500/40 hover:-translate-y-1 active:translate-y-0 shadow-sm"
+          className="group relative bg-violet-500/10 backdrop-blur-md rounded-4xl p-6 cursor-pointer transition-all duration-300 border-2 border-violet-500/20 border-b-[6px] border-b-violet-500/40 hover:-translate-y-1 active:translate-y-0 shadow-sm"
         >
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
-              <div className="bg-white dark:bg-white/10 text-violet-600 dark:text-violet-400 p-3 rounded-2xl shadow-sm backdrop-blur-sm border border-transparent dark:border-white/10 group-hover:scale-110 transition-transform">
+              <div className="bg-(--card-bg) text-violet-600 p-3 rounded-2xl shadow-sm backdrop-blur-sm border border-(--border-color) group-hover:scale-110 transition-transform">
                 <Brain size={24} strokeWidth={2.5} />
               </div>
-              <span className="bg-violet-200 text-violet-800 text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider">
+              <span className="bg-violet-500/20 text-violet-600 text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-wider border border-violet-500/20">
                 Focus
               </span>
             </div>
-            <h3 className="text-2xl font-black text-violet-900 mb-1">
+            <h3 className="text-2xl font-black text-(--text-primary) mb-1">
               Memory Match
             </h3>
-            <p className="text-violet-800/70 text-sm font-medium leading-snug mb-4">
+            <p className="text-(--text-secondary) text-sm font-medium leading-snug mb-4">
               Find matching tools!
             </p>
-            <div className="w-full bg-white dark:bg-violet-500/20 text-violet-600 dark:text-violet-400 font-bold py-2.5 rounded-xl text-center text-sm shadow-sm group-hover:bg-violet-500 group-hover:text-white transition-all border border-transparent dark:border-violet-500/20">
+            <div className="w-full bg-(--input-bg) text-violet-600 font-bold py-2.5 rounded-xl text-center text-sm shadow-sm group-hover:bg-violet-500 group-hover:text-white transition-all border border-(--border-color)">
               Train Memory
             </div>
           </div>

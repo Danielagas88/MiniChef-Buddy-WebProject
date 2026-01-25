@@ -9,17 +9,15 @@ export default function RecipeCard({
 }) {
   return (
     <article
-      className="group relative bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden border border-white/40 dark:border-white/20 cursor-pointer"
+      className="group relative bg-(--card-surface) backdrop-blur-md rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden border border-(--card-surface-border) cursor-pointer"
       onClick={onOpen}
     >
-      {/* Top-right action (Like button / heart) */}
       {action && (
         <div className="absolute top-3 right-3 z-20 transform transition-transform group-hover:scale-110">
           {action}
         </div>
       )}
 
-      {/* Recipe Image with Overlay on Hover */}
       <div className="relative overflow-hidden">
         <img
           src={recipe.image}
@@ -31,7 +29,7 @@ export default function RecipeCard({
 
       <div className="p-4 flex-1 flex flex-col gap-2">
         <div className="flex items-start justify-between gap-2">
-          <h4 className="text-sm md:text-lg font-extrabold text-[var(--text-primary)] leading-tight line-clamp-1">
+          <h4 className="text-sm md:text-lg font-extrabold text-(--text-primary) leading-tight line-clamp-1">
             {recipe.title}
           </h4>
           {badge && (
@@ -41,34 +39,31 @@ export default function RecipeCard({
           )}
         </div>
 
-        {/* Level & Time with Icons */}
-        <div className="flex items-center gap-3 text-[10px] md:text-xs font-semibold text-[var(--text-secondary)]">
+        <div className="flex items-center gap-3 text-[10px] md:text-xs font-semibold text-(--text-secondary)">
           <span className="flex items-center gap-1">
             <span className="text-emerald-500">📊</span> {recipe.level}
           </span>
         </div>
 
         {subtitleExtra && (
-          <p className="text-xs text-emerald-600 font-medium italic">
+          <p className="text-xs text-(--accent-emerald) font-medium italic">
             {subtitleExtra}
           </p>
         )}
 
-        {/* Tags with Emerald Theme */}
         <div className="flex flex-wrap gap-1.5 mt-2">
           {recipe.tags?.map((tag) => (
             <span
               key={tag}
-              className="px-2.5 py-0.5 text-[9px] md:text-[10px] font-bold bg-emerald-50/50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full border border-emerald-100 dark:border-emerald-500/20"
+              className="px-2.5 py-0.5 text-[9px] md:text-[10px] font-bold bg-emerald-500/10 text-(--accent-emerald) rounded-full border border-emerald-500/20"
             >
               #{tag}
             </span>
           ))}
         </div>
 
-        {/* Bottom action area */}
         {footer && (
-          <div className="mt-4 pt-4 border-t border-slate-50">{footer}</div>
+          <div className="mt-4 pt-4 border-t border-(--border-color)">{footer}</div>
         )}
       </div>
     </article>

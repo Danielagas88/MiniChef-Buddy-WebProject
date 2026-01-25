@@ -72,73 +72,48 @@ export default function RegisterPage() {
     !password;
 
   return (
-    <div
-      className={`min-h-screen w-full flex items-center justify-center p-6 relative overflow-hidden transition-all duration-500 
-        ${isDarkMode ? "bg-[#030712]" : "bg-slate-50"}`}
-      style={{ colorScheme: isDarkMode ? "dark" : "light" }}
-    >
-      {/* אלמנטים זוהרים ברקע (Blobs) */}
+    <div className="min-h-screen w-full flex items-center justify-center p-6 relative overflow-hidden transition-all duration-500 bg-(--bg-current)">
       <div className="absolute top-1/4 -left-20 w-80 h-80 bg-amber-500/20 rounded-full blur-[120px] animate-pulse" />
       <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-emerald-500/20 rounded-full blur-[120px] animate-pulse" />
 
-      {/* כפתור מצבים צף */}
       <button
         onClick={toggleTheme}
         type="button"
-        className="fixed top-6 right-6 p-3 rounded-2xl backdrop-blur-md border shadow-xl hover:scale-110 transition-all z-50 group
-          bg-white/40 border-white/40 text-[var(--text-primary)]
-          dark:bg-white/10 dark:border-white/10 dark:text-yellow-400"
+        className="fixed top-6 right-6 p-3 rounded-2xl border shadow-lg hover:scale-110 transition-all z-50 bg-(--toggle-bg) border-(--toggle-border) text-(--toggle-icon)"
       >
         {isDarkMode ? (
-          <Sun
-            size={22}
-            className="group-hover:rotate-45 transition-transform"
-          />
+          <Sun size={22} className="transition-transform hover:rotate-45" />
         ) : (
-          <Moon
-            size={22}
-            className="group-hover:-rotate-12 transition-transform"
-          />
+          <Moon size={22} className="transition-transform hover:-rotate-12" />
         )}
       </button>
 
-      {/* כרטיס המודאל (Glass Card) */}
-      <section
-        className={`w-full max-w-lg backdrop-blur-2xl rounded-[3rem] p-8 md:p-10 space-y-8 animate-fade-in relative z-10 border transition-all duration-500
-        ${
-          isDarkMode
-            ? "!bg-white/[0.03] border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
-            : "!bg-white/80 border-white shadow-[0_20px_50px_rgba(0,0,0,0.05)]"
-        }`}
-      >
-        {/* Header Section */}
+      <section className="w-full max-w-lg backdrop-blur-2xl rounded-[3rem] p-8 md:p-10 space-y-8 animate-fade-in relative z-10 border border-(--card-surface-border) bg-(--card-surface) shadow-xl transition-all duration-500">
         <div className="text-center space-y-3">
-          <div className="w-16 h-16 bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center mx-auto border border-amber-500/20 backdrop-blur-sm">
+          <div className="w-16 h-16 bg-amber-500/10 text-(--accent-amber) rounded-2xl flex items-center justify-center mx-auto border border-amber-500/20 backdrop-blur-sm">
             <UserPlus size={32} strokeWidth={2.5} />
           </div>
-          <h2 className="text-3xl font-black text-[var(--text-primary)] tracking-tight">
-            Join the <span className="text-emerald-500">Kitchen!</span>
+          <h2 className="text-3xl font-black text-(--text-primary) tracking-tight">
+            Join the <span className="text-(--accent-emerald)">Kitchen!</span>
           </h2>
-          <p className="text-sm text-[var(--text-secondary)] font-medium leading-relaxed opacity-80">
+          <p className="text-sm text-(--text-secondary) font-medium leading-relaxed opacity-80">
             Create your profile and start your yummy cooking adventure.
           </p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Name Input */}
             <div className="space-y-1.5 md:col-span-2">
-              <label className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-widest ml-2 opacity-60">
+              <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest ml-2 opacity-60">
                 Chef Name
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-(--muted)">
                   <User size={18} />
                 </span>
                 <input
                   placeholder="Your full name"
-                  className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-[var(--text-primary)] placeholder:opacity-30
-                    bg-white/40 border-slate-200/50 dark:bg-white/5 dark:border-white/10"
+                  className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:opacity-30 bg-(--input-bg) border-2 border-(--border-color)"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -146,35 +121,31 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Username */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-widest ml-2 opacity-60">
+              <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest ml-2 opacity-60">
                 Username
               </label>
               <input
                 placeholder="CoolChef123"
-                className="w-full px-4 py-3.5 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-[var(--text-primary)] placeholder:opacity-30
-                  bg-white/40 border-slate-200/50 dark:bg-white/5 dark:border-white/10"
+                className="w-full px-4 py-3.5 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:opacity-30 bg-(--input-bg) border-2 border-(--border-color)"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
 
-            {/* Password */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-widest ml-2 opacity-60">
+              <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest ml-2 opacity-60">
                 Password
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-(--muted)">
                   <Lock size={18} />
                 </span>
                 <input
                   type="password"
                   placeholder="••••••••"
-                  className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-[var(--text-primary)] placeholder:opacity-30
-                    bg-white/40 border-slate-200/50 dark:bg-white/5 dark:border-white/10"
+                  className="w-full pl-11 pr-4 py-3.5 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:opacity-30 bg-(--input-bg) border-2 border-(--border-color)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -184,9 +155,8 @@ export default function RegisterPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Parent PIN */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest ml-2 flex items-center gap-1">
+              <label className="text-[10px] font-black text-(--accent-amber) uppercase tracking-widest ml-2 flex items-center gap-1">
                 <ShieldCheck size={12} /> Parent PIN
               </label>
               <input
@@ -194,24 +164,20 @@ export default function RegisterPage() {
                 inputMode="numeric"
                 maxLength={4}
                 placeholder="••••"
-                className="w-full px-4 py-3.5 rounded-2xl text-sm font-black focus:border-amber-400 focus:outline-none transition-all text-[var(--text-primary)] tracking-[0.3em] placeholder:tracking-normal
-                  bg-amber-500/5 border-amber-500/20 dark:border-amber-500/10"
+                className="w-full px-4 py-3.5 rounded-2xl text-sm font-black focus:border-amber-400 focus:outline-none transition-all text-(--text-primary) tracking-[0.3em] placeholder:tracking-normal bg-amber-500/5 border-2 border-amber-500/20"
                 value={parentPin}
                 onChange={handlePinChange}
               />
             </div>
 
-            {/* Cooking Level */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-widest ml-2 flex items-center gap-1 opacity-60">
+              <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest ml-2 flex items-center gap-1 opacity-60">
                 <ChefHat size={12} /> Level
               </label>
               <select
                 value={cookingLevel}
                 onChange={(e) => setCookingLevel(e.target.value)}
-                style={{ colorScheme: isDarkMode ? "dark" : "light" }}
-                className="w-full px-4 py-3.5 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all cursor-pointer text-[var(--text-primary)]
-                  bg-white/40 border-slate-200/50 dark:bg-white/5 dark:border-white/10 appearance-none"
+                className="w-full px-4 py-3.5 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all cursor-pointer text-(--text-primary) bg-(--input-bg) border-2 border-(--border-color) appearance-none"
               >
                 <option value="Easy">Easy Peasy</option>
                 <option value="Medium">Medium Chef</option>
@@ -220,9 +186,8 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {/* Allergens Grid */}
           <div className="space-y-3">
-            <label className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-widest ml-2 flex items-center gap-1 opacity-60">
+            <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest ml-2 flex items-center gap-1 opacity-60">
               <AlertCircle size={12} /> Allergens
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -231,10 +196,10 @@ export default function RegisterPage() {
                   key={a.key}
                   type="button"
                   onClick={() => toggleAllergen(a.key)}
-                  className={`flex flex-col items-center justify-center p-2.5 rounded-2xl border transition-all ${
+                  className={`flex flex-col items-center justify-center p-2.5 rounded-2xl border-2 transition-all ${
                     allergens.includes(a.key)
-                      ? "bg-emerald-500/20 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm"
-                      : "bg-white/20 border-white/40 dark:border-white/5 text-[var(--text-secondary)] opacity-60 hover:opacity-100"
+                      ? "bg-emerald-500/20 border-emerald-500 text-(--accent-emerald) shadow-sm"
+                      : "bg-(--input-bg) border-(--border-color) text-(--text-secondary) opacity-60 hover:opacity-100"
                   }`}
                 >
                   <span className="text-xl mb-1">{a.icon}</span>
@@ -246,7 +211,6 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {/* Error Message */}
           {error && (
             <div className="text-xs font-bold text-red-500 bg-red-500/10 border border-red-500/20 rounded-2xl px-4 py-3 animate-bounce-in flex items-center gap-2">
               <span className="text-sm">⚠️</span>
@@ -254,7 +218,6 @@ export default function RegisterPage() {
             </div>
           )}
 
-          {/* Submit & Footer */}
           <div className="space-y-4 text-center">
             <button
               type="submit"
@@ -264,12 +227,12 @@ export default function RegisterPage() {
               {isSubmitting ? "Creating Profile..." : "Start Cooking Now!"}
             </button>
 
-            <p className="text-xs font-bold text-[var(--text-secondary)]">
+            <p className="text-xs font-bold text-(--text-secondary)">
               Already a chef?{" "}
               <button
                 type="button"
                 onClick={() => navigate("/login")}
-                className="text-emerald-600 dark:text-emerald-400 hover:underline font-black transition-colors"
+                className="text-(--accent-emerald) hover:underline font-black transition-colors"
               >
                 Login here
               </button>

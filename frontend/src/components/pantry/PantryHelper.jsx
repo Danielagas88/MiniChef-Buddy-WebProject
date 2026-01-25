@@ -11,7 +11,7 @@ export default function PantryHelper() {
   const [error, setError] = useState("");
   const [pantryInput, setPantryInput] = useState("");
   const [pantryItems, setPantryItems] = useState([]);
-  const [matchMode, setMatchMode] = useState("any"); // "any" | "all"
+  const [matchMode, setMatchMode] = useState("any");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -98,25 +98,25 @@ export default function PantryHelper() {
   }, [recipes, pantryItems, matchMode]);
 
   return (
-    <div className="bg-white/80 dark:bg-white/10 backdrop-blur-lg rounded-3xl shadow-xl p-6 md:p-8 space-y-6 border border-white/40 dark:border-white/20 transition-all">
+    <div className="bg-(--card-surface) backdrop-blur-lg rounded-3xl shadow-xl p-6 md:p-8 space-y-6 border border-(--card-surface-border) transition-all">
       <div className="text-center space-y-1 mb-4">
-        <h4 className="text-2xl font-bold text-[var(--text-primary)] flex items-center justify-center gap-2">
+        <h4 className="text-2xl font-bold text-(--text-primary) flex items-center justify-center gap-2">
           Pantry Helper
         </h4>
-        <p className="text-[var(--text-secondary)] text-sm md:text-base font-medium">
-          Add ingredients you have at home and we’ll suggest yummy recipes for
+        <p className="text-(--text-secondary) text-sm md:text-base font-medium">
+          Add ingredients you have at home and we'll suggest yummy recipes for
           you!
         </p>
       </div>
 
       <div className="flex justify-center items-center gap-3">
-        <span className="text-sm font-medium text-[var(--text-secondary)]">
+        <span className="text-sm font-medium text-(--text-secondary)">
           Match mode:
         </span>
         <select
           value={matchMode}
           onChange={(e) => setMatchMode(e.target.value)}
-          className="text-sm px-4 py-2 border border-emerald-100 dark:border-white/30 rounded-full bg-emerald-50/50 dark:bg-white/10 text-emerald-700 dark:text-emerald-300 font-semibold cursor-pointer"
+          className="text-sm px-4 py-2 border-2 border-(--border-color) rounded-full bg-(--input-bg) text-(--text-primary) font-semibold cursor-pointer"
         >
           <option value="any">Any ingredient</option>
           <option value="all">All ingredients</option>
@@ -131,7 +131,7 @@ export default function PantryHelper() {
       />
 
       {loading && (
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400 animate-pulse">
+        <p className="text-center text-sm text-(--text-secondary) animate-pulse">
           Loading recipes...
         </p>
       )}

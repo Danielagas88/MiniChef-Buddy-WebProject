@@ -48,20 +48,18 @@ export default function FavoritesPage() {
   }, [user?.token, favoriteIds]);
 
   return (
-    <section className="bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-sm border border-white/40 dark:border-white/20 p-6 space-y-6 transition-all">
-      {/* Header Area */}
-      <div className="flex items-center justify-between border-b border-emerald-50 pb-4">
-        <h2 className="text-2xl font-extrabold text-[var(--text-primary)]">
-          My <span className="text-emerald-600">Favorites</span>
+    <section className="bg-(--card-surface) backdrop-blur-md rounded-3xl shadow-sm border border-(--card-surface-border) p-6 space-y-6 transition-all">
+      <div className="flex items-center justify-between border-b border-(--border-color) pb-4">
+        <h2 className="text-2xl font-extrabold text-(--text-primary)">
+          My <span className="text-(--accent-emerald)">Favorites</span>
         </h2>
-        <span className="bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs font-bold px-3 py-1 rounded-full shadow-sm border dark:border-emerald-500/20">
+        <span className="bg-emerald-500/10 text-(--accent-emerald) text-xs font-bold px-3 py-1 rounded-full shadow-sm border border-emerald-500/20">
           {favoriteRecipes.length} Recipes
         </span>
       </div>
 
-      {/* Status Messages */}
       {loading && (
-        <p className="text-center py-10 text-[var(--text-secondary)] animate-pulse">
+        <p className="text-center py-10 text-(--text-secondary) animate-pulse">
           Gathering your favorites...
         </p>
       )}
@@ -69,13 +67,10 @@ export default function FavoritesPage() {
         <p className="text-center py-10 text-red-500 font-bold">{error}</p>
       )}
 
-      {/* Empty State */}
       {!loading && favoriteRecipes.length === 0 ? (
         <div className="text-center py-16 space-y-4">
-          <div className="text-6xl grayscale opacity-30 dark:opacity-50">
-            🍳
-          </div>
-          <p className="text-slate-500 font-medium text-lg">
+          <div className="text-6xl grayscale opacity-30">🍳</div>
+          <p className="text-(--text-secondary) font-medium text-lg">
             Your favorites list is empty.
           </p>
           <button
@@ -86,7 +81,6 @@ export default function FavoritesPage() {
           </button>
         </div>
       ) : (
-        /* Recipes Grid */
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
           {favoriteRecipes.map((recipe) => (
             <RecipeCard
@@ -100,7 +94,7 @@ export default function FavoritesPage() {
                     e.stopPropagation();
                     toggleFavorite(recipe.id);
                   }}
-                  className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center hover:scale-110 transition-transform border border-red-50"
+                  className="w-10 h-10 rounded-full bg-(--card-bg) shadow-md flex items-center justify-center hover:scale-110 transition-transform border border-(--border-color)"
                   aria-label="Remove from favorites"
                 >
                   <span className="text-xl text-red-500">❤️</span>

@@ -21,7 +21,7 @@ export default function FoodCard({ item, isShaking, isAnimatingOut }) {
 `}
       >
         <span className="text-7xl drop-shadow-sm filter">{item.emoji}</span>
-        <span className="text-[var(--text-primary)] font-black text-xl tracking-wide">
+        <span className="text-(--text-primary) font-black text-xl tracking-wide">
           {item.name}
         </span>
       </div>

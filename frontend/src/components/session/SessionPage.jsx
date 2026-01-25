@@ -339,7 +339,7 @@ export default function SessionPage() {
             isFirst={currentStepIndex === 0}
             isLast={currentStepIndex === recipe.steps.length - 1}
           />
-          <div className="w-full bg-white/40 dark:bg-white/5 backdrop-blur-md rounded-3xl border border-white/40 dark:border-white/10 shadow-sm overflow-hidden h-[300px] flex flex-col transition-all">
+          <div className="w-full bg-(--card-surface) backdrop-blur-md rounded-3xl border border-(--card-surface-border) shadow-sm overflow-hidden h-[300px] flex flex-col transition-all">
             <div className="flex-1 overflow-hidden h-full">
               <SessionChat
                 messages={messages}

@@ -146,10 +146,10 @@ export default function FoodSorter({ onBack }) {
         </div>
 
         <div className="space-y-2">
-          <h2 className="text-4xl font-black text-[var(--text-primary)] tracking-tight">
+          <h2 className="text-4xl font-black text-(--text-primary) tracking-tight">
             Food Sorter
           </h2>
-          <p className="text-[var(--text-secondary)] font-medium text-lg max-w-xs mx-auto leading-relaxed">
+          <p className="text-(--text-secondary) font-medium text-lg max-w-xs mx-auto leading-relaxed">
             Sort 10 ingredients into the correct baskets before time runs out.
           </p>
         </div>

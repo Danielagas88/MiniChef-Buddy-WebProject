@@ -22,67 +22,46 @@ export default function LoginPage() {
   }
 
   return (
-    <div
-      className={`min-h-screen w-full flex items-center justify-center p-6 relative overflow-hidden transition-all duration-500 
-        ${isDarkMode ? "bg-[#030712]" : "bg-slate-50"}`}
-      style={{ colorScheme: isDarkMode ? "dark" : "light" }}
-    >
-      <div className="absolute top-1/4 -left-20 w-80 h-80 bg-emerald-500/30 dark:bg-emerald-500/20 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-teal-500/30 dark:bg-teal-500/20 rounded-full blur-[120px] animate-pulse" />
+    <div className="min-h-screen w-full flex items-center justify-center p-6 relative overflow-hidden transition-all duration-500 bg-(--bg-current)">
+      <div className="absolute top-1/4 -left-20 w-80 h-80 bg-emerald-500/30 rounded-full blur-[120px] animate-pulse" />
+      <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-teal-500/30 rounded-full blur-[120px] animate-pulse" />
 
       <button
         onClick={toggleTheme}
         type="button"
-        className="fixed top-6 right-6 p-3 rounded-2xl backdrop-blur-md border shadow-xl hover:scale-110 transition-all z-50 group
-          bg-white/40 border-white/40 text-[var(--text-primary)]
-          dark:bg-white/10 dark:border-white/10 dark:text-yellow-400"
+        className="fixed top-6 right-6 p-3 rounded-2xl border shadow-lg hover:scale-110 transition-all z-50 bg-(--toggle-bg) border-(--toggle-border) text-(--toggle-icon)"
       >
         {isDarkMode ? (
-          <Sun
-            size={22}
-            className="group-hover:rotate-45 transition-transform"
-          />
+          <Sun size={22} className="transition-transform hover:rotate-45" />
         ) : (
-          <Moon
-            size={22}
-            className="group-hover:-rotate-12 transition-transform"
-          />
+          <Moon size={22} className="transition-transform hover:-rotate-12" />
         )}
       </button>
 
-      <section
-        className={`w-full max-w-md backdrop-blur-2xl rounded-[3rem] p-8 md:p-12 space-y-8 animate-fade-in relative z-10 border transition-all duration-500
-        ${
-          isDarkMode
-            ? "!bg-white/[0.03] border-white/[0.08] shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
-            : "!bg-white/80 border-white shadow-[0_20px_50px_rgba(0,0,0,0.05)]"
-        }`}
-      >
+      <section className="w-full max-w-md backdrop-blur-2xl rounded-[3rem] p-8 md:p-12 space-y-8 animate-fade-in relative z-10 border border-(--card-surface-border) bg-(--card-surface) shadow-xl transition-all duration-500">
         <div className="text-center space-y-3">
-          <div className="w-16 h-16 bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-2xl flex items-center justify-center mx-auto border border-emerald-500/20 backdrop-blur-sm">
+          <div className="w-16 h-16 bg-emerald-500/10 text-(--accent-emerald) rounded-2xl flex items-center justify-center mx-auto border border-emerald-500/20 backdrop-blur-sm">
             <LogIn size={32} strokeWidth={2.5} />
           </div>
-          <h2 className="text-3xl font-black text-[var(--text-primary)] tracking-tight">
-            Welcome <span className="text-emerald-500">Back!</span>
+          <h2 className="text-3xl font-black text-(--text-primary) tracking-tight">
+            Welcome <span className="text-(--accent-emerald)">Back!</span>
           </h2>
-          <p className="text-sm text-[var(--text-secondary)] font-medium">
+          <p className="text-sm text-(--text-secondary) font-medium">
             Ready to cook something yummy today?
           </p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <label className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-widest ml-2 opacity-60">
+            <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest ml-2 opacity-60">
               Username
             </label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-(--muted)">
                 <User size={18} />
               </span>
               <input
-                className="w-full pl-12 pr-4 py-4 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] placeholder:opacity-30
-                  bg-white/40 border-slate-200/50
-                  dark:bg-white/5 dark:border-white/10"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:text-(--text-secondary) placeholder:opacity-30 bg-(--input-bg) border-2 border-(--border-color)"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Your chef name"
@@ -92,18 +71,16 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-widest ml-2 opacity-60">
+            <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest ml-2 opacity-60">
               Password
             </label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-(--muted)">
                 <Lock size={18} />
               </span>
               <input
                 type="password"
-                className="w-full pl-12 pr-4 py-4 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] placeholder:opacity-30
-                  bg-white/40 border-slate-200/50
-                  dark:bg-white/5 dark:border-white/10"
+                className="w-full pl-12 pr-4 py-4 rounded-2xl text-sm font-bold focus:border-emerald-400 focus:outline-none transition-all text-(--text-primary) placeholder:text-(--text-secondary) placeholder:opacity-30 bg-(--input-bg) border-2 border-(--border-color)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
@@ -128,12 +105,12 @@ export default function LoginPage() {
               {isSubmitting ? "Opening the Kitchen..." : "Login to Profile"}
             </button>
 
-            <p className="text-xs font-bold text-[var(--text-secondary)]">
+            <p className="text-xs font-bold text-(--text-secondary)">
               Not a chef yet?{" "}
               <button
                 type="button"
                 onClick={() => navigate("/register")}
-                className="text-emerald-600 dark:text-emerald-400 hover:underline font-black transition-colors"
+                className="text-(--accent-emerald) hover:underline font-black transition-colors"
               >
                 Create an account
               </button>

@@ -45,7 +45,7 @@ export default function GameEndScreen({
               : "⏰"}
         </div>
 
-        <h2 className="text-4xl font-black text-[var(--text-primary)] mb-2 italic uppercase tracking-tighter drop-shadow-sm">
+        <h2 className="text-4xl font-black text-(--text-primary) mb-2 italic uppercase tracking-tighter drop-shadow-sm">
           {title || (score > 0 ? "Well Done!" : "Time's Up!")}
         </h2>
 
@@ -61,7 +61,7 @@ export default function GameEndScreen({
               className={`p-5 rounded-3xl border-2 backdrop-blur-md ${currentTheme}`}
             >
               <p className="text-[10px] font-black uppercase mb-1">You</p>
-              <p className="text-4xl font-black text-[var(--text-primary)]">
+              <p className="text-4xl font-black text-(--text-primary)">
                 {score}
               </p>
             </div>
@@ -69,7 +69,7 @@ export default function GameEndScreen({
               <p className="text-[10px] font-black text-orange-500 uppercase mb-1 truncate">
                 {opponentName}
               </p>
-              <p className="text-4xl font-black text-[var(--text-primary)]">
+              <p className="text-4xl font-black text-(--text-primary)">
                 {opponentScore}
               </p>
             </div>
@@ -83,7 +83,7 @@ export default function GameEndScreen({
                 <span className="text-sm font-black uppercase tracking-[0.3em] opacity-80 mb-1">
                   Final Score
                 </span>
-                <p className="text-7xl font-black text-[var(--text-primary)] leading-none drop-shadow-2xl">
+                <p className="text-7xl font-black text-(--text-primary) leading-none drop-shadow-2xl">
                   {score}
                 </p>
               </div>
@@ -110,7 +110,7 @@ export default function GameEndScreen({
             label="Back to Menu"
             onClick={onExit}
             variant="outline"
-            className="w-full h-14 font-black rounded-full !bg-white/40 dark:!bg-white/10 !text-[var(--text-primary)] !border-white/60 dark:!border-white/10 backdrop-blur-md transition-all hover:!bg-white/60"
+            className="w-full h-14 font-black rounded-full !bg-white/40 dark:!bg-white/10 !text-(--text-primary) !border-white/60 dark:!border-white/10 backdrop-blur-md transition-all hover:!bg-white/60"
           />
         </div>
       </div>
