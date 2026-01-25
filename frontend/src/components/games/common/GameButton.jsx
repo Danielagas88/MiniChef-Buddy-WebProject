@@ -19,13 +19,15 @@ export default function GameButton({
 
   const variants = {
     default:
-      "bg-white text-slate-700 hover:bg-slate-50 border-2 border-slate-100",
+      "bg-white dark:bg-white/10 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/20 border-2 border-slate-100 dark:border-white/10 backdrop-blur-sm",
     primary:
-      "bg-blue-500 text-white hover:bg-blue-400 border-b-4 border-blue-700",
-    correct: "bg-emerald-400 text-emerald-900 border-b-4 border-emerald-600",
-    wrong: "bg-rose-400 text-rose-900 border-b-4 border-rose-600",
+      "bg-emerald-500 text-white hover:bg-emerald-400 border-b-4 border-emerald-700 dark:border-emerald-900 shadow-emerald-200/50",
+    correct:
+      "bg-emerald-400 dark:bg-emerald-500/40 text-emerald-900 dark:text-emerald-100 border-b-4 border-emerald-600 dark:border-emerald-500/60",
+    wrong:
+      "bg-rose-400 dark:bg-rose-500/40 text-rose-900 dark:text-rose-100 border-b-4 border-rose-600 dark:border-rose-500/60",
     outline:
-      "bg-transparent border-2 border-slate-300 text-slate-500 hover:bg-slate-50",
+      "bg-transparent border-2 border-slate-300 dark:border-white/20 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5",
   };
 
   return (

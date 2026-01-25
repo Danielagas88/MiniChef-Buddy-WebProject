@@ -5,7 +5,7 @@ import { ChefHat, Trophy, Users } from "lucide-react";
 
 import { SCORING } from "../common/ScoreSystem";
 import GameHeader from "../common/GameHeader";
-import GameButton from "../common/GameButton";
+import GameEndScreen from "../common/GameEndScreen";
 
 import TriviaStartScreen from "./TriviaStartScreen";
 import WaitingRoom from "./WaitingRoom";
@@ -32,7 +32,6 @@ export default function TriviaGame({ onBack }) {
 
   const isBattle = !!roomId;
 
-  // --- רפרנסים (למניעת באגים בסוקטים בהמשך) ---
   const scoreRef = useRef(0);
   const questionsRef = useRef([]);
   const isFinishedRef = useRef(false);
@@ -321,37 +320,41 @@ export default function TriviaGame({ onBack }) {
     return (
       <div className="w-full animate-fade-in pb-10">
         {isBattle ? (
-          <div className="max-w-3xl mx-auto px-4 mb-6">
-            <div className="bg-white/95 backdrop-blur-md rounded-[2.5rem] p-6 shadow-xl border-2 border-emerald-100 flex justify-between items-center relative overflow-hidden">
-              <div className="flex items-center gap-4">
-                <div className="bg-emerald-500 p-3 rounded-2xl text-white shadow-md">
+          <div className="max-w-3xl mx-auto px-4 mb-8">
+            <div className="bg-white/40 dark:bg-white/5 backdrop-blur-xl rounded-[2.5rem] p-6 shadow-2xl border border-white/40 dark:border-white/10 flex justify-between items-center relative overflow-hidden transition-all">
+              <div className="flex items-center gap-4 relative z-10">
+                <div className="bg-emerald-500 p-3 rounded-2xl text-white shadow-lg shadow-emerald-500/20 ring-2 ring-white/20">
                   <Users size={24} />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black text-emerald-500 uppercase italic tracking-widest">
+                  <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase italic tracking-widest leading-none mb-1">
                     You
                   </p>
-                  <p className="text-3xl font-black text-slate-800">{score}</p>
+                  <p className="text-4xl font-black text-[var(--text-primary)] leading-none tabular-nums">
+                    {score}
+                  </p>
                 </div>
               </div>
 
-              <div className="absolute left-1/2 -translate-x-1/2 bg-slate-100 px-6 py-2 rounded-full font-black text-slate-400 italic text-sm border-2 border-white shadow-inner">
+              <div className="absolute left-1/2 -translate-x-1/2 bg-white/60 dark:bg-white/10 px-6 py-2 rounded-full font-black text-[var(--text-secondary)] italic text-sm border border-white/40 dark:border-white/10 shadow-sm backdrop-blur-md">
                 VS
               </div>
 
-              <div className="flex items-center gap-4 text-right">
+              <div className="flex items-center gap-4 text-right relative z-10">
                 <div>
-                  <p className="text-[10px] font-black text-orange-500 uppercase italic tracking-widest">
+                  <p className="text-[11px] font-black text-orange-600 dark:text-orange-400 uppercase italic tracking-widest leading-none mb-1 truncate max-w-[100px] md:max-w-[140px]">
                     {opponentName}
                   </p>
-                  <p className="text-3xl font-black text-slate-800">
+                  <p className="text-4xl font-black text-[var(--text-primary)] leading-none tabular-nums">
                     {opponentScore}
                   </p>
                 </div>
-                <div className="bg-orange-500 p-3 rounded-2xl text-white shadow-md">
+                <div className="bg-orange-500 p-3 rounded-2xl text-white shadow-lg shadow-orange-500/20 ring-2 ring-white/20">
                   <Trophy size={24} />
                 </div>
               </div>
+
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-orange-500/5 pointer-events-none" />
             </div>
           </div>
         ) : (
@@ -394,86 +397,22 @@ export default function TriviaGame({ onBack }) {
     );
   }
 
-  if (gameState === "END")
+  if (gameState === "END") {
     return (
-      <div className="text-center py-6 animate-fade-in max-w-md mx-auto">
-        <div className="bg-white rounded-[3rem] p-10 shadow-2xl border-b-8 border-emerald-100 relative overflow-hidden">
-          <div className="text-7xl mb-6 drop-shadow-lg">
-            {isBattle
-              ? technicalWin
-                ? "🏃‍♂️"
-                : score > opponentScore
-                  ? "🏆"
-                  : score === opponentScore
-                    ? "🤝"
-                    : "🍳"
-              : "🏆"}
-          </div>
-
-          <h2 className="text-4xl font-black text-slate-800 mb-2 italic uppercase tracking-tighter">
-            {isBattle
-              ? technicalWin
-                ? "Victory!"
-                : score > opponentScore
-                  ? "You Win!"
-                  : score === opponentScore
-                    ? "Draw!"
-                    : "Good Game!"
-              : "WELL DONE!"}
-          </h2>
-
-          {isBattle && score > opponentScore && (
-            <p className="text-emerald-500 font-black text-sm mb-4 animate-bounce">
-              + {SCORING.TRIVIA.ONLINE_WIN_BONUS} WINNER BONUS INCLUDED!
-            </p>
-          )}
-
-          {isBattle ? (
-            <div className="grid grid-cols-2 gap-4 mb-8">
-              <div className="p-5 rounded-3xl bg-emerald-50 border-2 border-emerald-200 shadow-sm">
-                <p className="text-[10px] font-black text-emerald-500 uppercase mb-1">
-                  You
-                </p>
-                <p className="text-4xl font-black text-slate-700">{score}</p>
-              </div>
-              <div className="p-5 rounded-3xl bg-orange-50 border-2 border-orange-200 shadow-sm">
-                <p className="text-[10px] font-black text-orange-500 uppercase mb-1">
-                  {opponentName}
-                </p>
-                <p className="text-4xl font-black text-slate-700">
-                  {opponentScore}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="p-8 rounded-[2rem] bg-emerald-50 border-2 border-emerald-200 shadow-sm mb-8 max-w-[220px] mx-auto">
-              <p className="text-[10px] font-black text-emerald-500 uppercase mb-1 italic tracking-widest">
-                Final Score
-              </p>
-              <p className="text-6xl font-black text-slate-700 leading-none">
-                {score}
-              </p>
-            </div>
-          )}
-
-          <div className="space-y-4">
-            <GameButton
-              label="Play Again"
-              onClick={() => {
-                isFinishedRef.current = false;
-                setGameState("START");
-              }}
-              variant="primary"
-              className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-full shadow-lg transform transition-all active:scale-95"
-            />
-            <GameButton
-              label="Back to Menu"
-              onClick={handleExit}
-              variant="secondary"
-              className="w-full h-14 font-black rounded-full"
-            />
-          </div>
-        </div>
-      </div>
+      <GameEndScreen
+        score={score}
+        isBattle={isBattle}
+        opponentScore={opponentScore}
+        opponentName={opponentName}
+        technicalWin={technicalWin}
+        winBonus={SCORING.TRIVIA.ONLINE_WIN_BONUS}
+        onPlayAgain={() => {
+          isFinishedRef.current = false;
+          setGameState("START");
+        }}
+        onExit={handleExit}
+        variant="emerald"
+      />
     );
+  }
 }

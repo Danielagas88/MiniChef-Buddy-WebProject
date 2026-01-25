@@ -74,7 +74,7 @@ const ALLERGEN_ALIASES = {
 function containsAllergen(ingredientNames = [], userAllergens = []) {
   if (!userAllergens?.length) return false;
   const ingredients = ingredientNames.map((i) =>
-    String(i).toLowerCase().trim()
+    String(i).toLowerCase().trim(),
   );
   const blocked = new Set();
   for (const a of userAllergens) {
@@ -107,7 +107,7 @@ export default function RecipesPage() {
   }
 
   const levelOptions = ["Easy", "Medium", "Advanced"].filter(
-    (lvl) => levelRank[lvl] <= levelRank[userLevel]
+    (lvl) => levelRank[lvl] <= levelRank[userLevel],
   );
 
   useEffect(() => {
@@ -155,10 +155,10 @@ export default function RecipesPage() {
   return (
     <section className="space-y-4">
       {/* Container with the new Emerald theme but keeping your original padding/shadow structure */}
-      <div className="bg-white/90 rounded-3xl shadow-sm p-4 md:p-6 space-y-3 border border-emerald-50">
+      <div className="bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-sm p-4 md:p-6 space-y-3 border border-white/40 dark:border-white/20 transition-all">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between flex-wrap gap-2">
-            <h3 className="text-lg md:text-xl font-bold text-slate-800">
+            <h3 className="text-lg md:text-xl font-bold text-[var(--text-primary)]">
               Choose a Yummy Recipe
             </h3>
 
@@ -181,7 +181,7 @@ export default function RecipesPage() {
           )}
           {loadError && <p className="text-center text-red-500">{loadError}</p>}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
             {!isLoading && filteredRecipes.length === 0 && (
               <p className="text-sm text-slate-500 col-span-full text-center py-10">
                 No recipes found for this selection.

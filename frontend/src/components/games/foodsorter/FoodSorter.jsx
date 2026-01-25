@@ -8,7 +8,7 @@ import { SCORING } from "../common/ScoreSystem";
 
 // Common Components
 import GameHeader from "../common/GameHeader";
-import GameButton from "../common/GameButton";
+import GameEndScreen from "../common/GameEndScreen";
 
 // Local Components
 import FoodCard from "./FoodCard";
@@ -141,22 +141,22 @@ export default function FoodSorter({ onBack }) {
   if (gameState === "START") {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center space-y-6 animate-fade-in px-4">
-        <div className="bg-orange-100 p-8 rounded-full text-orange-500 shadow-inner">
+        <div className="bg-orange-500/10 dark:bg-orange-500/5 backdrop-blur-md p-8 rounded-full text-orange-500 dark:text-orange-400 shadow-inner border border-orange-500/20">
           <Layers size={64} strokeWidth={1.5} />
         </div>
 
         <div className="space-y-2">
-          <h2 className="text-4xl font-black text-slate-800 tracking-tight">
+          <h2 className="text-4xl font-black text-[var(--text-primary)] tracking-tight">
             Food Sorter
           </h2>
-          <p className="text-slate-500 font-medium text-lg max-w-xs mx-auto leading-relaxed">
+          <p className="text-[var(--text-secondary)] font-medium text-lg max-w-xs mx-auto leading-relaxed">
             Sort 10 ingredients into the correct baskets before time runs out.
           </p>
         </div>
 
         <button
           onClick={startGame}
-          className="bg-orange-500 text-white px-10 py-4 rounded-full font-bold text-lg shadow-xl hover:bg-orange-600 hover:scale-105 transition-all border-b-4 border-orange-700"
+          className="bg-orange-500 text-white px-10 py-4 rounded-full font-black text-xl shadow-lg shadow-orange-500/20 hover:bg-orange-600 hover:scale-105 transition-all border-b-4 border-orange-700 active:translate-y-[2px] active:border-b-2"
         >
           Start Sorting
         </button>
@@ -167,37 +167,12 @@ export default function FoodSorter({ onBack }) {
   // Screen 2: Results / Game Over
   if (gameState === "END") {
     return (
-      <div className="text-center py-12 max-w-md mx-auto animate-fade-in px-4">
-        <div className="bg-white rounded-[2.5rem] p-10 shadow-xl border-b-8 border-orange-100">
-          <div className="text-7xl mb-6">🏆</div>
-          <h2 className="text-4xl font-black text-slate-800 mb-2 font-display">
-            Well Done!
-          </h2>
-
-          <div className="bg-orange-50 p-6 rounded-3xl border border-orange-100 my-8">
-            <p className="text-orange-600/60 font-black uppercase tracking-widest text-xs mb-1">
-              Final Score
-            </p>
-            <p className="text-6xl font-black text-orange-500">{score}</p>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <GameButton
-              label="Play Again"
-              onClick={startGame}
-              variant="primary"
-              className="w-full bg-orange-500 text-white border-none hover:bg-orange-600 h-14 rounded-full text-lg font-bold shadow-md"
-            />
-
-            <GameButton
-              label="Exit to Menu"
-              onClick={onBack}
-              variant="secondary"
-              className="w-full bg-slate-100 text-slate-600 border-none hover:bg-slate-200 h-14 rounded-full text-lg font-bold"
-            />
-          </div>
-        </div>
-      </div>
+      <GameEndScreen
+        score={score}
+        onPlayAgain={startGame}
+        onExit={onBack}
+        variant="orange"
+      />
     );
   }
 

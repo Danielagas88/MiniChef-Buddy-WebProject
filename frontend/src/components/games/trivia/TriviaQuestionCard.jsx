@@ -11,11 +11,11 @@ export default function TriviaQuestionCard({
 }) {
   return (
     <div className="relative animate-scale-in max-w-3xl mx-auto w-full px-4">
-      <div className="relative z-10 bg-emerald-100 rounded-[3rem] p-10 md:p-14 shadow-2xl border-8 border-emerald-200 text-center min-h-[450px] flex flex-col justify-center">
+      <div className="relative z-10 bg-emerald-500/10 dark:bg-white/5 backdrop-blur-2xl rounded-[3rem] p-10 md:p-14 shadow-2xl border-4 border-white/40 dark:border-white/10 text-center min-h-[450px] flex flex-col justify-center transition-all">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-2 bg-emerald-700 rounded-b-xl opacity-50"></div>
 
         {/* Question Text */}
-        <h3 className="text-2xl md:text-3xl font-black text-emerald-900 leading-relaxed mb-12 drop-shadow-md">
+        <h3 className="text-2xl md:text-3xl font-black text-(--text-primary) leading-relaxed mb-12 drop-shadow-md">
           {question}
         </h3>
 
@@ -36,16 +36,16 @@ export default function TriviaQuestionCard({
                 onClick={() => onAnswerClick(option)}
                 disabled={showFeedback}
                 className={`
-                  relative overflow-hidden p-6 rounded-2xl font-bold text-lg transition-all duration-200
-                  active:scale-95 shadow-[0_6px_0_rgba(0,0,0,0.2)] active:shadow-none active:translate-y-[6px]
-                  ${
-                    status === "correct"
-                      ? "bg-emerald-400 text-emerald-900 ring-4 ring-emerald-200" // Correct style
-                      : status === "wrong"
-                        ? "bg-rose-400 text-rose-900 ring-4 ring-rose-200" // Wrong style
-                        : "bg-white text-emerald-900 hover:bg-emerald-50" // Default style (High Contrast)
-                  }
-                `}
+  relative overflow-hidden p-6 rounded-2xl font-black text-lg transition-all duration-200
+  active:scale-95 shadow-[0_6px_0_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1.5 backdrop-blur-md border-2
+  ${
+    status === "correct"
+      ? "bg-emerald-500 text-white border-emerald-400 shadow-emerald-500/20"
+      : status === "wrong"
+        ? "bg-rose-500 text-white border-rose-400 shadow-rose-500/20"
+        : "bg-white/60 dark:bg-white/10 text-(--text-primary) border-white/60 dark:border-white/10 hover:bg-white/80 dark:hover:bg-white/20"
+  }
+`}
               >
                 {/* Flex layout for the button content */}
                 <div className="flex items-center justify-between relative z-10">

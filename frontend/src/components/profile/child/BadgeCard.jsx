@@ -8,10 +8,10 @@ export default function BadgeCard({
 
   return (
     <div
-      className={`rounded-3xl border-2 p-4 text-center transition-all duration-300 relative overflow-hidden ${
+      className={`rounded-3xl border-2 p-4 text-center transition-all duration-300 relative overflow-hidden backdrop-blur-md ${
         unlocked
-          ? "bg-gradient-to-b from-amber-50 to-white border-amber-200 shadow-sm scale-100"
-          : "bg-slate-50 border-slate-100 opacity-60 scale-95"
+          ? "bg-amber-50/50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-500/30 shadow-sm scale-100"
+          : "bg-white/40 dark:bg-white/5 border-white/20 dark:border-white/10 opacity-60 scale-95"
       }`}
     >
       {/* Sparkle effect for unlocked badges */}
@@ -39,7 +39,9 @@ export default function BadgeCard({
 
       <div
         className={`text-xs md:text-sm font-black tracking-tight ${
-          unlocked ? "text-slate-800" : "text-slate-400"
+          unlocked
+            ? "text-[var(--text-primary)]"
+            : "text-[var(--text-secondary)]"
         }`}
       >
         {title}

@@ -4,25 +4,28 @@ import GameTimer from "./GameTimer";
 
 const THEMES = {
   green: {
-    wrapper: "bg-emerald-100/90 border-emerald-200 shadow-emerald-200/50",
-    text: "text-emerald-900",
-    pill: "bg-white text-emerald-700",
-    activeDot: "bg-emerald-500 ring-emerald-300",
-    inactiveDot: "bg-emerald-200",
+    wrapper:
+      "bg-emerald-500/10 dark:bg-white/5 border-emerald-500/20 dark:border-white/10 shadow-emerald-500/5",
+    text: "text-emerald-700 dark:text-emerald-400",
+    pill: "bg-white/60 dark:bg-white/10 text-emerald-700 dark:text-emerald-400 border-white/40 dark:border-white/10",
+    activeDot: "bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.4)]",
+    inactiveDot: "bg-emerald-200 dark:bg-white/5",
   },
   purple: {
-    wrapper: "bg-violet-100/90 border-violet-200 shadow-violet-200/50",
-    text: "text-violet-900",
-    pill: "bg-white text-violet-700",
-    activeDot: "bg-violet-500 ring-violet-300",
-    inactiveDot: "bg-violet-200",
+    wrapper:
+      "bg-violet-500/10 dark:bg-white/5 border-violet-500/20 dark:border-white/10 shadow-violet-500/5",
+    text: "text-violet-700 dark:text-violet-400",
+    pill: "bg-white/60 dark:bg-white/10 text-violet-700 dark:text-violet-400 border-white/40 dark:border-white/10",
+    activeDot: "bg-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.4)]",
+    inactiveDot: "bg-violet-200 dark:bg-white/5",
   },
   orange: {
-    wrapper: "bg-orange-100/90 border-orange-200 shadow-orange-200/50",
-    text: "text-orange-900",
-    pill: "bg-white text-orange-700",
-    activeDot: "bg-orange-500 ring-orange-300",
-    inactiveDot: "bg-orange-200",
+    wrapper:
+      "bg-orange-500/10 dark:bg-white/5 border-orange-500/20 dark:border-white/10 shadow-orange-500/5",
+    text: "text-orange-700 dark:text-orange-400",
+    pill: "bg-white/60 dark:bg-white/10 text-orange-700 dark:text-orange-400 border-white/40 dark:border-white/10",
+    activeDot: "bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.4)]",
+    inactiveDot: "bg-orange-200 dark:bg-white/5",
   },
 };
 
@@ -43,14 +46,14 @@ export default function GameHeader({
       className={`
       grid grid-cols-3 items-center 
       w-full max-w-2xl mx-auto mb-8 px-6 py-3
-      rounded-full border-4 backdrop-blur-md shadow-xl transition-all duration-300
+      rounded-full border-2 backdrop-blur-xl shadow-2xl transition-all duration-300
       ${styles.wrapper}
     `}
     >
       {/* LEFT SECTION: Timer & Info */}
       <div className="flex items-center gap-3 justify-start">
         <div
-          className={`px-4 py-2 rounded-full shadow-sm flex items-center gap-2 font-bold min-w-[90px] justify-center ${styles.pill}`}
+          className={`px-4 py-2 rounded-full shadow-sm flex items-center gap-2 font-black min-w-[90px] justify-center border backdrop-blur-md ${styles.pill}`}
         >
           <GameTimer
             timeLeft={timeLeft}
@@ -61,7 +64,7 @@ export default function GameHeader({
 
         {extraInfo && (
           <div
-            className={`px-3 py-2 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm hidden lg:block ${styles.pill}`}
+            className={`px-3 py-2 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm hidden lg:block border backdrop-blur-md ${styles.pill}`}
           >
             {extraInfo}
           </div>
@@ -78,10 +81,10 @@ export default function GameHeader({
                 w-2.5 h-2.5 rounded-full transition-all duration-500
                 ${
                   idx === progressCurrent
-                    ? `${styles.activeDot} scale-125 ring-2`
+                    ? `${styles.activeDot} scale-125 ring-2 ring-white/50 dark:ring-white/20`
                     : idx < progressCurrent
                       ? styles.activeDot
-                      : styles.inactiveDot
+                      : `${styles.inactiveDot} border border-black/5 dark:border-white/10`
                 }
               `}
             />
@@ -90,7 +93,7 @@ export default function GameHeader({
 
         {/* Mobile progress text */}
         <div
-          className={`md:hidden font-black text-[10px] uppercase tracking-widest opacity-80 ${styles.text}`}
+          className={`md:hidden font-black text-[10px] uppercase tracking-widest opacity-90 ${styles.text}`}
         >
           {progressLabel} {progressCurrent + 1}/{progressTotal}
         </div>
@@ -99,9 +102,12 @@ export default function GameHeader({
       {/* RIGHT SECTION: Score */}
       <div className="flex items-center justify-end">
         <div
-          className={`px-5 py-2 rounded-full flex items-center gap-2 shadow-sm border-2 border-slate-50/50 ${styles.pill}`}
+          className={`px-5 py-2 rounded-full flex items-center gap-2 shadow-sm border backdrop-blur-md ${styles.pill}`}
         >
-          <Trophy size={18} className="text-yellow-500 fill-yellow-500" />
+          <Trophy
+            size={18}
+            className="text-yellow-500 fill-yellow-500 drop-shadow-sm"
+          />
           <span className="font-black text-xl leading-none tabular-nums">
             {score}
           </span>

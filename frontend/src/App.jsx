@@ -42,7 +42,7 @@ export default function App() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#F0FDF4] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-emerald-50 dark:bg-slate-950 flex items-center justify-center p-4 transition-colors duration-300">
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

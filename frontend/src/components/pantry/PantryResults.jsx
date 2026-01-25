@@ -19,21 +19,22 @@ export default function PantryResults({ pantryItems, results, onStart }) {
   });
 
   return (
-    <div className="pt-6 border-t border-emerald-50">
-      <h5 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
-        <span className="text-emerald-500">✨</span> Suggested Recipes
+    <div className="pt-6 border-t border-slate-200/50 dark:border-white/10">
+      <h5 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2 transition-colors">
+        <span className="text-emerald-500 dark:text-emerald-400">✨</span>{" "}
+        Suggested Recipes
       </h5>
 
       {filteredResults.length === 0 ? (
-        <div className="bg-emerald-50 p-6 rounded-2xl text-center border-2 border-dashed border-emerald-100">
-          <p className="text-slate-600 font-medium italic">
+        <div className="bg-emerald-50/50 dark:bg-emerald-900/20 p-6 rounded-2xl text-center border-2 border-dashed border-emerald-100/50 dark:border-emerald-500/20 transition-all">
+          <p className="text-[var(--text-secondary)] font-medium italic">
             {results.length > 0
               ? "We found recipes, but they are a bit too advanced for your current level. Try other ingredients!"
               : "No recipes found. Try adding more ingredients to your pantry!"}
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
           {filteredResults.map(({ recipe, hits, hitsCount }) => (
             <PantryRecipeCard
               key={recipe.id}

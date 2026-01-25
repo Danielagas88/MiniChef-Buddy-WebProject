@@ -42,7 +42,7 @@ export default function PantryHelper() {
       .replace(/[\d/.]+/g, " ")
       .replace(
         /\b(cup|cups|tbsp|tsp|teaspoon|tablespoon|grams|g|kg|ml|l|oz|lb)\b/g,
-        " "
+        " ",
       )
       .replace(/\s+/g, " ")
       .trim();
@@ -83,7 +83,7 @@ export default function PantryHelper() {
         const ing = (r.ingredients || []).map(normalizeIngredientLine);
 
         const hits = pantryItems.filter((p) =>
-          ing.some((i) => i.includes(p) || p.includes(i))
+          ing.some((i) => i.includes(p) || p.includes(i)),
         );
 
         const ok =
@@ -98,35 +98,31 @@ export default function PantryHelper() {
   }, [recipes, pantryItems, matchMode]);
 
   return (
-    /* Changed bg-opacity and added a subtle emerald border */
-    <div className="bg-white bg-opacity-90 rounded-3xl shadow-xl p-6 md:p-8 space-y-6 border border-emerald-50">
-      {/* Header section: Centered for more impact */}
+    <div className="bg-white/80 dark:bg-white/10 backdrop-blur-lg rounded-3xl shadow-xl p-6 md:p-8 space-y-6 border border-white/40 dark:border-white/20 transition-all">
       <div className="text-center space-y-1 mb-4">
-        <h4 className="text-2xl font-bold text-slate-800 flex items-center justify-center gap-2">
+        <h4 className="text-2xl font-bold text-[var(--text-primary)] flex items-center justify-center gap-2">
           Pantry Helper
         </h4>
-        {/* Added 'whitespace-nowrap' or simply removed width constraints to keep it on one line */}
-        <p className="text-slate-600 text-sm md:text-base font-medium">
+        <p className="text-[var(--text-secondary)] text-sm md:text-base font-medium">
           Add ingredients you have at home and we’ll suggest yummy recipes for
           you!
         </p>
       </div>
 
-      {/* Match Mode Selector: Styled with Emerald theme */}
       <div className="flex justify-center items-center gap-3">
-        <span className="text-sm font-medium text-slate-500">Match mode:</span>
+        <span className="text-sm font-medium text-[var(--text-secondary)]">
+          Match mode:
+        </span>
         <select
           value={matchMode}
           onChange={(e) => setMatchMode(e.target.value)}
-          /* Changed ring-pink-300 to ring-emerald-300 */
-          className="text-sm px-4 py-2 border border-emerald-100 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-300 bg-emerald-50 text-emerald-700 font-semibold cursor-pointer transition-all"
+          className="text-sm px-4 py-2 border border-emerald-100 dark:border-white/30 rounded-full bg-emerald-50/50 dark:bg-white/10 text-emerald-700 dark:text-emerald-300 font-semibold cursor-pointer"
         >
           <option value="any">Any ingredient</option>
           <option value="all">All ingredients</option>
         </select>
       </div>
 
-      {/* This component contains the actual search input we want to enlarge */}
       <PantryInput
         value={pantryInput}
         onChange={setPantryInput}
@@ -135,10 +131,11 @@ export default function PantryHelper() {
       />
 
       {loading && (
-        <p className="text-center text-sm text-slate-400 animate-pulse">
+        <p className="text-center text-sm text-slate-500 dark:text-slate-400 animate-pulse">
           Loading recipes...
         </p>
       )}
+
       {error && <p className="text-center text-sm text-red-500">{error}</p>}
 
       <PantryChips

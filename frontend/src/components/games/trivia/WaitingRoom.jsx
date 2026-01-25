@@ -41,11 +41,11 @@ export default function WaitingRoom({ onCancel, onStartGame }) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] py-10 animate-fade-in text-center space-y-8">
-      <div className="bg-white/90 backdrop-blur-md p-10 rounded-[3rem] shadow-2xl border-4 border-emerald-50 max-w-sm w-full relative overflow-hidden">
+      <div className="bg-white/40 dark:bg-white/5 backdrop-blur-xl p-10 rounded-[3rem] shadow-2xl border border-white/40 dark:border-white/10 max-w-sm w-full relative overflow-hidden transition-all">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-300 to-teal-400"></div>
 
         <div className="mb-8 relative flex flex-col items-center justify-center">
-          <div className="absolute w-24 h-24 bg-emerald-100 rounded-full blur-xl opacity-60 animate-pulse"></div>
+          <div className="absolute w-24 h-24 bg-emerald-500/20 dark:bg-emerald-500/10 rounded-full blur-xl animate-pulse"></div>
 
           <Loader
             className="animate-spin text-emerald-500 relative z-10 mb-4"
@@ -53,18 +53,18 @@ export default function WaitingRoom({ onCancel, onStartGame }) {
             strokeWidth={1.5}
           />
 
-          <div className="relative z-10 bg-emerald-100 text-emerald-700 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border border-emerald-200 animate-bounce">
+          <div className="relative z-10 bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border border-emerald-500/20 animate-bounce">
             {playerCount} {playerCount === 1 ? "Chef" : "Chefs"} Waiting
           </div>
         </div>
 
-        <h2 className="text-3xl font-black text-slate-800 mb-3 italic tracking-tight leading-tight">
+        <h2 className="text-3xl font-black text-[var(--text-primary)] mb-3 italic tracking-tight leading-tight">
           Finding{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-500">
             Opponent...
           </span>
         </h2>
-        <p className="text-slate-500 text-sm font-medium px-4 leading-relaxed mb-8">
+        <p className="text-[var(--text-secondary)] text-sm font-medium px-4 leading-relaxed mb-8">
           Preparing the kitchen for a Chef Battle! Hang tight.
         </p>
 
@@ -72,13 +72,13 @@ export default function WaitingRoom({ onCancel, onStartGame }) {
           <GameButton
             label="Cancel Search"
             onClick={onCancel}
-            variant="primary"
-            className="w-full bg-emerald-600 text-white hover:bg-emerald-700 border-none h-14 text-base font-bold shadow-lg shadow-emerald-200/40 transition-transform hover:scale-[1.02]"
+            variant="outline"
+            className="w-full !bg-white/40 dark:!bg-white/10 !text-emerald-600 dark:!text-emerald-400 !border-emerald-500/20 h-14 text-base font-black shadow-lg hover:!bg-rose-500 hover:!text-white hover:!border-rose-500 transition-all active:scale-95"
           />
         </div>
       </div>
 
-      <p className="text-xs text-emerald-600/70 font-black uppercase tracking-widest animate-pulse">
+      <p className="text-[10px] text-emerald-500 dark:text-emerald-400 font-black uppercase tracking-[0.2em] animate-pulse">
         Connecting to Live Server...
       </p>
     </div>

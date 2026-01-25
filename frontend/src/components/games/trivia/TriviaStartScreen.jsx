@@ -8,13 +8,13 @@ export default function TriviaStartScreen({ onStartGame }) {
     <div className="w-full max-w-md mx-auto py-8 px-4 animate-fade-in space-y-8">
       {/* Header Bubble */}
       <div className="text-center flex flex-col items-center space-y-2">
-        <div className="bg-emerald-100 p-6 rounded-full text-emerald-600 shadow-sm mb-4 transform hover:scale-110 transition-transform duration-300">
+        <div className="bg-emerald-500/10 dark:bg-emerald-500/5 backdrop-blur-md p-6 rounded-full text-emerald-600 dark:text-emerald-400 shadow-sm border border-emerald-500/20 transform hover:scale-110 transition-transform duration-300">
           <Trophy size={64} strokeWidth={1.5} />
         </div>
-        <h2 className="text-4xl font-black text-slate-800 tracking-tight">
+        <h2 className="text-4xl font-black text-(--text-primary) tracking-tight">
           Trivia Challenge
         </h2>
-        <p className="text-slate-500 font-medium text-lg">
+        <p className="text-(--text-secondary) font-medium text-lg">
           Choose your game mode
         </p>
       </div>

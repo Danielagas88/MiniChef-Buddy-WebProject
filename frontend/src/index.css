@@ -1,34 +1,47 @@
-@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap");
 @import "tailwindcss";
-body {
-  font-family: "Rubik", sans-serif;
-  background-color: #e0faec;
-  background-image:
-    linear-gradient(rgba(16, 185, 129, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(16, 185, 129, 0.15) 1px, transparent 1px);
-  background-size: 40px 40px;
-  color: #1e293b;
+
+@theme {
+  --dark-mode: selector(.dark);
+  --color-main-bg: #e0faec;
+  --color-dark-bg: #0f172a;
 }
 
-@keyframes float {
-  0% {
-    transform: translateY(0px);
+@layer base {
+  :root {
+    --bg-current: var(--color-main-bg);
+    --header-bg: #f0fdf4;
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
   }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
 
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  .dark {
+    --bg-current: var(--color-dark-bg);
+    --header-bg: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--bg-current);
+    color: var(--text-primary);
+    @apply transition-colors duration-300;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(16, 185, 129, 0.5); /* צבע אמרלד בשקיפות בהובר */
+  }
 }

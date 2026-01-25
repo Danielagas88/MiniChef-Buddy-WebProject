@@ -27,12 +27,12 @@ export default function Leaderboard({ players = [], isLoading = false }) {
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto space-y-4">
+    <div className="w-full max-w-xl mx-auto space-y-6">
       {/* Header - More Compact */}
       <div className="flex items-center justify-between px-4 mb-2">
         <div className="flex items-center gap-2">
           <Trophy className="text-yellow-400" size={18} />
-          <h3 className="font-black text-lg text-slate-800 uppercase italic tracking-tighter">
+          <h3 className="font-black text-xl text-(--text-primary) uppercase italic tracking-tighter">
             Chef <span className="text-emerald-500">Rankings</span>
           </h3>
         </div>
@@ -42,47 +42,49 @@ export default function Leaderboard({ players = [], isLoading = false }) {
       </div>
 
       {/* Unified List - More Compact */}
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         {players.map((player, index) => {
           const isTop3 = index < 3;
 
           // Dynamic styling logic
           const rankStyles = {
-            0: "bg-gradient-to-r from-yellow-50 to-white border-yellow-200 shadow-sm",
-            1: "bg-gradient-to-r from-slate-100 to-white border-slate-400 shadow-sm", // הדגשת מסגרת כסופה
-            2: "bg-gradient-to-r from-orange-50 to-white border-orange-200 shadow-sm",
+            0: "bg-gradient-to-r from-yellow-500/10 to-transparent border-yellow-500/30 dark:from-yellow-500/20",
+            1: "bg-gradient-to-r from-slate-400/10 to-transparent border-slate-400/30 dark:from-slate-400/20",
+            2: "bg-gradient-to-r from-orange-500/10 to-transparent border-orange-500/30 dark:from-orange-500/20",
           };
 
-          const cardStyle =
-            rankStyles[index] ||
-            "bg-white border-slate-100 hover:border-slate-200";
+          const cardStyle = isTop3
+            ? rankStyles[index]
+            : "bg-white/40 dark:bg-white/5 border-white/40 dark:border-white/10";
 
           return (
             <div
               key={player._id || index}
               className={`
-                relative flex items-center justify-between rounded-xl border-2 transition-all duration-200
+                relative flex items-center justify-between rounded-2xl border-2 backdrop-blur-md transition-all duration-300
                 ${cardStyle}
-                ${isTop3 ? "py-2 px-4 mx-0" : "py-1.5 px-4 mx-2"} 
+                ${isTop3 ? "py-3 px-5 mx-0 shadow-lg shadow-black/5" : "py-2 px-5 mx-2 shadow-sm opacity-90 hover:opacity-100"} 
               `}
             >
               {/* Left Side: Rank & Info */}
-              <div className="flex items-center gap-3 overflow-hidden">
-                {/* Slimmer Rank Badge */}
+              <div className="flex items-center gap-4 overflow-hidden">
                 <div
                   className={`
-                  font-black text-[10px] w-5 h-5 flex items-center justify-center rounded-full
-                  ${isTop3 ? "bg-white shadow-inner" : "text-slate-400"}
-                `}
+                  font-black text-[11px] w-6 h-6 flex items-center justify-center rounded-full backdrop-blur-md border transition-all duration-300
+                    ${
+                      isTop3
+                        ? "bg-white/60 dark:bg-white/20 text-(--text-primary) border-white/60 dark:border-white/20 shadow-sm"
+                        : "bg-white/30 dark:bg-white/5 text-(--text-secondary) border-white/20 dark:border-white/10"
+                    }
+`}
                 >
                   {index + 1}
                 </div>
-
                 {/* Smaller Icon Container */}
                 <div
                   className={`
-                  flex items-center justify-center rounded-lg bg-white shadow-sm flex-shrink-0
-                  ${isTop3 ? "w-9 h-9 border border-white/50" : "w-7 h-7"}
+                  flex items-center justify-center rounded-xl bg-white/80 dark:bg-white/10 shadow-sm border border-white/40 shrink-0
+                  ${isTop3 ? "w-11 h-11" : "w-8 h-8"}
                 `}
                 >
                   {getRankIcon(index)}
@@ -91,16 +93,16 @@ export default function Leaderboard({ players = [], isLoading = false }) {
                 {/* Name & Title */}
                 <div className="flex flex-col truncate">
                   <span
-                    className={`font-bold text-slate-800 truncate ${isTop3 ? "text-sm" : "text-xs"}`}
+                    className={`font-black text-(--text-primary) truncate ${isTop3 ? "text-base" : "text-sm"}`}
                   >
                     {player.username || "Unknown Chef"}
                   </span>
                   {isTop3 && (
-                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                    <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest leading-none">
                       {index === 0
-                        ? "Master"
+                        ? "Master Chef"
                         : index === 1
-                          ? "Executive"
+                          ? "Executive Chef"
                           : "Sous Chef"}
                     </span>
                   )}
@@ -108,20 +110,20 @@ export default function Leaderboard({ players = [], isLoading = false }) {
               </div>
 
               {/* Right Side: Score */}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 <span
-                  className={`font-black ${isTop3 ? "text-sm text-slate-700" : "text-xs text-slate-500"}`}
+                  className={`font-black ${isTop3 ? "text-lg text-emerald-600 dark:text-emerald-400" : "text-sm text-(--text-secondary)"}`}
                 >
                   {player.totalScore || 0}
                 </span>
-                <span className="text-[9px] font-bold text-slate-300 uppercase">
+                <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase">
                   pts
                 </span>
               </div>
 
               {/* Rank 1 TOP Badge */}
               {index === 0 && (
-                <div className="absolute -top-2 -right-1 bg-yellow-400 text-white text-[8px] font-black px-1.5 py-0.5 rounded-md shadow-md uppercase tracking-tighter rotate-12 border border-white/50">
+                <div className="absolute -top-2.5 -right-1 bg-linear-to-r from-yellow-400 to-amber-500 text-white text-[9px] font-black px-2 py-0.5 rounded-lg shadow-lg uppercase rotate-12 border-2 border-white dark:border-slate-800">
                   TOP
                 </div>
               )}
@@ -131,8 +133,10 @@ export default function Leaderboard({ players = [], isLoading = false }) {
       </div>
 
       {players.length === 0 && (
-        <div className="text-center py-6 text-slate-300 text-xs font-bold uppercase">
-          No data found
+        <div className="text-center py-10 bg-white/20 dark:bg-white/5 rounded-3xl border border-dashed border-white/20">
+          <p className="text-(--text-secondary) text-sm font-bold uppercase tracking-wider italic">
+            No legends yet...
+          </p>
         </div>
       )}
     </div>

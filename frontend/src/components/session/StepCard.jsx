@@ -1,4 +1,5 @@
-/* StepCard.jsx */
+import { memo } from "react";
+
 function SpeakingRobot({ isSpeaking }) {
   return (
     <div
@@ -11,7 +12,7 @@ function SpeakingRobot({ isSpeaking }) {
   );
 }
 
-export default function StepCard({
+function StepCard({
   stepText,
   currentStep,
   totalSteps,
@@ -23,9 +24,9 @@ export default function StepCard({
   isLast,
 }) {
   return (
-    <div className="bg-white rounded-3xl shadow-xl p-8 min-h-[300px] flex flex-col justify-between relative overflow-hidden border border-emerald-50">
+    <div className="bg-white/90 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-xl p-8 min-h-[300px] flex flex-col justify-between relative overflow-hidden border border-white/40 dark:border-white/20 transition-all">
       {/* Background Decoration */}
-      <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-50 rounded-bl-full -z-0 opacity-60"></div>
+      <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-50 rounded-bl-full z-0 opacity-60"></div>
 
       <div className="z-10 relative">
         <div className="flex justify-between items-start mb-6">
@@ -41,7 +42,7 @@ export default function StepCard({
           <SpeakingRobot isSpeaking={isSpeaking} />
         </div>
 
-        <p className="text-lg md:text-xl text-slate-800 font-medium leading-relaxed">
+        <p className="text-lg md:text-xl text-(--text-primary) font-medium leading-relaxed">
           {stepText}
         </p>
       </div>
@@ -50,7 +51,7 @@ export default function StepCard({
         <button
           onClick={onPrev}
           disabled={isFirst}
-          className="px-6 py-3 rounded-full text-slate-500 font-bold hover:bg-slate-100 disabled:opacity-30 text-lg transition"
+          className="px-6 py-3 rounded-full text-(--text-secondary) font-bold hover:bg-slate-100 disabled:opacity-30 text-lg transition"
         >
           ← Back
         </button>
@@ -68,3 +69,5 @@ export default function StepCard({
     </div>
   );
 }
+
+export default memo(StepCard);

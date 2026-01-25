@@ -13,17 +13,17 @@ export default function TriviaFeedback({
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg z-50 px-4 animate-bounce-slight">
       <div
         className={`
-            p-10 rounded-[3rem] shadow-[0_20px_60px_rgba(0,0,0,0.3)] border-8 border-white text-center relative overflow-hidden
-            ${
-              isCorrect
-                ? "bg-emerald-100 text-emerald-900"
-                : "bg-rose-100 text-rose-900"
-            }
-        `}
+  p-10 rounded-[3rem] shadow-2xl border-4 backdrop-blur-2xl text-center relative overflow-hidden
+  ${
+    isCorrect
+      ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-900 dark:text-emerald-100"
+      : "bg-rose-500/20 border-rose-500/30 text-rose-900 dark:text-rose-100"
+  }
+`}
       >
         {/* Background Bubbles Decoration */}
-        <div className="absolute top-[-20px] right-[-20px] w-24 h-24 rounded-full bg-white opacity-20"></div>
-        <div className="absolute bottom-[-20px] left-[-20px] w-32 h-32 rounded-full bg-white opacity-20"></div>
+        <div className="absolute -top-5 -right-5 w-24 h-24 rounded-full bg-white opacity-20"></div>
+        <div className="absolute -bottom-5 -left-5 w-32 h-32 rounded-full bg-white opacity-20"></div>
 
         {/* Content */}
         <div className="relative z-10">
@@ -43,7 +43,7 @@ export default function TriviaFeedback({
             {isCorrect ? "Tasty!" : "Oops..."}
           </h4>
 
-          <p className="font-medium text-xl leading-relaxed mb-10 opacity-90 text-slate-800">
+          <p className="font-medium text-xl leading-relaxed mb-10 opacity-90 text-(--text-primary)">
             {fact}
           </p>
 

@@ -18,13 +18,12 @@ export default function ParentMainPage() {
   };
 
   return (
-    <div className="animate-fade-in relative min-h-[500px]">
-      {parent.gate.isUnlocked && (
+    <div className="relative min-h-[60vh] flex items-center justify-center">
+      {parent.gate.isUnlocked ? (
         <ParentDashboard token={user?.token} limit={10} />
-      )}
-
-      {!parent.gate.isUnlocked && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm z-10">
+      ) : (
+        /* Overlay מעודכן - תואם ל-FinishModal */
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/20 dark:bg-black/40 backdrop-blur-sm animate-fade-in transition-all duration-500">
           <ParentGateModal
             pin={parent.pin}
             setPinInput={parent.setPinInput}

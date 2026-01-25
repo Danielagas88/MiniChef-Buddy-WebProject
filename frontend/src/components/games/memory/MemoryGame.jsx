@@ -5,7 +5,8 @@ import { memoryCards } from "../../../data/memoryCards";
 // Common Components
 import GameButton from "../common/GameButton";
 import GameHeader from "../common/GameHeader";
-import { SCORING, calculateMemoryScore } from "../common/ScoreSystem";
+import GameEndScreen from "../common/GameEndScreen";
+import { calculateMemoryScore } from "../common/ScoreSystem";
 
 // Icons
 import { Brain } from "lucide-react";
@@ -204,20 +205,26 @@ export default function MemoryGame({ onBack }) {
   // VIEW: Start Screen
   if (gameState === "START") {
     return (
-      <div className="flex flex-col items-center justify-center py-12 animate-fade-in text-center space-y-6">
-        <div className="bg-indigo-100 p-6 rounded-full text-indigo-600 shadow-inner mb-4 transform hover:scale-110 transition-transform">
+      <div className="flex flex-col items-center justify-center py-12 animate-fade-in text-center space-y-8 px-4">
+        <div className="bg-violet-500/10 dark:bg-violet-500/5 backdrop-blur-md p-8 rounded-full text-violet-600 dark:text-violet-400 shadow-inner border border-violet-500/20 transform hover:scale-110 transition-transform">
           <Brain size={64} strokeWidth={1.5} />
         </div>
-        <h2 className="text-4xl font-black text-slate-800">Memory Match</h2>
-        <p className="text-slate-500 font-medium text-lg max-w-xs">
-          Train your brain! Find all the matching kitchen pairs before time runs
-          out.
-        </p>
+
+        <div className="space-y-3">
+          <h2 className="text-4xl font-black text-[var(--text-primary)] tracking-tight">
+            Memory Match
+          </h2>
+          <p className="text-[var(--text-secondary)] font-medium text-lg max-w-xs mx-auto leading-relaxed">
+            Train your brain! Find all matching kitchen pairs before time runs
+            out.
+          </p>
+        </div>
+
         <GameButton
           label="Start Game"
           onClick={initializeGame}
           variant="primary"
-          className="bg-indigo-600 border-indigo-800 hover:bg-indigo-500 text-white px-10 py-4 text-xl"
+          className="!bg-violet-600 !text-white px-12 py-4 text-xl font-black rounded-full shadow-xl shadow-violet-500/20 active:scale-95 transition-all"
         />
       </div>
     );
@@ -226,45 +233,13 @@ export default function MemoryGame({ onBack }) {
   // VIEW: End Screen
   if (gameState === "END") {
     return (
-      <div className="text-center py-10 space-y-8 animate-fade-in max-w-md mx-auto">
-        <div className="bg-white rounded-[2.5rem] p-10 shadow-xl border-b-8 border-indigo-100">
-          <div className="text-7xl flex justify-center mb-6">
-            {score > 0 ? "🏆" : "⏰"}
-          </div>
-          <h2 className="text-3xl font-black text-slate-800 mb-2">
-            {score > 0 ? "Well Done!" : "Time's Up!"}
-          </h2>
-
-          <div className="bg-indigo-50 p-6 rounded-3xl border border-indigo-100 mb-8 space-y-2">
-            <div className="flex justify-between text-indigo-800/70 font-bold uppercase text-xs tracking-widest">
-              <span>Moves</span>
-              <span>Score</span>
-            </div>
-            <div className="flex justify-between items-end">
-              <span className="text-2xl font-black text-slate-600">
-                {moves}
-              </span>
-              <span className="text-6xl font-black text-indigo-600">
-                {score}
-              </span>
-            </div>
-          </div>
-
-          <GameButton
-            label="Play Again"
-            onClick={initializeGame}
-            variant="primary"
-            className="w-full bg-violet-600 text-white border-none hover:bg-violet-700 h-14 rounded-full text-lg font-bold shadow-md transition-all"
-          />
-
-          <GameButton
-            label="Exit to Menu"
-            onClick={onBack}
-            variant="secondary"
-            className="w-full bg-slate-100 text-slate-600 border-none hover:bg-slate-200 h-14 rounded-full text-lg font-bold"
-          />
-        </div>
-      </div>
+      <GameEndScreen
+        score={score}
+        moves={moves}
+        onPlayAgain={initializeGame}
+        onExit={onBack}
+        variant="violet"
+      />
     );
   }
 
