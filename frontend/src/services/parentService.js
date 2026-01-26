@@ -1,30 +1,37 @@
-const API_BASE = "http://localhost:3000";
+/**
+ * Parent PIN Service
+ * 
+ * Handles parent PIN verification and setup for secure parent dashboard access.
+ * PINs are 4-digit codes that provide an additional security layer.
+ * 
+ * @module services/parentService
+ */
 
-async function request(path, { method = "GET", body, token } = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method,
-    headers: {
-      ...(body ? { "Content-Type": "application/json" } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+import { apiClient } from "../lib/apiClient.js";
+import { API_ENDPOINTS } from "../constants/api/endpoints.js";
 
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok)
-    throw new Error(data?.message || `Request failed: ${res.status}`);
-  return data;
-}
-
+/**
+ * Parent API service object
+ * @namespace parentApi
+ */
 export const parentApi = {
+  /**
+   * Verify parent PIN for dashboard access
+   * @param {string} pin - 4-digit PIN code
+   * @param {string} token - User authentication token
+   * @returns {Promise<Object>} Verification result
+   * @throws {Error} If PIN is incorrect or request fails
+   */
   verifyPin: (pin, token) =>
-    request("/api/parent-pin/verify", { method: "POST", body: { pin }, token }),
+    apiClient.post(API_ENDPOINTS.PARENT.VERIFY_PIN, { pin }, { token }),
 
+  /**
+   * Set or update parent PIN
+   * @param {string} pin - 4-digit PIN code to set
+   * @param {string} token - User authentication token
+   * @returns {Promise<Object>} Confirmation result
+   * @throws {Error} If request fails
+   */
   setPin: (pin, token) =>
-    request("/api/parent-pin/set", { method: "POST", body: { pin }, token }),
-
-  getWeeklyReport: (token) => request("/api/weekly-report/me", { token }),
-
-  saveWeeklyReport: (report, token) =>
-    request("/api/weekly-report/me", { method: "PUT", body: report, token }),
+    apiClient.post(API_ENDPOINTS.PARENT.SET_PIN, { pin }, { token }),
 };

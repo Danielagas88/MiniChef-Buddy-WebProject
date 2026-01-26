@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 // Data and Types
 import { foodItems, CATEGORIES } from "../../../data/foodSorterData";
+import { apiClient } from "../../../lib/apiClient.js";
+import { API_ENDPOINTS } from "../../../constants/api/endpoints.js";
 
 // Scoring System
 import { SCORING } from "../common/ScoreSystem";
@@ -46,23 +48,10 @@ export default function FoodSorter({ onBack }) {
     
     try {
       const token = localStorage.getItem("token") || "";
-      const response = await fetch("http://localhost:3000/api/auth/score", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ points: finalScore }),
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log(`✅ Food Sorter score saved! Game score: ${finalScore}, Server total: ${data.totalScore}`);
-      } else {
-        console.error("❌ Failed to save Food Sorter score:", await response.text());
-      }
+      // Consume response body to prevent memory leaks
+      await apiClient.patch(API_ENDPOINTS.AUTH.SCORE, { points: finalScore }, { token });
     } catch (error) {
-      console.error("❌ Critical: Server sync failed", error);
+      // Score save failed - game continues normally without interrupting user experience
     }
   }, [isFinished]);
 

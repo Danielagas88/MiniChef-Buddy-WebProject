@@ -1,5 +1,7 @@
 import { Brain, Trophy, Layers, ChefHat } from "lucide-react";
 import { useState, useEffect } from "react";
+import { apiClient } from "../../lib/apiClient.js";
+import { API_ENDPOINTS } from "../../constants/api/endpoints.js";
 
 import TriviaGame from "./trivia/TriviaGame";
 import MemoryGame from "./memory/MemoryGame";
@@ -15,15 +17,10 @@ export default function GamesPage() {
   const fetchLeaderboard = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        "http://localhost:3000/api/auth/leaderboard",
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setPlayers(data);
-      }
+      const data = await apiClient.get(API_ENDPOINTS.AUTH.LEADERBOARD);
+      setPlayers(data);
     } catch (error) {
-      console.error("Error fetching leaderboard:", error);
+      // Error fetching leaderboard silently
     } finally {
       setLoading(false);
     }

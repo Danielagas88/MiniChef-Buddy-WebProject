@@ -17,13 +17,13 @@ export default function GameEndScreen({
 }) {
   const themes = {
     emerald:
-      "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30 shadow-emerald-500/10",
+      "text-emerald-600 dark:text-emerald-200 bg-emerald-500/10 dark:bg-emerald-900/40 border-emerald-500/30 dark:border-emerald-400/60 shadow-emerald-500/10",
     orange:
-      "text-orange-600 dark:text-orange-400 bg-orange-500/10 border-orange-500/30 shadow-orange-500/10",
+      "text-orange-600 dark:text-orange-200 bg-orange-500/10 dark:bg-orange-900/40 border-orange-500/30 dark:border-orange-400/60 shadow-orange-500/10",
     violet:
-      "text-violet-600 dark:text-violet-400 bg-violet-500/10 border-violet-500/30 shadow-violet-500/10",
+      "text-violet-600 dark:text-violet-200 bg-violet-500/10 dark:bg-violet-900/40 border-violet-500/30 dark:border-violet-400/60 shadow-violet-500/10",
     indigo:
-      "text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 border-indigo-500/30 shadow-indigo-500/10",
+      "text-indigo-600 dark:text-indigo-200 bg-indigo-500/10 dark:bg-indigo-900/40 border-indigo-500/30 dark:border-indigo-400/60 shadow-indigo-500/10",
   };
 
   const currentTheme = themes[variant] || themes.emerald;
@@ -76,14 +76,14 @@ export default function GameEndScreen({
           </div>
         ) : (
           <div
-            className={`p-6 md:p-8 rounded-[2rem] border-2 backdrop-blur-md mb-6 mx-auto flex flex-col items-center justify-center max-w-[280px] ${currentTheme}`}
+            className={`p-6 md:p-8 rounded-4xl border-2 backdrop-blur-md mb-6 mx-auto flex flex-col items-center justify-center max-w-[280px] ${currentTheme}`}
           >
             <div className="flex flex-col items-center w-full space-y-4">
               <div className="flex flex-col items-center">
-                <span className="text-sm font-black uppercase tracking-[0.3em] opacity-80 mb-1">
+                <span className="text-sm font-black uppercase tracking-[0.3em] dark:opacity-100 opacity-80 mb-1 dark:text-emerald-100">
                   Final Score
                 </span>
-                <p className="text-7xl font-black text-(--text-primary) leading-none drop-shadow-2xl">
+                <p className="text-7xl font-black dark:text-emerald-300 text-(--text-primary) leading-none drop-shadow-2xl">
                   {score}
                 </p>
               </div>
@@ -104,13 +104,13 @@ export default function GameEndScreen({
             label="Play Again"
             onClick={onPlayAgain}
             variant="primary"
-            className={`w-full h-14 !text-white font-black rounded-full shadow-lg active:scale-95 ${variant === "orange" ? "!bg-orange-500" : variant === "violet" ? "!bg-violet-600" : "!bg-emerald-600"}`}
+            className={`w-full h-14 text-white! font-black rounded-full shadow-lg active:scale-95 ${variant === "orange" ? "bg-orange-500!" : variant === "violet" ? "bg-violet-600!" : "bg-emerald-600!"}`}
           />
           <GameButton
             label="Back to Menu"
             onClick={onExit}
-            variant="outline"
-            className="w-full h-14 font-black rounded-full !bg-white/40 dark:!bg-white/10 !text-(--text-primary) !border-white/60 dark:!border-white/10 backdrop-blur-md transition-all hover:!bg-white/60"
+            variant="default"
+            className="w-full h-14 font-black rounded-full bg-white/40! dark:bg-slate-800! dark:text-white! text-slate-800! border-white/60! dark:border-slate-600! backdrop-blur-md transition-all hover:bg-white/60! dark:hover:bg-slate-700!"
           />
         </div>
       </div>

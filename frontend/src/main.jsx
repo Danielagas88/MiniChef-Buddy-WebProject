@@ -1,3 +1,17 @@
+/**
+ * Application Entry Point
+ * 
+ * Initializes React application with:
+ * - React Router for navigation
+ * - Context providers for global state
+ * - Error boundaries and strict mode
+ * 
+ * Provider Hierarchy:
+ * ThemeProvider → BrowserRouter → AuthProvider → FavoritesProvider → App
+ * 
+ * @file
+ */
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";

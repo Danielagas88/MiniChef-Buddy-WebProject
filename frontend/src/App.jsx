@@ -1,3 +1,18 @@
+/**
+ * Main Application Component
+ * 
+ * Handles routing and authentication-based access control.
+ * 
+ * Features:
+ * - Protected routes (require authentication)
+ * - Lazy loading for code splitting
+ * - Error boundaries for error handling
+ * - Automatic redirects based on auth state
+ * 
+ * @component
+ * @returns {JSX.Element} The main application with routing
+ */
+
 import { Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { useAuth } from "./hooks/useAuth.js";
@@ -13,7 +28,7 @@ import FavoritesPage from "./components/FavoritesPage.jsx";
 import SessionPage from "./components/session/SessionPage.jsx";
 import ChildProfile from "./components/profile/child/ChildProfile.jsx";
 
-// Lazy loaded routes for code splitting
+// Lazy loaded routes for code splitting (improves initial load time)
 const GamesPage = lazy(() => import("./components/games/GamesPage.jsx"));
 const ParentPage = lazy(() => import("./components/profile/parent/ParentMainPage.jsx"));
 

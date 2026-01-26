@@ -1,57 +1,74 @@
-const API_BASE = "http://localhost:3000";
+/**
+ * Gallery Service
+ * 
+ * Handles user photo gallery operations.
+ * Users can save photos of their completed recipes to their gallery.
+ * 
+ * @module services/galleryService
+ */
 
+import { apiClient } from "../lib/apiClient.js";
+import { API_ENDPOINTS } from "../constants/api/endpoints.js";
+
+/**
+ * Gallery service object
+ * @namespace galleryService
+ */
 export const galleryService = {
-  // 1. Add a new photo to the user's gallery
+  /**
+   * Add a new photo to the user's gallery
+   * 
+   * Saves a photo URL to the user's gallery with an optional caption.
+   * 
+   * @param {string} imageUrl - URL of the image to add
+   * @param {string} [caption="My Creation"] - Optional caption for the photo
+   * @returns {Promise<Object>} Updated gallery data
+   * @throws {Error} If request fails
+   * 
+   * @example
+   * await galleryService.addToGallery("https://example.com/photo.jpg", "My Pasta!");
+   */
   addToGallery: async (imageUrl, caption = "My Creation") => {
     const token = localStorage.getItem("token");
-
-    const res = await fetch(`${API_BASE}/api/auth/gallery`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      body: JSON.stringify({ imageUrl, caption }),
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to save to gallery");
-    }
-
-    return res.json();
+    return apiClient.post(
+      API_ENDPOINTS.AUTH.GALLERY,
+      { imageUrl, caption },
+      { token }
+    );
   },
 
-  // 2. Fetch all gallery images from the current user profile
+  /**
+   * Fetch all gallery images from the current user profile
+   * 
+   * Retrieves all photos saved in the user's gallery.
+   * 
+   * @returns {Promise<Array>} Array of gallery photo objects
+   * @throws {Error} If request fails
+   * 
+   * @example
+   * const photos = await galleryService.getUserGallery();
+   */
   getUserGallery: async () => {
     const token = localStorage.getItem("token");
-
-    const res = await fetch(`${API_BASE}/api/auth/me`, {
-      method: "GET",
-      headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch gallery");
-    }
-
-    const data = await res.json();
+    const data = await apiClient.get(API_ENDPOINTS.AUTH.ME, { token });
     // Return only the gallery array from the user object
     return data.gallery || [];
   },
 
-  // 3. Delete a specific photo by its ID
+  /**
+   * Delete a specific photo by its ID
+   * 
+   * Removes a photo from the user's gallery.
+   * 
+   * @param {string} photoId - ID of the photo to delete
+   * @returns {Promise<Object>} Deletion confirmation
+   * @throws {Error} If request fails
+   * 
+   * @example
+   * await galleryService.deletePhoto("photo-123");
+   */
   deletePhoto: async (photoId) => {
     const token = localStorage.getItem("token");
-    const res = await fetch(`${API_BASE}/api/auth/gallery/${photoId}`, {
-      method: "DELETE",
-      headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-    });
-
-    if (!res.ok) throw new Error("Failed to delete photo");
-    return res.json();
+    return apiClient.delete(API_ENDPOINTS.AUTH.GALLERY_DELETE(photoId), { token });
   },
 };

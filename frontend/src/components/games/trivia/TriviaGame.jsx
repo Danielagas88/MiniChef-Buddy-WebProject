@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { socket } from "../../../services/socket";
 import { triviaQuestions } from "../../../data/triviaQuestions";
 import { ChefHat, Trophy, Users } from "lucide-react";
+import { apiClient } from "../../../lib/apiClient.js";
+import { API_ENDPOINTS } from "../../../constants/api/endpoints.js";
 
 import { SCORING } from "../common/ScoreSystem";
 import GameHeader from "../common/GameHeader";
@@ -92,7 +94,6 @@ export default function TriviaGame({ onBack }) {
   const finishGame = useCallback(
     async (isTechWin = false) => {
       if (isFinishedRef.current) {
-        console.warn("finishGame called multiple times, ignoring duplicate call");
         return;
       }
       isFinishedRef.current = true;
@@ -116,32 +117,19 @@ export default function TriviaGame({ onBack }) {
         try {
           const token = localStorage.getItem("token");
           if (!token) {
-            console.error("No token found, cannot save score");
             setGameState("END");
             return;
           }
 
-          const response = await fetch("http://localhost:3000/api/auth/score", {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ points: finalTotal }),
-          });
-          
-          if (response.ok) {
-            const data = await response.json();
-            console.log(`✅ Score saved! Game score: ${finalTotal}, Server total: ${data.totalScore}`);
-          } else {
-            const errorText = await response.text();
-            console.error("❌ Failed to save score:", response.status, errorText);
+          // Consume response body to prevent memory leaks
+          try {
+            await apiClient.patch(API_ENDPOINTS.AUTH.SCORE, { points: finalTotal }, { token });
+          } catch {
+            // Score save failed - game continues normally without interrupting user experience
           }
-        } catch (e) {
-          console.error("❌ Error saving score:", e);
+        } catch (error) {
+          // Score save failed - game continues normally without interrupting user experience
         }
-      } else {
-        console.log("Score is 0, not saving to server");
       }
 
       setGameState("END");
@@ -255,7 +243,6 @@ export default function TriviaGame({ onBack }) {
       // Prevent calling if game is already finished
       if (isFinishedRef.current) return;
       
-      console.log("Opponent left the kitchen!");
       setTechnicalWin(true);
       setBattleMessage(data.message || "The other chef left the kitchen...");
       finishGame(true);
@@ -301,7 +288,6 @@ export default function TriviaGame({ onBack }) {
   useEffect(() => {
     return () => {
       if (isBattle && roomId) {
-        console.log("Leaving room before unmount...");
         socket.emit("leave_room", { roomId });
       }
     };
@@ -393,7 +379,7 @@ export default function TriviaGame({ onBack }) {
                 </div>
               </div>
 
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-orange-500/5 pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-r from-emerald-500/5 via-transparent to-orange-500/5 pointer-events-none" />
             </div>
           </div>
         ) : (

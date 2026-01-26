@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 // Data
 import { memoryCards } from "../../../data/memoryCards";
+import { apiClient } from "../../../lib/apiClient.js";
+import { API_ENDPOINTS } from "../../../constants/api/endpoints.js";
 
 // Common Components
 import GameButton from "../common/GameButton";
@@ -127,22 +129,10 @@ export default function MemoryGame({ onBack }) {
       if (finalScore > 0) {
         try {
           const token = localStorage.getItem("token") || "";
-          const API_URL = "http://localhost:3000/api/auth/score";
-
-          const res = await fetch(API_URL, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ points: finalScore }),
-          });
-
-          if (!res.ok) {
-            console.error("Failed to save score to server");
-          }
+          // Consume response body to prevent memory leaks
+          await apiClient.patch(API_ENDPOINTS.AUTH.SCORE, { points: finalScore }, { token });
         } catch (error) {
-          console.error("Error saving score:", error);
+          // Score save failed - game continues normally without interrupting user experience
         }
       }
     },
@@ -224,7 +214,7 @@ export default function MemoryGame({ onBack }) {
           label="Start Game"
           onClick={initializeGame}
           variant="primary"
-          className="!bg-violet-600 !text-white px-12 py-4 text-xl font-black rounded-full shadow-xl shadow-violet-500/20 active:scale-95 transition-all"
+          className="bg-violet-600! text-white! px-12 py-4 text-xl font-black rounded-full shadow-xl shadow-violet-500/20 active:scale-95 transition-all"
         />
       </div>
     );

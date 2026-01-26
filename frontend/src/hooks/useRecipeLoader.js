@@ -1,9 +1,22 @@
+/**
+ * useRecipeLoader Hook
+ * 
+ * Loads recipe data from external API and manages loading/error states.
+ * Tracks when the recipe session started for timing calculations.
+ * 
+ * @param {string} recipeId - Recipe ID to load
+ * @returns {Object} Recipe loader state
+ * @returns {Object|null} returns.recipe - Loaded recipe data
+ * @returns {boolean} returns.loading - Loading state
+ * @returns {string|null} returns.error - Error message if loading failed
+ * @returns {number|null} returns.startedAt - Timestamp when recipe was loaded
+ * 
+ * @example
+ * const { recipe, loading, error, startedAt } = useRecipeLoader(recipeId);
+ */
 import { useState, useEffect, useRef } from "react";
 import { fetchRecipeById } from "../services/recipeService.js";
 
-/**
- * Custom hook for loading recipe data
- */
 export function useRecipeLoader(recipeId) {
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);

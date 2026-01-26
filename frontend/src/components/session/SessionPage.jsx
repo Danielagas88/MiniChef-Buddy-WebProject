@@ -65,7 +65,11 @@ export default function SessionPage() {
     await uploadImage(file, recipe?.title);
   };
 
-  const handleFinalizeSession = async () => {
+  /**
+   * Save recipe completion to history
+   * @param {string} [redirectPath="/recipes"] - Path to navigate after saving
+   */
+  const saveRecipeToHistory = async (redirectPath = "/recipes") => {
     try {
       if (user?.token && recipe && startedAt) {
         const minutes = Math.max(
@@ -82,8 +86,16 @@ export default function SessionPage() {
     } catch (e) {
       console.error("Error saving session:", e);
     } finally {
-      navigate("/recipes");
+      navigate(redirectPath);
     }
+  };
+
+  const handleFinalizeSession = () => {
+    saveRecipeToHistory("/recipes");
+  };
+
+  const handleViewProfile = () => {
+    saveRecipeToHistory("/progress");
   };
 
   if (loading) {
@@ -148,7 +160,7 @@ export default function SessionPage() {
           isUploadSuccess={isUploadSuccess}
           uploadError={uploadError}
           onUpload={handleImageUpload}
-          onViewProfile={() => navigate("/progress")}
+          onViewProfile={handleViewProfile}
           onDone={handleFinalizeSession}
         />
       )}

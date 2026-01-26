@@ -1,28 +1,36 @@
-const API_BASE = "http://localhost:3000";
+/**
+ * Favorites Service
+ * 
+ * Handles all favorite recipe operations with the backend API.
+ * Uses centralized apiClient for consistent error handling.
+ * 
+ * @module services/favoritesService
+ */
 
-async function apiRequest(path, { method = "GET", body, token } = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+import { apiClient } from "../lib/apiClient.js";
+import { API_ENDPOINTS } from "../constants/api/endpoints.js";
 
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data?.message || `Request failed: ${res.status}`);
-  return data;
-}
-
+/**
+ * Get user's favorite recipes from the server
+ * @param {string} token - User authentication token
+ * @returns {Promise<Object>} Response containing favoriteRecipeIds array
+ * @throws {Error} If request fails
+ */
 export function getFavorites(token) {
-  return apiRequest("/api/favorites", { token });
+  return apiClient.get(API_ENDPOINTS.FAVORITES.BASE, { token });
 }
 
+/**
+ * Toggle favorite status of a recipe on the server
+ * @param {string} recipeId - Recipe ID to toggle
+ * @param {string} token - User authentication token
+ * @returns {Promise<Object>} Updated favorites data
+ * @throws {Error} If request fails
+ */
 export function toggleFavoriteOnServer(recipeId, token) {
-  return apiRequest("/api/favorites/toggle", {
-    method: "POST",
-    body: { recipeId },
-    token,
-  });
+  return apiClient.post(
+    API_ENDPOINTS.FAVORITES.TOGGLE,
+    { recipeId },
+    { token }
+  );
 }

@@ -10,7 +10,27 @@ const initialMessages = [
 ];
 
 /**
- * Custom hook for managing chat messages and AI interactions
+ * useChatMessages Hook
+ * 
+ * Manages chat messages between user and ChefBot AI.
+ * Handles message sending, AI responses, and text-to-speech integration.
+ * 
+ * @param {Object} recipe - Current recipe object
+ * @param {number} currentStepIndex - Index of current cooking step
+ * @param {string} userToken - User authentication token
+ * @param {Function} onSpeak - Text-to-speech function
+ * @returns {Object} Chat state and methods
+ * @returns {Array} returns.messages - Array of chat messages
+ * @returns {boolean} returns.isBotTyping - Whether bot is generating response
+ * @returns {Function} returns.sendMessage - Function to send a message
+ * 
+ * @example
+ * const { messages, isBotTyping, sendMessage } = useChatMessages(
+ *   recipe,
+ *   currentStepIndex,
+ *   userToken,
+ *   speak
+ * );
  */
 export function useChatMessages(recipe, currentStepIndex, userToken, onSpeak) {
   const [messages, setMessages] = useState(initialMessages);

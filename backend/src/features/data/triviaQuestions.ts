@@ -1,5 +1,3 @@
-// src/data/triviaQuestions.js
-
 export const triviaQuestions = [
   {
     id: 1,

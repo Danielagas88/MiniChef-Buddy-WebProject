@@ -1,19 +1,34 @@
-const API_BASE = "http://localhost:3000";
+/**
+ * User Service
+ * 
+ * Handles user profile and account operations.
+ * 
+ * @module services/userService
+ */
 
+import { apiClient } from "../lib/apiClient.js";
+import { API_ENDPOINTS } from "../constants/api/endpoints.js";
+
+/**
+ * Update user's cooking level
+ * 
+ * Updates the user's cooking skill level (Beginner, Medium, Advanced).
+ * 
+ * @param {Object} params - Update parameters
+ * @param {string} params.token - User authentication token
+ * @param {string} params.cookingLevel - New cooking level (e.g., "Beginner", "Medium", "Advanced")
+ * @returns {Promise<Object>} Updated user data
+ * @throws {Error} If token is missing or request fails
+ * 
+ * @example
+ * await updateMyCookingLevel({ token: userToken, cookingLevel: "Advanced" });
+ */
 export async function updateMyCookingLevel({ token, cookingLevel }) {
   if (!token) throw new Error("Missing token");
 
-  const res = await fetch(`${API_BASE}/api/auth/me/cooking-level`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ cookingLevel }),
-  });
-
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok)
-    throw new Error(data?.message || `Request failed: ${res.status}`);
-  return data;
+  return apiClient.patch(
+    API_ENDPOINTS.AUTH.COOKING_LEVEL,
+    { cookingLevel },
+    { token }
+  );
 }
