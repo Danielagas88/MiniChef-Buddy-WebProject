@@ -1,3 +1,11 @@
+/**
+ * StepCard
+ *
+ * Displays one recipe step with prev/next navigation and optional
+ * text-to-speech indicator. Used inside SessionPage.
+ *
+ * @component
+ */
 import { memo } from "react";
 
 function SpeakingRobot({ isSpeaking }) {

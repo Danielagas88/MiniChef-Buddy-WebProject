@@ -1,3 +1,11 @@
+/**
+ * GamesPage
+ *
+ * Game arcade: Trivia, Memory, Food Sorter. Shows leaderboard and
+ * lets user pick a game or play multiplayer trivia.
+ *
+ * @component
+ */
 import { Brain, Trophy, Layers, ChefHat } from "lucide-react";
 import { useState, useEffect } from "react";
 import { apiClient } from "../../lib/apiClient.js";

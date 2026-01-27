@@ -1,4 +1,10 @@
-// src/data/foodSorterData.js
+/**
+ * foodSorterData
+ *
+ * Categories and food items for the Food Sorter game.
+ *
+ * @module data/foodSorterData
+ */
 
 export const CATEGORIES = [
   {

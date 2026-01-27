@@ -1,3 +1,14 @@
+/**
+ * TriviaGame
+ *
+ * Trivia game: single or multiplayer. Uses socket for multiplayer, triviaQuestions
+ * for questions. Saves score via API.
+ *
+ * @param {Object} props
+ * @param {Function} props.onBack - Back to games menu
+ *
+ * @component
+ */
 import { useState, useEffect, useCallback, useRef } from "react";
 import { socket } from "../../../services/socket";
 import { triviaQuestions } from "../../../data/triviaQuestions";

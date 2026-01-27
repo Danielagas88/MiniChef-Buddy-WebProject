@@ -1,3 +1,14 @@
+/**
+ * Leaderboard
+ *
+ * Ranks players by score. Used on GamesPage. Shows loading state when fetching.
+ *
+ * @param {Object} props
+ * @param {Object[]} [props.players=[]] - List of { username, totalScore } 
+ * @param {boolean} [props.isLoading=false] - Whether leaderboard is loading
+ *
+ * @component
+ */
 import React from "react";
 import { Trophy, Crown, ChefHat, Star, Loader } from "lucide-react";
 
@@ -7,7 +18,7 @@ export default function Leaderboard({ players = [], isLoading = false }) {
       case 0:
         return <Crown size={22} className="text-yellow-500" />;
       case 1:
-        return <Star size={20} className="text-slate-500" />; // כסף מודגש יותר
+        return <Star size={20} className="text-slate-500" />; 
       case 2:
         return <Star size={20} className="text-orange-500" />;
       default:

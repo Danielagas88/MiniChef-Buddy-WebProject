@@ -1,3 +1,14 @@
+/**
+ * MemoryGame
+ *
+ * Memory match game: flip cards to find pairs. Uses memoryCards data,
+ * calculateMemoryScore, and saves score via API.
+ *
+ * @param {Object} props
+ * @param {Function} props.onBack - Back to games menu
+ *
+ * @component
+ */
 import React, { useState, useEffect, useCallback } from "react";
 // Data
 import { memoryCards } from "../../../data/memoryCards";

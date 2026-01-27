@@ -1,3 +1,12 @@
+/**
+ * ParentMainPage
+ *
+ * Parent dashboard page: PIN gate (ParentGateModal) or dashboard content
+ * (ParentDashboard). Uses useParentArea for PIN state and verification.
+ * Route: /parent-dashboard.
+ *
+ * @component
+ */
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth.js";
 import { useParentArea } from "./useParentArea.js";

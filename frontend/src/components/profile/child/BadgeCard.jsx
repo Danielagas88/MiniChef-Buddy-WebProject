@@ -1,3 +1,17 @@
+/**
+ * BadgeCard
+ *
+ * Single achievement badge: icon, title, subtitle, unlocked state.
+ * Used in AchievementsSection for First Dish, Mini Chef, etc.
+ *
+ * @param {Object} props
+ * @param {React.ComponentType} props.IconComponent - Lucide icon component
+ * @param {string} props.title - Badge name (e.g. "First Dish")
+ * @param {boolean} props.unlocked - Whether the badge is earned
+ * @param {string} [props.subtitle] - Optional description
+ *
+ * @component
+ */
 export default function BadgeCard({
   IconComponent,
   title,

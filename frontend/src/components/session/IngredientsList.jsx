@@ -1,4 +1,13 @@
-/* IngredientsList.jsx */
+/**
+ * IngredientsList
+ *
+ * Sidebar list of recipe ingredients. Used in SessionPage.
+ *
+ * @param {Object} props
+ * @param {string[]} props.ingredients - List of ingredient strings
+ *
+ * @component
+ */
 import { memo } from "react";
 
 function IngredientsList({ ingredients }) {

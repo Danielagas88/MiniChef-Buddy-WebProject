@@ -1,3 +1,11 @@
+/**
+ * LoginPage
+ *
+ * Login form with username/password, validation, theme toggle, and link
+ * to registration. Used when the user is not authenticated.
+ *
+ * @component
+ */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";

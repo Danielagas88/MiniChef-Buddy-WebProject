@@ -1,3 +1,15 @@
+/**
+ * ParentSummaryCards
+ *
+ * Summary cards on parent dashboard: Active Time, Recipes Cooked, Badges
+ * Earned. Uses progressUtils stats. Used in ParentDashboard.
+ *
+ * @param {Object} props
+ * @param {boolean} props.loading - Whether stats are loading
+ * @param {Object} props.stats - From computeProgress (totalCooked, totalMinutes, earnedBadges)
+ *
+ * @component
+ */
 import { Clock, ChefHat, TrendingUp } from "lucide-react";
 
 export default function ParentSummaryCards({ loading, stats }) {

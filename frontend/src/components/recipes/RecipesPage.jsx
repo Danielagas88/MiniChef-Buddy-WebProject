@@ -1,3 +1,11 @@
+/**
+ * RecipesPage
+ *
+ * Browse and filter recipes. Uses recipeService and useRecipeFilters.
+ * Supports search, category, level, and allergen filtering.
+ *
+ * @component
+ */
 import { useEffect, useState } from "react";
 import { fetchRecipes } from "../../services/recipeService.js";
 import { useAuth } from "../../hooks/useAuth.js";

@@ -1,8 +1,18 @@
+/**
+ * GallerySection
+ *
+ * Child profile gallery: grid of uploaded photos with delete option.
+ * Used in ChildProfile. Loads and displays gallery from galleryService.
+ *
+ * @param {Object} props
+ * @param {Object[]} props.images - Gallery items ({ _id, imageUrl, caption })
+ * @param {boolean} props.loading - Whether gallery is loading
+ * @param {Function} props.onDelete - Called with photoId when user deletes a photo
+ *
+ * @component
+ */
 import { Camera } from "lucide-react";
 
-/**
- * Gallery section component displaying user's uploaded photos
- */
 export default function GallerySection({ images, loading, onDelete }) {
   return (
     <div className="bg-(--card-surface) backdrop-blur-md rounded-3xl shadow-sm p-6 border border-(--card-surface-border) transition-all">

@@ -1,3 +1,16 @@
+/**
+ * ParentDashboard
+ *
+ * Parent dashboard content: header, summary cards (time, recipes, badges),
+ * and recent cooked list. Loads recipe history via recipeHistoryService and
+ * uses progressUtils. Used in ParentMainPage when PIN is unlocked.
+ *
+ * @param {Object} props
+ * @param {string} props.token - User auth token
+ * @param {number} [props.limit=10] - Max recipes to load for recent list
+ *
+ * @component
+ */
 import { useEffect, useMemo, useState } from "react";
 import { getMyRecipeHistory } from "../../../services/recipeHistoryService.js";
 import { computeProgress } from "../../../utils/progressUtils.js";

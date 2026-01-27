@@ -1,3 +1,11 @@
+/**
+ * RegisterPage
+ *
+ * Registration form: username, password, name, allergens, cooking level,
+ * optional parent PIN. Validates and submits to auth API.
+ *
+ * @component
+ */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";

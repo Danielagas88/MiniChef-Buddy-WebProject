@@ -1,3 +1,17 @@
+/**
+ * PantryInput
+ *
+ * Input area for adding pantry ingredients: text field, "Add item" and
+ * "Scan pantry" buttons. Enter key triggers add. Used in PantryHelper.
+ *
+ * @param {Object} props
+ * @param {string} props.value - Current input value
+ * @param {Function} props.onChange - Called when input value changes
+ * @param {Function} props.onAdd - Called when adding the current item
+ * @param {Function} props.onScan - Called for "Scan pantry" (demo: parse comma-separated)
+ *
+ * @component
+ */
 export default function PantryInput({ value, onChange, onAdd, onScan }) {
   return (
     <div className="flex flex-col md:flex-row gap-3 items-center max-w-3xl mx-auto w-full">

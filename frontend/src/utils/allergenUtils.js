@@ -1,5 +1,10 @@
 /**
- * Allergen detection utilities
+ * allergenUtils
+ *
+ * Detects allergens in recipe text. Used for filtering recipes
+ * by user allergens on RecipesPage and PantryHelper.
+ *
+ * @module utils/allergenUtils
  */
 
 const ALLERGEN_ALIASES = {

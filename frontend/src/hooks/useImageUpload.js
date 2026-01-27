@@ -1,3 +1,14 @@
+/**
+ * useImageUpload
+ *
+ * Handles image uploads to Cloudinary and adding photos to the user gallery.
+ * Used in the cooking session finish modal.
+ *
+ * @returns {Object} isUploading, isUploadSuccess, uploadError, uploadImage(file, recipeTitle)
+ *
+ * @example
+ * const { isUploading, isUploadSuccess, uploadError, uploadImage } = useImageUpload();
+ */
 import { useState } from "react";
 import { galleryService } from "../services/galleryService.js";
 
@@ -6,9 +17,6 @@ const CLOUDINARY_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
-/**
- * Custom hook for handling image uploads to Cloudinary
- */
 export function useImageUpload() {
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadSuccess, setIsUploadSuccess] = useState(false);

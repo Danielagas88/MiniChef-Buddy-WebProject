@@ -1,3 +1,16 @@
+/**
+ * PantryResults
+ *
+ * Shows suggested recipes based on pantry ingredients. Filters by user
+ * cooking level and renders PantryRecipeCard for each match. Used in PantryHelper.
+ *
+ * @param {Object} props
+ * @param {string[]} props.pantryItems - Current pantry items (hide section if empty)
+ * @param {Array<{ recipe: Object, hits: string[], hitsCount: number }>} props.results - Matched recipes
+ * @param {Function} props.onStart - Called with recipeId when user starts a recipe
+ *
+ * @component
+ */
 import { useAuth } from "../../hooks/useAuth.js";
 import PantryRecipeCard from "./PantryRecipeCard.jsx";
 

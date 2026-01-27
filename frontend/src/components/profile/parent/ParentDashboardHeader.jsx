@@ -1,8 +1,13 @@
+/**
+ * ParentDashboardHeader
+ *
+ * Header for the parent dashboard: title and short description.
+ * Used in ParentDashboard.
+ *
+ * @component
+ */
 import { ShieldCheck } from "lucide-react";
 
-/**
- * Parent dashboard header component
- */
 export default function ParentDashboardHeader() {
   return (
     <div className="rounded-[2rem] bg-(--card-surface) backdrop-blur-md shadow-sm p-8 border border-(--card-surface-border) flex items-center justify-between gap-4 transition-all">

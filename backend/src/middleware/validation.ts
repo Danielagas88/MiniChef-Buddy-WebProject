@@ -1,3 +1,10 @@
+/**
+ * Validation middleware
+ *
+ * Uses Zod to validate request body. Exports validate(schema) and validationSchemas
+ * for register, login, addToGallery, updateCookingLevel, addScore, toggleFavorite, etc.
+ * Gracefully skips if zod is not installed.
+ */
 import { Request, Response, NextFunction } from "express";
 
 // Try to import zod, but allow graceful fallback if not installed

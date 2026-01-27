@@ -1,3 +1,12 @@
+/**
+ * FavoritesProvider
+ *
+ * Manages favorite recipe IDs. Syncs with server when user is logged in
+ * and falls back to localStorage for guests. Provides favoriteIds,
+ * isFavorite(id), and toggleFavorite(id).
+ *
+ * @component
+ */
 import { useEffect, useMemo, useState } from "react";
 import { FavoritesContext } from "./favorites.context.js";
 

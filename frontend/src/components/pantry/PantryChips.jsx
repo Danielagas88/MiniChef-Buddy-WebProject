@@ -1,3 +1,16 @@
+/**
+ * PantryChips
+ *
+ * Displays pantry items as removable chips plus a "Clear All" button.
+ * Each chip has a remove (✕) action. Used in PantryHelper.
+ *
+ * @param {Object} props
+ * @param {string[]} props.items - List of ingredient strings
+ * @param {Function} props.onRemove - Called with item when a chip is removed
+ * @param {Function} props.onClear - Called when "Clear All" is clicked
+ *
+ * @component
+ */
 export default function PantryChips({ items, onRemove, onClear }) {
   if (!items || items.length === 0) return null;
 

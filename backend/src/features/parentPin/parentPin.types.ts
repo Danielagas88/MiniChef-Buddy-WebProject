@@ -1,3 +1,8 @@
+/**
+ * Parent PIN types and validators
+ *
+ * SetPinBody, VerifyPinBody, validatePin (4 digits).
+ */
 export type SetPinBody = { pin?: string };
 export type VerifyPinBody = { pin?: string };
 

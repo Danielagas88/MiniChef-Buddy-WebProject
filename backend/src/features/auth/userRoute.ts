@@ -1,3 +1,10 @@
+/**
+ * Auth / User routes
+ *
+ * Mounted at /api/auth. Registers: GET /me, POST /register, POST /login,
+ * POST /gallery, DELETE /gallery/:photoId, PATCH /me/cooking-level, PATCH /score,
+ * GET /leaderboard. Uses auth middleware and validation where applicable.
+ */
 import { Router } from "express";
 import {
   createUser,

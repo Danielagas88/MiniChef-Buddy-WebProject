@@ -1,3 +1,8 @@
+/**
+ * Recipe history service
+ *
+ * createCompletion: insert one completion. listHistory: list by userId with limit.
+ */
 import { RecipeHistory } from "./recipeHistory.model";
 
 export async function createCompletion(input: {

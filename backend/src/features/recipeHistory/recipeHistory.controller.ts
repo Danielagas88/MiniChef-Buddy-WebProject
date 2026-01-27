@@ -1,3 +1,9 @@
+/**
+ * Recipe history controller
+ *
+ * complete: save a completed recipe (auth). me: list current user's history (auth).
+ * Duplicate sessionId returns ok/duplicate instead of error.
+ */
 import { Response } from "express";
 import { AuthRequest } from "../../middleware/middleware";
 import { parseCompleteBody } from "./recipeHistory.types";

@@ -1,13 +1,18 @@
-// src/components/games/common/GameTimer.jsx
+/**
+ * GameTimer
+ *
+ * Timer display for games: bar or digital. Used in GameHeader (Trivia, etc.).
+ *
+ * @param {Object} props
+ * @param {number} props.timeLeft - Seconds remaining
+ * @param {number} props.totalTime - Total seconds for progress
+ * @param {string} [props.variant="bar"] - "bar" or "digital"
+ *
+ * @component
+ */
 import React from "react";
 import { Clock } from "lucide-react";
 
-/**
- * Timer component that can display as a progress bar or a digital clock.
- * @param {number} timeLeft - Current time remaining in seconds
- * @param {number} totalTime - Total duration for the progress calculation
- * @param {string} variant - 'bar' (default) or 'digital' (for headers)
- */
 export default function GameTimer({ timeLeft, totalTime, variant = "bar" }) {
   // 1. Digital Clock Mode (Best for Headers)
   if (variant === "digital") {

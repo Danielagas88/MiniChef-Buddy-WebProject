@@ -1,3 +1,17 @@
+/**
+ * PantryRecipeCard
+ *
+ * Card for a single pantry-matched recipe: image, title, level, matched
+ * ingredients count, and "Start!" button. Used in PantryResults.
+ *
+ * @param {Object} props
+ * @param {Object} props.recipe - Recipe object (id, title, image, level, category)
+ * @param {number} props.hitsCount - Number of matched ingredients
+ * @param {string[]} props.hits - List of matched ingredient names
+ * @param {Function} props.onStart - Called when "Start!" is clicked
+ *
+ * @component
+ */
 export default function PantryRecipeCard({ recipe, hitsCount, hits, onStart }) {
   const levelStyles = {
     Easy: "text-(--accent-emerald) bg-emerald-500/10 border-emerald-500/20",

@@ -1,3 +1,20 @@
+/**
+ * ParentGateModal
+ *
+ * Modal for parent-only access: enter PIN or set/create PIN. Shown when
+ * user tries to open parent dashboard. Used in ParentMainPage via useParentArea.
+ *
+ * @param {Object} props
+ * @param {Object} props.pin - { input, confirm, error } from useParentArea
+ * @param {string} props.pinMode - "enter" | "setup" | "create"
+ * @param {Function} props.setPinInput - Update PIN input value
+ * @param {Function} props.setPinConfirm - Update PIN confirm value (setup mode)
+ * @param {Function} props.onClose - Close modal (e.g. navigate away)
+ * @param {Function} props.onSubmit - Submit PIN (verify or set)
+ * @param {Function} [props.onForgotPin] - "Forgot PIN" handler
+ *
+ * @component
+ */
 export default function ParentGateModal({
   pin,
   pinMode,

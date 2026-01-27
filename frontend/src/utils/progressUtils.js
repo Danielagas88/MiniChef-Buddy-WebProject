@@ -1,3 +1,12 @@
+/**
+ * progressUtils
+ *
+ * Badge definitions and progress computation from recipe history.
+ * Used in ChildProfile / AchievementsSection.
+ *
+ * @module utils/progressUtils
+ */
+
 export const BADGES = [
   { key: "first-dish", name: "First Dish", at: 1 },
   { key: "mini-chef", name: "Mini Chef", at: 15 },

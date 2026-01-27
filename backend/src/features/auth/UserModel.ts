@@ -1,3 +1,9 @@
+/**
+ * User model (Mongoose)
+ *
+ * Schema for users: name, username, password, parentPinHash, totalScore,
+ * favoriteRecipeIds, allergens, cookingLevel, gallery. Used by auth and related features.
+ */
 import { model, Schema } from "mongoose";
 import { UserDoc } from "./UserType";
 

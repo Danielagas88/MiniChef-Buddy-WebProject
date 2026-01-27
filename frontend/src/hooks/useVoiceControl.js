@@ -1,3 +1,14 @@
+/**
+ * useVoiceControl
+ *
+ * Text-to-speech for recipe steps and ChefBot. Manages enabled state,
+ * speaking state, and available voices.
+ *
+ * @returns {Object} isVoiceEnabled, isSpeaking, speak(text), stopSpeaking, toggleVoice
+ *
+ * @example
+ * const { isVoiceEnabled, speak, stopSpeaking, toggleVoice } = useVoiceControl();
+ */
 import { useState, useEffect, useCallback } from "react";
 
 /**
@@ -12,9 +23,6 @@ function stripEmojis(str) {
     .trim();
 }
 
-/**
- * Custom hook for managing voice/TTS functionality
- */
 export function useVoiceControl() {
   const [isVoiceEnabled, setIsVoiceEnabled] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);

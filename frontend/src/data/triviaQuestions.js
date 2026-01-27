@@ -1,4 +1,11 @@
-// src/data/triviaQuestions.js
+/**
+ * triviaQuestions
+ *
+ * Trivia game questions (id, question, options, correctAnswer, fact).
+ * Used by TriviaGame and backend trivia routes.
+ *
+ * @module data/triviaQuestions
+ */
 
 export const triviaQuestions = [
   {

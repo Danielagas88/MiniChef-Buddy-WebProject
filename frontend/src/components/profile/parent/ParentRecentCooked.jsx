@@ -1,3 +1,15 @@
+/**
+ * ParentRecentCooked
+ *
+ * List of recent recipe completions on the parent dashboard. Shows
+ * title, date, level, minutes. Used in ParentDashboard.
+ *
+ * @param {Object} props
+ * @param {boolean} props.loading - Whether history is loading
+ * @param {Object[]} props.items - Recipe history items (recipeId, title, completedAt, etc.)
+ *
+ * @component
+ */
 function formatDate(iso) {
   try {
     const d = new Date(iso);

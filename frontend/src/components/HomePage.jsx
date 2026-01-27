@@ -1,3 +1,11 @@
+/**
+ * HomePage
+ *
+ * Welcome page shown when the user is logged in. Displays the MiniChef Buddy
+ * intro and the PantryHelper for ingredient-based recipe suggestions.
+ *
+ * @component
+ */
 import PantryHelper from "./pantry/PantryHelper.jsx";
 
 export default function HomePage() {
@@ -18,7 +26,7 @@ export default function HomePage() {
         </div>
 
         <div className="mt-6">
-          <div className="relative w-24 h-24 md:w-28 md:h-28 bg-gradient-to-tr from-emerald-300 to-amber-300 rounded-full shadow-inner flex items-center justify-center animate-pulse-slow">
+          <div className="relative w-24 h-24 md:w-28 md:h-28 bg-linear-to-tr from-emerald-300 to-amber-300 rounded-full shadow-inner flex items-center justify-center animate-pulse-slow">
             <div className="w-16 h-16 md:w-20 md:h-20 bg-(--bg-current) rounded-full shadow flex flex-col items-center justify-center border-2 border-(--border-color)">
               <div className="text-3xl md:text-4xl">🤖</div>
               <p className="text-[8px] md:text-[10px] font-bold text-(--accent-emerald) uppercase tracking-tighter">

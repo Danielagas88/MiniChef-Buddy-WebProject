@@ -1,5 +1,14 @@
 /**
- * Match mode selector component
+ * PantryMatchMode
+ *
+ * Match mode selector: "Any ingredient" or "All ingredients". Controls how
+ * recipes are matched to the user's pantry list. Used in PantryHelper.
+ *
+ * @param {Object} props
+ * @param {string} props.matchMode - "any" or "all"
+ * @param {Function} props.onModeChange - Called when mode changes
+ *
+ * @component
  */
 export default function PantryMatchMode({ matchMode, onModeChange }) {
   return (

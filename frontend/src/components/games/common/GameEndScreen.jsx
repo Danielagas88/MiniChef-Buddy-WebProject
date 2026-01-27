@@ -1,3 +1,24 @@
+/**
+ * GameEndScreen
+ *
+ * End-of-game screen: title, score, optional moves/battle info,
+ * "Play Again" and "Back to Menu" buttons. Used by Trivia, Memory, Food Sorter.
+ *
+ * @param {Object} props
+ * @param {string} props.title - Screen title (e.g. "You Win!")
+ * @param {number} props.score - Player score
+ * @param {number} [props.moves] - Moves taken (e.g. Memory)
+ * @param {string} [props.variant="emerald"] - Theme: emerald, orange, violet, indigo
+ * @param {Function} props.onPlayAgain - Play again handler
+ * @param {Function} props.onExit - Back to menu handler
+ * @param {boolean} [props.isBattle] - Multiplayer battle mode
+ * @param {number} [props.opponentScore] - Opponent score in battle
+ * @param {string} [props.opponentName] - Opponent name
+ * @param {boolean} [props.technicalWin] - Win by opponent leaving
+ * @param {number} [props.winBonus] - Bonus points for winning
+ *
+ * @component
+ */
 import React from "react";
 import GameButton from "./GameButton";
 import { Footprints } from "lucide-react";

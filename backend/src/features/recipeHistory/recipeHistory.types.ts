@@ -1,3 +1,8 @@
+/**
+ * Recipe history types and parsers
+ *
+ * CompleteBody and parseCompleteBody for the /complete endpoint.
+ */
 export type CompleteBody = {
   recipeId?: string;
   title?: string;

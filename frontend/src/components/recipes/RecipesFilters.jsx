@@ -1,10 +1,23 @@
+/**
+ * RecipesFilters
+ *
+ * Search, level, and category filter controls for RecipesPage.
+ *
+ * @param {Object} props - Controlled filter values and handlers
+ * @param {string} props.search - Search text
+ * @param {Function} props.onSearch - Search change handler
+ * @param {string} props.level - Level filter
+ * @param {Function} props.onLevel - Level change handler
+ * @param {string} props.activeCategory - Active category
+ * @param {Function} props.onCategoryChange - Category change handler
+ * @param {string[]} [props.levelOptions] - Allowed level options
+ *
+ * @component
+ */
 import SearchInput from "./filters/SearchInput.jsx";
 import LevelFilter from "./filters/LevelFilter.jsx";
 import CategoryButtons from "./filters/CategoryButtons.jsx";
 
-/**
- * Recipes filters component combining search, level, and category filters
- */
 export default function RecipesFilters({
   search,
   onSearch,

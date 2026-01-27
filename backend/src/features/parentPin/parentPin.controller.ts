@@ -1,3 +1,9 @@
+/**
+ * Parent PIN controller
+ *
+ * setPin: set/update 4-digit parent PIN (auth).
+ * verifyPin: check PIN for parent dashboard access (auth).
+ */
 import { Response } from "express";
 import { AuthRequest } from "../../middleware/middleware";
 import { validatePin } from "./parentPin.types";

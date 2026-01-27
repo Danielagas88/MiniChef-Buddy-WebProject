@@ -1,10 +1,21 @@
-// src/components/games/common/GameButton.jsx
+/**
+ * GameButton
+ *
+ * Reusable game UI button. Variants: default, primary, correct, wrong, outline, etc.
+ * Used in games and GameEndScreen.
+ *
+ * @param {Object} props
+ * @param {string} props.label - Button text
+ * @param {Function} props.onClick - Click handler
+ * @param {string} [props.variant="default"] - Style variant
+ * @param {boolean} [props.disabled=false] - Disabled state
+ * @param {React.ComponentType} [props.icon] - Optional Lucide icon
+ * @param {string} [props.className=""] - Extra CSS classes
+ *
+ * @component
+ */
 import React from "react";
 
-/**
- * A reusable "Bubble" style button component.
- * Supports different variants for styling (primary, correct, wrong, etc.).
- */
 export default function GameButton({
   label,
   onClick,

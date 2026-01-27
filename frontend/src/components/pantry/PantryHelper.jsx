@@ -1,3 +1,12 @@
+/**
+ * PantryHelper
+ *
+ * Pantry-based recipe finder on the home page. User enters ingredients,
+ * picks match mode (any/all), sees matched recipes. Uses usePantryMatching
+ * and recipeService.
+ *
+ * @component
+ */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchRecipes } from "../../services/recipeService.js";

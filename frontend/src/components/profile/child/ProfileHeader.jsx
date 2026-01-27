@@ -1,9 +1,18 @@
+/**
+ * ProfileHeader
+ *
+ * Child profile header: user info, avatar, name, and cooking level selector.
+ * Saves level via userService.updateMyCookingLevel. Used in ChildProfile.
+ *
+ * @param {Object} props
+ * @param {Object} props.user - Current user (name, cookingLevel, token)
+ * @param {Function} props.setUser - Called to update user in auth context
+ *
+ * @component
+ */
 import { useState, useEffect } from "react";
 import { updateMyCookingLevel } from "../../../services/userService.js";
 
-/**
- * Profile header component with user info and level selector
- */
 export default function ProfileHeader({ user, setUser }) {
   const [level, setLevel] = useState(user?.cookingLevel || "Easy");
   const [savingLevel, setSavingLevel] = useState(false);

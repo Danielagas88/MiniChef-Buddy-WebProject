@@ -1,3 +1,8 @@
+/**
+ * Favorites service
+ *
+ * Reads and toggles favoriteRecipeIds on the User model.
+ */
 import User from "../auth/UserModel";
 
 export async function getFavoriteIds(userId: string): Promise<string[]> {

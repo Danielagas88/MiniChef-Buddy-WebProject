@@ -1,3 +1,12 @@
+/**
+ * FavoritesPage
+ *
+ * Lists the user's favorite recipes using data from the favorites context
+ * and recipe service. Supports toggling favorites and navigating to a recipe
+ * session.
+ *
+ * @component
+ */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";

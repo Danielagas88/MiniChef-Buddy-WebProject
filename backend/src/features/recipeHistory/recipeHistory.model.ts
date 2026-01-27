@@ -1,3 +1,9 @@
+/**
+ * Recipe history model (Mongoose)
+ *
+ * Stores completed recipes per user: userId, recipeId, title, level, minutes,
+ * sessionId (unique per user), completedAt. Used for progress and stats.
+ */
 import mongoose, { Schema } from "mongoose";
 
 const RecipeHistorySchema = new Schema(

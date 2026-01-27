@@ -1,3 +1,9 @@
+/**
+ * Auth middleware
+ *
+ * Verifies JWT from Authorization: Bearer <token>, loads user, attaches req.user.
+ * Use on routes that require authentication.
+ */
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../features/auth/UserModel";

@@ -1,3 +1,9 @@
+/**
+ * Gemini (ChefBot) service
+ *
+ * Calls Google Gemini API to generate ChefBot replies for cooking-session chat.
+ * Uses GEMINI_API_KEY; warns and skips if not set.
+ */
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const API_KEY = process.env.GEMINI_API_KEY;

@@ -1,3 +1,14 @@
+/**
+ * FoodSorter
+ *
+ * Game: drag food items into category buckets. Scores and saves to leaderboard.
+ * Uses foodSorterData, ScoreSystem, apiClient.
+ *
+ * @param {Object} props
+ * @param {Function} props.onBack - Back to games menu
+ *
+ * @component
+ */
 import React, { useState, useEffect, useCallback } from "react";
 
 // Data and Types

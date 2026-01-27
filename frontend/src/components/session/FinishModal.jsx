@@ -1,4 +1,21 @@
-/* FinishModal.jsx - Neon Glass Edition */
+/**
+ * FinishModal
+ *
+ * Modal shown when the user completes a recipe. Offers: upload a photo,
+ * view in profile (after upload), or go back to menu. Recipe completion
+ * is saved by the parent (SessionPage) when either action is chosen.
+ *
+ * @param {Object} props
+ * @param {string} props.recipeTitle - Name of the completed recipe
+ * @param {boolean} props.isUploading - Whether a photo is currently uploading
+ * @param {boolean} props.isUploadSuccess - Whether a photo was uploaded
+ * @param {string} [props.uploadError] - Error message from upload
+ * @param {Function} props.onUpload - Handler for file input change
+ * @param {Function} props.onViewProfile - Navigate to profile (saves completion)
+ * @param {Function} props.onDone - Back to menu (saves completion)
+ *
+ * @component
+ */
 export default function FinishModal({
   recipeTitle,
   isUploading,

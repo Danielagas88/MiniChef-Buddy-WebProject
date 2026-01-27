@@ -1,3 +1,11 @@
+/**
+ * ChildProfile
+ *
+ * Child progress page: header, achievements (recipe history), and gallery.
+ * Loads recipe history and gallery from APIs.
+ *
+ * @component
+ */
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks/useAuth.js";
 import { galleryService } from "../../../services/galleryService.js";

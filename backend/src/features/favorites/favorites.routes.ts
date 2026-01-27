@@ -1,3 +1,8 @@
+/**
+ * Favorites routes
+ *
+ * Mounted at /api/favorites. GET / (auth), POST /toggle (auth).
+ */
 import { Router } from "express";
 import { auth } from "../../middleware/middleware";
 import { validate, validationSchemas } from "../../middleware/validation";

@@ -1,3 +1,9 @@
+/**
+ * Gemini (ChefBot) controller
+ *
+ * POST /chat: recipeTitle, currentStep, userQuery - ChefBot reply via Gemini.
+ * Uses auth middleware.
+ */
 import { Request, Response } from "express";
 import { generateChefBotResponse } from "./gemini.service";
 

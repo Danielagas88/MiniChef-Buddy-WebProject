@@ -1,5 +1,13 @@
 /**
- * Error alert component
+ * ErrorAlert
+ *
+ * Simple error message banner. Renders nothing when message is empty.
+ * Used in ParentDashboard for load errors.
+ *
+ * @param {Object} props
+ * @param {string} [props.message] - Error message to show
+ *
+ * @component
  */
 export default function ErrorAlert({ message }) {
   if (!message) return null;

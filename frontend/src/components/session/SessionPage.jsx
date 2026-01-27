@@ -1,3 +1,12 @@
+/**
+ * SessionPage
+ *
+ * Cooking session UI: steps, ingredients, ChefBot chat, and voice control.
+ * Saves recipe completion when the user finishes and supports photo upload
+ * and navigation to profile or menu.
+ *
+ * @component
+ */
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.js";

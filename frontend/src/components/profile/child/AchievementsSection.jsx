@@ -1,3 +1,16 @@
+/**
+ * AchievementsSection
+ *
+ * Child profile achievements: total cooked count, progress bar, and badge
+ * cards (First Dish, Mini Chef, Kitchen Star, Master Chef). Uses
+ * progressUtils.computeProgress and BadgeCard. Used in ChildProfile.
+ *
+ * @param {Object} props
+ * @param {Object[]} props.historyItems - Recipe completion history
+ * @param {boolean} props.progressLoading - Whether history is loading
+ *
+ * @component
+ */
 import { Award, ChefHat, Star, Trophy } from "lucide-react";
 import BadgeCard from "./BadgeCard";
 import { BADGES, computeProgress } from "../../../utils/progressUtils";
@@ -9,9 +22,6 @@ const BADGE_ICONS = {
   "master-chef": Trophy,
 };
 
-/**
- * Achievements section component showing badges and progress
- */
 export default function AchievementsSection({ historyItems, progressLoading }) {
   const progress = computeProgress(historyItems);
 

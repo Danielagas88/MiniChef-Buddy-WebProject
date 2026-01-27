@@ -1,3 +1,11 @@
+/**
+ * Header
+ *
+ * App header: logo/brand, navigation links, theme toggle, and auth area.
+ * Shown on all authenticated routes.
+ *
+ * @component
+ */
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Sun, Moon, Menu, X } from "lucide-react";
@@ -16,7 +24,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 h-20 w-full bg-(--header-bg) shadow-md border-b border-(--border-color) transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 h-full flex items-center justify-between gap-4">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <Brand onClick={() => navigate("/")} />
         </div>
 
@@ -24,7 +32,7 @@ export default function Header() {
           <TopNav />
         </div>
 
-        <div className="flex items-center gap-2 lg:gap-4 flex-shrink-0">
+        <div className="flex items-center gap-2 lg:gap-4 shrink-0">
           <div className="hidden sm:block">
             <AuthArea />
           </div>

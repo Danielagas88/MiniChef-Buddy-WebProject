@@ -1,4 +1,11 @@
-// src/services/recipeService.js
+/**
+ * recipeService
+ *
+ * Fetches and maps recipes from TheMealDB. Exposes fetchRecipes, fetchRecipeById,
+ * CATEGORY_FILTERS, and kid-friendly filtering helpers.
+ *
+ * @module services/recipeService
+ */
 
 const BASE_URL = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 

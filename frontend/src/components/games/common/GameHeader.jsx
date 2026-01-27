@@ -1,3 +1,15 @@
+/**
+ * GameHeader
+ *
+ * In-game header: title, score/timer, theme pills. Used by Trivia, Memory, Food Sorter.
+ *
+ * @param {Object} props
+ * @param {string} props.title - Header title
+ * @param {string} [props.theme="green"] - Theme: green, purple, orange, indigo
+ * @param {React.ReactNode} [props.children] - Optional extra content (e.g. score, timer)
+ *
+ * @component
+ */
 import React from "react";
 import { Trophy } from "lucide-react";
 import GameTimer from "./GameTimer";

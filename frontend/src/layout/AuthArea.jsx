@@ -1,3 +1,11 @@
+/**
+ * AuthArea
+ *
+ * User avatar, name, and logout button in the header. Shown when user
+ * is logged in.
+ *
+ * @component
+ */
 import { useAuth } from "../hooks/useAuth.js";
 
 export default function AuthArea() {

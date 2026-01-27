@@ -1,3 +1,20 @@
+/**
+ * RecipeCard
+ *
+ * Card for a single recipe: image, title, optional action, footer, badge.
+ * Used in recipes list and favorites.
+ *
+ * @param {Object} props
+ * @param {Object} props.recipe - Recipe object (title, image, level, etc.)
+ * @param {Function} props.onOpen - Called when card is clicked
+ * @param {React.ReactNode} [props.action] - Optional action button
+ * @param {React.ReactNode} [props.footer] - Optional footer content
+ * @param {React.ReactNode} [props.badge] - Optional badge
+ * @param {React.ReactNode} [props.subtitleExtra] - Optional extra subtitle
+ * @param {string} [props.imageHeightClass="h-48"] - Tailwind class for image height
+ *
+ * @component
+ */
 export default function RecipeCard({
   recipe,
   onOpen,
@@ -24,7 +41,7 @@ export default function RecipeCard({
           alt={recipe.title}
           className={`w-full ${imageHeightClass} object-cover transition-transform duration-500 group-hover:scale-105`}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
 
       <div className="p-4 flex-1 flex flex-col gap-2">

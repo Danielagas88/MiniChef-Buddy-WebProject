@@ -1,3 +1,18 @@
+/**
+ * usePantryMatching
+ *
+ * Matches user pantry ingredients to recipes. Filters by level and allergens,
+ * ranks recipes by match count.
+ *
+ * @param {Object[]} pantryItems - User's pantry items
+ * @param {Object[]} recipes - Recipe list
+ * @param {string} [userLevel] - User cooking level
+ * @param {string[]} [userAllergens] - User allergens
+ * @returns {Object} matchedRecipes, loading-like state if needed
+ *
+ * @example
+ * const { matchedRecipes } = usePantryMatching(pantryItems, recipes, userLevel, userAllergens);
+ */
 import { useMemo } from "react";
 import { containsAllergen } from "../utils/allergenUtils.js";
 

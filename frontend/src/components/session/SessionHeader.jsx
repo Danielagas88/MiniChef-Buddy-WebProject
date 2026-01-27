@@ -1,3 +1,17 @@
+/**
+ * SessionHeader
+ *
+ * Header for the cooking session: recipe title, back button, and voice
+ * (text-to-speech) toggle.
+ *
+ * @param {Object} props
+ * @param {string} props.title - Recipe title
+ * @param {Function} props.onBack - Navigate back (e.g. to recipes)
+ * @param {boolean} props.isVoiceEnabled - Whether TTS is on
+ * @param {Function} props.onToggleVoice - Toggle TTS
+ *
+ * @component
+ */
 import { memo } from "react";
 
 function SessionHeader({ title, onBack, isVoiceEnabled, onToggleVoice }) {

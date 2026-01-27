@@ -1,3 +1,9 @@
+/**
+ * Trivia questions
+ *
+ * Questions for the trivia game (id, question, options, correctAnswer, fact).
+ * Used by backend WebSocket trivia and frontend TriviaGame.
+ */
 export const triviaQuestions = [
   {
     id: 1,

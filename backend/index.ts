@@ -255,7 +255,7 @@ const MONGO_URI = (process.env.MONGO_URI || "").replace(
 app.use(express.json());
 app.use(cors());
 
-//favorites routes amit added this
+//favorites routes 
 app.use("/api/favorites", favoritesRoutes);
 
 /**
@@ -265,11 +265,11 @@ app.use("/api/favorites", favoritesRoutes);
 app.use("/api/auth", userRouter);
 
 /**
- * Parent PIN routes amit added this
+ * Parent PIN routes 
  * -----------------
  * Routes responsible for managing parent access PIN:
- * - POST /api/parent-pin/set    → Create or update the parent's PIN
- * - POST /api/parent-pin/verify → Verify the parent's PIN
+ * - POST /api/parent-pin/set    - Create or update the parent's PIN
+ * - POST /api/parent-pin/verify - Verify the parent's PIN
  *
  * All routes are protected by JWT authentication middleware.
  */

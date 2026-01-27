@@ -1,4 +1,10 @@
-// src/data/memoryCards.js
+/**
+ * memoryCards
+ *
+ * Card definitions (id, name, image) for the Memory game.
+ *
+ * @module data/memoryCards
+ */
 import imgPizza from "../assets/memory/pizza.jpg";
 import imgBurger from "../assets/memory/hamburger.jpg";
 import imgStrawberry from "../assets/memory/strawberry.jpg";

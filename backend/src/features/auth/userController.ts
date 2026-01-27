@@ -1,3 +1,9 @@
+/**
+ * Auth / User controller
+ *
+ * Handles user registration, login, profile (get/update), gallery, score, and leaderboard.
+ * Uses JWT for auth; auth middleware attaches req.user on protected routes.
+ */
 import { Request, Response } from "express";
 import { AuthRequest } from "../../middleware/middleware";
 import bcrypt from "bcryptjs";

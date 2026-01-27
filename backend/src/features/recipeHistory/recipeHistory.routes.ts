@@ -1,3 +1,8 @@
+/**
+ * Recipe history routes
+ *
+ * Mounted at /api/recipe-history. POST /complete (auth), GET /me (auth).
+ */
 import { Router } from "express";
 import { auth } from "../../middleware/middleware";
 import { validate, validationSchemas } from "../../middleware/validation";

@@ -1,3 +1,11 @@
+/**
+ * TopNav
+ *
+ * Navigation links for authenticated users: Home, Recipes, Games,
+ * Favorites, Progress, and optional Parent Dashboard.
+ *
+ * @component
+ */
 import { NavLink } from "react-router-dom";
 
 function NavItem({ to, children, isParent }) {
@@ -6,7 +14,7 @@ function NavItem({ to, children, isParent }) {
       to={to}
       className={({ isActive }) => {
         const baseClasses =
-          "pb-1 text-sm font-bold transition-all duration-300 border-b-2 flex-shrink-0";
+          "pb-1 text-sm font-bold transition-all duration-300 border-b-2 shrink-0";
 
         if (isActive) {
           return `${baseClasses} ${

@@ -1,5 +1,10 @@
 /**
- * Pantry helper header component
+ * PantryHeader
+ *
+ * Header for the Pantry Helper section on the home page. Shows title and
+ * short description for ingredient-based recipe suggestions.
+ *
+ * @component
  */
 export default function PantryHeader() {
   return (

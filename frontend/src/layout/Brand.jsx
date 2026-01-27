@@ -1,3 +1,13 @@
+/**
+ * Brand
+ *
+ * MiniChef Buddy logo and title. Click navigates to home.
+ *
+ * @param {Object} props
+ * @param {Function} props.onClick - Called when logo/title is clicked
+ *
+ * @component
+ */
 export default function Brand({ onClick }) {
   return (
     <div

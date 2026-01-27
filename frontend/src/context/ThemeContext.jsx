@@ -1,3 +1,11 @@
+/**
+ * ThemeContext
+ *
+ * Manages dark/light theme. Persists preference in localStorage and
+ * syncs with document root classes for Tailwind dark mode.
+ *
+ * @module context/ThemeContext
+ */
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const ThemeContext = createContext();

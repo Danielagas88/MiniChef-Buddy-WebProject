@@ -1,3 +1,8 @@
+/**
+ * User types
+ *
+ * UserDoc and UserDocument for the User model and auth middleware.
+ */
 import { HydratedDocument } from "mongoose";
 
 export interface UserDoc {

@@ -1,3 +1,8 @@
+/**
+ * Favorites controller
+ *
+ * GET favorites and POST toggle favorite. Both require auth; delegate to favorites.service.
+ */
 import { Response } from "express";
 import { AuthRequest } from "../../middleware/middleware";
 import { validateRecipeId } from "./favorites.types";

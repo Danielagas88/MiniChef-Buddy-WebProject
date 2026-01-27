@@ -1,3 +1,14 @@
+/**
+ * MainLayout
+ *
+ * App shell for authenticated routes: top Header and a main content area.
+ * Wraps all in-app pages (home, recipes, session, games, etc.).
+ *
+ * @param {Object} props
+ * @param {React.ReactNode} props.children - Page content
+ *
+ * @component
+ */
 import Header from "./Header.jsx";
 
 export default function MainLayout({ children }) {

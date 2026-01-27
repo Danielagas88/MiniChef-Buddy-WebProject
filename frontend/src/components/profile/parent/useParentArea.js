@@ -1,3 +1,20 @@
+/**
+ * useParentArea
+ *
+ * Hook for parent dashboard: PIN gate state, verify/set PIN, unlock.
+ * Used by ParentMainPage and ParentGateModal. Calls parentApi.verifyPin
+ * and parentApi.setPin.
+ *
+ * @param {Object} params
+ * @param {string} [params.token] - User auth token
+ * @param {string} [params.viewMode] - "parent" to show gate when not unlocked
+ * @returns {Object} gate, pin, pinMode, setPinInput, setPinConfirm, handleForgotPin, submitPin
+ *
+ * @example
+ * const parent = useParentArea({ token: user?.token, viewMode: "parent" });
+ * if (parent.gate.isUnlocked) return <ParentDashboard />;
+ * return <ParentGateModal pinMode={parent.pinMode} onSubmit={parent.submitPin} ... />;
+ */
 import { useCallback, useEffect, useMemo, useReducer } from "react";
 import { parentApi } from "../../../services/parentService.js";
 

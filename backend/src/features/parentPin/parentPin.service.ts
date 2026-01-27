@@ -1,3 +1,9 @@
+/**
+ * Parent PIN service
+ *
+ * setParentPin: hash and save PIN on User.parentPinHash.
+ * verifyParentPin: compare PIN with hash; returns NO_PIN if none set.
+ */
 import bcrypt from "bcryptjs";
 import User from "../auth/UserModel";
 

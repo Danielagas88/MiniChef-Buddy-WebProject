@@ -1,11 +1,21 @@
+/**
+ * RecipesList
+ *
+ * Renders filtered recipes as RecipeCards. Handles loading/error,
+ * favorites, and navigation to session.
+ *
+ * @param {Object} props
+ * @param {Object[]} props.recipes - Recipe list
+ * @param {boolean} props.isLoading - Loading state
+ * @param {string} [props.loadError] - Error message
+ *
+ * @component
+ */
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth.js";
 import { useFavorites } from "../../hooks/useFavorites.js";
 import RecipeCard from "./RecipeCard.jsx";
 
-/**
- * Recipes list component displaying filtered recipes
- */
 export default function RecipesList({ recipes, isLoading, loadError }) {
   const navigate = useNavigate();
   const { user } = useAuth();
