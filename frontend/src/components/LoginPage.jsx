@@ -1,69 +1,29 @@
 /**
  * LoginPage
  *
- * Login form with username/password, validation, theme toggle, and link
- * to registration. Used when the user is not authenticated.
+ * Login form UI: layout, styling, and wiring of useLoginForm. All validation,
+ * submit logic, and state live in useLoginForm and utils/authValidation.
  *
  * @component
  */
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.js";
 import { useTheme } from "../context/ThemeContext";
+import { useLoginForm } from "../hooks/useLoginForm.js";
 import { LogIn, User, Lock, Sun, Moon } from "lucide-react";
 
 export default function LoginPage() {
-  const { login, error } = useAuth();
-  const navigate = useNavigate();
   const { isDarkMode, toggleTheme } = useTheme();
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [validationErrors, setValidationErrors] = useState({});
-
-  function validateField(name, value) {
-    const errors = { ...validationErrors };
-    
-    if (name === "username") {
-      if (!value.trim()) {
-        errors.username = "Username is required";
-      } else if (value.trim().length < 3) {
-        errors.username = "Username must be at least 3 characters";
-      } else {
-        delete errors.username;
-      }
-    }
-    
-    if (name === "password") {
-      if (!value) {
-        errors.password = "Password is required";
-      } else if (value.length < 6) {
-        errors.password = "Password must be at least 6 characters";
-      } else {
-        delete errors.password;
-      }
-    }
-    
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    
-    const isUsernameValid = validateField("username", username);
-    const isPasswordValid = validateField("password", password);
-    
-    if (!isUsernameValid || !isPasswordValid) {
-      return;
-    }
-    
-    setIsSubmitting(true);
-    const ok = await login(username, password);
-    setIsSubmitting(false);
-    if (ok) navigate("/");
-  }
+  const {
+    username,
+    setUsername,
+    password,
+    setPassword,
+    isSubmitting,
+    validationErrors,
+    error,
+    validateField,
+    handleSubmit,
+    navigate,
+  } = useLoginForm();
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-6 relative overflow-hidden transition-all duration-500 bg-(--bg-current)">

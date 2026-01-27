@@ -26,12 +26,11 @@ export const API_CONFIG = {
 };
 
 /**
- * Helper function to build full API URL
+ * Helper to build full API URL. Reserved for future use (e.g. non-apiClient callers).
  * @param {string} path - API endpoint path
  * @returns {string} Full URL with base path
  */
 export function getApiUrl(path) {
-  // Remove leading slash if present to avoid double slashes
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
   return `${API_BASE_URL}/${cleanPath}`;
 }

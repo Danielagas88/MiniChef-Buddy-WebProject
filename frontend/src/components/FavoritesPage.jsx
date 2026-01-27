@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 import { useFavorites } from "../hooks/useFavorites.js";
 import { fetchRecipeById } from "../services/recipeService.js";
-import RecipeCard from "../components/recipes/RecipeCard.jsx";
+import RecipeCard from "./recipes/RecipeCard.jsx";
 
 export default function FavoritesPage() {
   const navigate = useNavigate();

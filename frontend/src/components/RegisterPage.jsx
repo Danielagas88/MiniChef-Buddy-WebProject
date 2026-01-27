@@ -1,15 +1,15 @@
 /**
- * RegisterPage
+ * RegisterPage 
  *
- * Registration form: username, password, name, allergens, cooking level,
- * optional parent PIN. Validates and submits to auth API.
+ * Registration form UI: layout, styling, and wiring of useRegisterForm.
+ * Validation, submit, allergens, and PIN logic live in useRegisterForm
+ * and utils/authValidation; options live in constants/allergenOptions.
  *
  * @component
  */
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth.js";
 import { useTheme } from "../context/ThemeContext";
+import { useRegisterForm } from "../hooks/useRegisterForm.js";
+import { ALLERGEN_OPTIONS } from "../constants/allergenOptions.js";
 import {
   UserPlus,
   User,
@@ -21,117 +21,29 @@ import {
   Moon,
 } from "lucide-react";
 
-const ALLERGEN_OPTIONS = [
-  { key: "milk", label: "Milk", icon: "🥛" },
-  { key: "eggs", label: "Eggs", icon: "🥚" },
-  { key: "nuts", label: "Nuts", icon: "🥜" },
-  { key: "soy", label: "Soy", icon: "🫘" },
-  { key: "wheat", label: "Wheat", icon: "🌾" },
-  { key: "fish", label: "Fish", icon: "🐟" },
-  { key: "sesame", label: "Sesame", icon: "🥯" },
-];
-
 export default function RegisterPage() {
-  const { register, error, isAuthLoading } = useAuth();
-  const navigate = useNavigate();
   const { isDarkMode, toggleTheme } = useTheme();
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [cookingLevel, setCookingLevel] = useState("Easy");
-  const [parentPin, setParentPin] = useState("");
-  const [allergens, setAllergens] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [validationErrors, setValidationErrors] = useState({});
-
-  function validateField(name, value) {
-    const errors = { ...validationErrors };
-    
-    if (name === "name") {
-      if (!value.trim()) {
-        errors.name = "Name is required";
-      } else {
-        delete errors.name;
-      }
-    }
-    
-    if (name === "username") {
-      if (!value.trim()) {
-        errors.username = "Username is required";
-      } else if (value.trim().length < 3) {
-        errors.username = "Username must be at least 3 characters";
-      } else if (!/^[a-z0-9_]+$/i.test(value.trim())) {
-        errors.username = "Username can only contain letters, numbers, and underscores";
-      } else {
-        delete errors.username;
-      }
-    }
-    
-    if (name === "password") {
-      if (!value) {
-        errors.password = "Password is required";
-      } else if (value.length < 6) {
-        errors.password = "Password must be at least 6 characters";
-      } else {
-        delete errors.password;
-      }
-    }
-    
-    if (name === "parentPin") {
-      if (value && value.length !== 4) {
-        errors.parentPin = "PIN must be exactly 4 digits";
-      } else {
-        delete errors.parentPin;
-      }
-    }
-    
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    
-    const isNameValid = validateField("name", name);
-    const isUsernameValid = validateField("username", username);
-    const isPasswordValid = validateField("password", password);
-    const isPinValid = parentPin ? validateField("parentPin", parentPin) : true;
-    
-    if (!isNameValid || !isUsernameValid || !isPasswordValid || !isPinValid) {
-      return;
-    }
-
-    setIsSubmitting(true);
-    const ok = await register({
-      username: username.trim(),
-      password,
-      name: name.trim(),
-      cookingLevel,
-      allergens,
-      parentPin,
-    });
-    setIsSubmitting(false);
-    if (ok) navigate("/");
-  }
-
-  function toggleAllergen(key) {
-    setAllergens((prev) =>
-      prev.includes(key) ? prev.filter((x) => x !== key) : [...prev, key],
-    );
-  }
-
-  function handlePinChange(e) {
-    const val = e.target.value.replace(/\D/g, "").slice(0, 4);
-    setParentPin(val);
-  }
-
-  const isDisabled =
-    isSubmitting ||
-    isAuthLoading ||
-    !name.trim() ||
-    !username.trim() ||
-    !password;
+  const {
+    username,
+    setUsername,
+    password,
+    setPassword,
+    name,
+    setName,
+    cookingLevel,
+    setCookingLevel,
+    parentPin,
+    validationErrors,
+    error,
+    validateField,
+    handleSubmit,
+    toggleAllergen,
+    handlePinChange,
+    isDisabled,
+    isSubmitting,
+    allergens,
+    navigate,
+  } = useRegisterForm();
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-6 relative overflow-hidden transition-all duration-500 bg-(--bg-current)">
