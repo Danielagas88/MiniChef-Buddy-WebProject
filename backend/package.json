@@ -2,11 +2,11 @@
   "name": "express-api",
   "version": "1.0.0",
   "description": "Express API with TypeScript, Mongoose, and CORS",
-  "main": "dist/server.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev ./index.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/index.js",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
