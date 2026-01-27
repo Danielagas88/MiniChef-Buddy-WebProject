@@ -29,7 +29,7 @@ export default function ParentMainPage() {
   return (
     <div className="relative min-h-[60vh] flex items-center justify-center">
       {parent.gate.isUnlocked ? (
-        <ParentDashboard token={user?.token} limit={10} />
+        <ParentDashboard token={user?.token} recentListSize={10} />
       ) : (
         /* Overlay מעודכן - תואם ל-FinishModal */
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm animate-fade-in transition-all duration-500">

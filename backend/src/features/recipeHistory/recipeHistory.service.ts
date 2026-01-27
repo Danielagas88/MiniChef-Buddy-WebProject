@@ -24,8 +24,10 @@ export async function createCompletion(input: {
   });
 }
 
+const MAX_HISTORY_LIMIT = 10000;
+
 export async function listHistory(input: { userId: string; limit?: number }) {
-  const limit = Math.min(Math.max(Number(input.limit ?? 200), 1), 200);
+  const limit = Math.min(Math.max(Number(input.limit ?? 200), 1), MAX_HISTORY_LIMIT);
 
   // Use projection to only fetch needed fields
   return RecipeHistory.find({ userId: input.userId })
